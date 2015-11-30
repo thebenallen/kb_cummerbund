@@ -2,7 +2,9 @@ module-name:
     kb_cummerbund
 
 module-description:
-    A KBase module
+    <p>This is a KBase wrapper for CummerBund package.</p>
+    <p>cummeRbund is a visualization package for Cufflinks high-throughput sequencing data. It is designed to help you navigate through the large amount of data produced from a Cuffdiff RNA-Seq differential expression analysis. </p>
+    <p>http://compbio.mit.edu/cummeRbund/manual_2_0.html</p>
 
 service-language:
     python
