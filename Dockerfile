@@ -10,11 +10,17 @@ MAINTAINER KBase Developer
 # -----------------------------------------
 
 COPY ./ /kb/module
+
 RUN mkdir -p /kb/module/work
 
+RUN apt-get update && apt-get -y install r-bioc-cummerbund 
+
 WORKDIR /kb/module
+COPY ./deps /kb/deps
 
 RUN make
+
+
 
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 
