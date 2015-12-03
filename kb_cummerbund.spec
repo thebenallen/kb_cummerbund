@@ -2,28 +2,32 @@
 A KBase module: kb_cummerbund
 */
 
+
+
+
 module kb_cummerbund {
-	/*
-	Insert your typespec information here.
-	*/
+
+        /* workspace name of the object */
+
 	typedef string workspace_name;
 
-	/*
-	A string representing input ws object  cuffdiff_results_id.
-	*/
+	/* object of type: KBaseRNASeq.RNASeqCuffdiffdifferentialExpression */
 
-	typedef string cuffdiff_results_id;
+	typedef string ws_cuffdiff_id;
 
-	/*
-	A string representing output  cummerbund_results_id.
+	/* object of type: KBaseRNASeq.cummerbund_output */
 
-	*/
-	typedef string cummerbund_results_id;
+	typedef string ws_cummerbund_output;
 
-	/*
-	Generate plots
-	store data for plots in cummerbund_results_id
-	*/
-	async funcdef generate_plots(workspace_name, cuffdiff_results_id) returns (cummerbund_results_id) authentication required;
+
+
+	typedef structure {
+		workspace_name workspace_name;
+		ws_cuffdiff_id ws_cuffdiff_id;
+		ws_cummerbund_output ws_cummerbund_output;
+	} cummerbundParams;
+
+
+	async funcdef generate_cummerbund_plots (cummerbundParams) returns (ws_cummerbund_output) authentication required;
 
 };
