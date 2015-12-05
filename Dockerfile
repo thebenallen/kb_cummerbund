@@ -9,11 +9,11 @@ MAINTAINER KBase Developer
 
 # -----------------------------------------
 
+RUN apt-get update && apt-get -y install r-bioc-cummerbund 
+
 COPY ./ /kb/module
 
 RUN mkdir -p /kb/module/work
-
-RUN apt-get update && apt-get -y install r-bioc-cummerbund 
 
 WORKDIR /kb/module
 COPY ./deps /kb/deps
