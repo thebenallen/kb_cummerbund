@@ -1,4 +1,4 @@
-import script_utils
+import script_util
 import subprocess
 from zipfile import ZipFile
 from os import listdir

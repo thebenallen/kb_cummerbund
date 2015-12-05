@@ -17,9 +17,10 @@ RUN mkdir -p /kb/module/work
 
 WORKDIR /kb/module
 COPY ./deps /kb/deps
+export PYTHONPATH="${PYTHONPATH}:/kb/module/lib/kb_cummerbund
 
-RUN make
 
+RUN make && make deploy
 
 
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
