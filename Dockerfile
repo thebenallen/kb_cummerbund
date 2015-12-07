@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y install r-bioc-cummerbund
 
 COPY ./ /kb/module
 
-RUN mkdir -p /kb/module/work
+RUN mkdir -p /kb/module/work/tmp
 
 WORKDIR /kb/module
 COPY ./deps /kb/deps

@@ -23,7 +23,7 @@ class kb_cummerbundTest(unittest.TestCase):
         config.read(config_file)
         for nameval in config.items('kb_cummerbund'):
             cls.cfg[nameval[0]] = nameval[1]
-        cls.wsURL = cls.cfg['workspace-url']
+        cls.wsURL = cls.cfg['ws_url']
         cls.wsClient = workspaceService(cls.wsURL, token=token)
         cls.serviceImpl = kb_cummerbund(cls.cfg)
 
@@ -55,6 +55,17 @@ class kb_cummerbundTest(unittest.TestCase):
         # Prepare test objects in workspace if needed using 
         # self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects': []})
         #
+	ws_out_id="cummerbund_out_obj"
+	ws_id="pranjan77:1449259911756"
+	ws_obj_id="cuffdiff_input_data"
+        cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id}
+
+
+	
+	ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
+	x=1
+	y=1
+        self.assertEqual(x,y,1)
         # Run your method by
         # ret = self.getImpl().your_method(self.getContext(), parameters...)
         #
