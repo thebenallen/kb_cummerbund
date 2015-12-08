@@ -35,7 +35,7 @@ def untar_files(logger, src_fn, dst_path):
     tar.extractall(dst_path)
     tar.close()
 
-def rplotandupload (logger, scratch,rscripts, plotscript,shock_url, hs_url, token):
+def rplotandupload (logger, scratch,rscripts, plotscript,shock_url, hs_url, token, listplots, title, description):
 	cuffdiff_dir = scratch + '/' + 'cuffdiff'
         #post the json file to workspace as cummerbundoutput typed object
         outpng = scratch + '/' + plotscript + ".png"
@@ -46,6 +46,10 @@ def rplotandupload (logger, scratch,rscripts, plotscript,shock_url, hs_url, toke
         jsonfile="--outjson=" + outjson
         subprocess.call(["Rscript", dispersionscript, diroption, png, jsonfile])
         plotinfo=dict()
-	plotinfo['png_handle']=script_util.create_shock_handle(logger,outpng,shock_url,hs_url,".png",token)
-	plotinfo['png_json_handle']=script_util.create_shock_handle(logger,outjson,shock_url,hs_url,".json",token)
-        return plotinfo	
+	png_handle=script_util.create_shock_handle(logger,outpng,shock_url,hs_url,".png",token)
+	png_json_handle=script_util.create_shock_handle(logger,outjson,shock_url,hs_url,".json",token)
+	listplots.append({"png_handle":png_handle,
+                         "png_json_handle": png_json_handle,
+                          "plot_title": title,
+                          "plot_description": description})
+        return listplots	

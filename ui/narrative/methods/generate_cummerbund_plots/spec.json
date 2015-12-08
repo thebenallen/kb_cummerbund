@@ -9,7 +9,7 @@
     "output" : null
   },
   "parameters" : [ {
-    "id" : "input_cuffdiff",
+    "id" : "ws_cuffdiff_id",
     "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
@@ -19,7 +19,7 @@
       "valid_ws_types" : [ "KBaseRNASeq.RNASeqCuffdiffdifferentialExpression" ]
     }
   }, {
-    "id" : "out_cummerbund_name",
+    "id" : "ws_cummerbund_output",
     "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
@@ -29,23 +29,23 @@
   "behavior" : {
       "service-mapping" : {
       	"url" : "",
-        "name" : "KBaseRNASeq",
-        "method" : "BuildBowtie2Index",
+        "name" : "kb_cummerbund",
+        "method" : "generate_cummerbund_plots",
         "input_mapping" : [
         {
           "narrative_system_variable": "workspace",
-          "target_property": "ws_id"
+          "target_property": "workspace_name"
         },{
-          "input_parameter": "input_genome",
-          "target_property": "reference"
+          "input_parameter": "ws_cuffdiff_id",
+          "target_property": "ws_cuffdiff_id"
         },{
-          "input_parameter": "out_index_name",
-          "target_property": "output_obj_name"
+          "input_parameter": "ws_cummerbund_output",
+          "target_property": "ws_cummerbund_output"
         }],
      "output_mapping" : [
         {
          "service_method_output_path": [0],
-         "target_property": "BuildBowtie2Index"
+         "target_property": "generate_cummerbund_plots"
         }
       ]
     }

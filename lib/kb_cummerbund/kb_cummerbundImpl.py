@@ -116,49 +116,23 @@ class kb_cummerbund:
 #except Exception,e:
  #               raise kb_cummerbundException("Error Downloading ws_cuffdiff_id from the workspace {0},{1}".format(params['ws_cuffdiff_id'],e))
 	#Download tar file
-	#dx=script_util.download_file_from_shock(self.__LOGGER, self.__SHOCK_URL, cuffdiff_shock_id, cuffdiff_file_name, self.__SCRATCH, filesize, user_token)
+	dx=script_util.download_file_from_shock(self.__LOGGER, self.__SHOCK_URL, cuffdiff_shock_id, cuffdiff_file_name, self.__SCRATCH, filesize, user_token)
 	#Decompress tar file and keep it in a directory
 	#------TO DO--------------------------
 	#use something like input_file = os.path.join(cufflinks_dir,"accepted_hits.bam")
 	tarfile=self.__SCRATCH + '/' + cuffdiff_file_name
-	#dx=script_util2.untar_files(self.__LOGGER, tarfile, self.__SCRATCH)
+	dx=script_util2.untar_files(self.__LOGGER, tarfile, self.__SCRATCH)
 	#run R script to run cummerbund json and update the cummerbund output json file
 	#-------To DO ------------
  	#Fix so that the path is not hardcoded like this
 	cuffdiff_dir = self.__SCRATCH + '/' + 'cuffdiff'
-	#post the json file to workspace as cummerbundoutput typed object
-	#outpng = self.__SCRATCH + '/' + "dispersionplot.png"
-	#outjson = self.__SCRATCH + '/' + "dispersionplot.json"
-	#dispersionscript = self.__RSCRIPTS + '/' +'dispersionplot.R'
-	#dispersionplot = " --cuffdiff_dir={0} --outpng={1} --outjson={2}".format(cuffdiff_dir,outpng,outjson)
-        #diroption = "--cuffdiff_dir="+cuffdiff_dir
-        #png = "--outpng=" + outpng	
-	#jsonfile="--outjson=" + outjson
-       	#subprocess.call(["Rscript", dispersionscript, diroption, png, jsonfile])
         outputobject=dict()
         listplots=[]
-        dispersionplotinfo=script_util2.rplotandupload(self.__LOGGER, self.__SCRATCH, self.__RSCRIPTS, "dispersionplot.R", self.__SHOCK_URL, self.__HS_URL, user_token )
+        listplots=script_util2.rplotandupload(self.__LOGGER, self.__SCRATCH, self.__RSCRIPTS, "dispersionplot.R", self.__SHOCK_URL, self.__HS_URL, user_token , listplots, "Dispersion plot", "Dispersion plot")
 
-	listplots.append({"png_handle": dispersionplotinfo["png_handle"],
-			 "png_json_handle": dispersionplotinfo["png_json_handle"],
-			  "plot_title": "Dispersion plot",
-			  "plot_description": "Dispersion plot"})
+        listplots=script_util2.rplotandupload(self.__LOGGER, self.__SCRATCH, self.__RSCRIPTS, "pcaplot.R", self.__SHOCK_URL, self.__HS_URL, user_token, listplots, "PCA plot", "PCA plot" )
 
-        pcaplotinfo=script_util2.rplotandupload(self.__LOGGER, self.__SCRATCH, self.__RSCRIPTS, "pcaplot.R", self.__SHOCK_URL, self.__HS_URL, user_token )
-
-	listplots.append({"png_handle":pcaplotinfo["png_handle"],
-			 "png_json_handle":pcaplotinfo["png_json_handle"],
-			  "plot_title": "PCA plot",
-			  "plot_description": "PCA plot"})
-
-
-
-        fpkmscvplot=script_util2.rplotandupload(self.__LOGGER, self.__SCRATCH, self.__RSCRIPTS, "fpkmscvplot.R", self.__SHOCK_URL, self.__HS_URL, user_token )
-
-	listplots.append({"png_handle":fpkmscvplot["png_handle"],
-			 "png_json_handle":fpkmscvplot["png_json_handle"],
-			  "plot_title": "FPKM SCV plot",
-			  "plot_description": "FPKM SCV plot"})
+        listplots=script_util2.rplotandupload(self.__LOGGER, self.__SCRATCH, self.__RSCRIPTS, "fpkmscvplot.R", self.__SHOCK_URL, self.__HS_URL, user_token, listplots, "FPKM SCV plot", "FPKM SCV plot" )
 
 
         outputobject["cummerbundplotSet"]=listplots

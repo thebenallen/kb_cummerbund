@@ -1,14 +1,14 @@
 #
 # Define basic display information
 #
-name     : Build Bowtie2 Index 
+name     : Ceate Cummerbund plots 
 tooltip  : |
-    Build bowtie2 index for a given genome
+    Create cummerbund plots from cuffdiff results 
 
 screenshots :
     []
 
-replacement-text : Created a new bowtie2 Index  for {{{input_genome}}}
+replacement-text : Created Cummerbund plots
 
 #
 # Define the set of other narrative methods that should be suggested to the user.
@@ -30,33 +30,26 @@ suggestions :
 # Configure the display and description of the parameters
 #
 parameters :
-    input_genome:
+    ws_cuffdiff_id:
         ui-name : |
-            Genome
+           cuffdiff_id 
         short-hint : |
-            Select genome that needs to be indexed 
+            Select input cuffdiff_id 
 
-    out_index_name:
+    ws_cummerbund_output:
         ui-name : |
-            Output
+            Cummerbund plot output 
         short-hint : |
-            Enter the name of the indexed genome
+            Enter the name of the Cummerbund plot output
 
 description : |
-   <p>This method allows to build the Bowtie2 Indexes for a given reference genome object.</p> 
-    <p>Bowtie indexes the reference genome using a scheme based on the Burrows-Wheeler transform (BWT) and the full-text minute-space (FM) index (similar to a suffix array) to keep its memory footprint small.</p>
+   <p>This method allows to create plots for differential RNASeq expression data.</p> 
     
     <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
-    Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Priya Ranjan, Jim Thomason, Fei He, Vivek Kumar</p>
+    Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     
 publications :
     -
-        display-text: |
-            Langmead B, Trapnell C, Pop M, Salzberg SL (2009) "Ultrafast and memory-efficient alignment of short DNA sequences to the human genome" Genome Biology 10 (3): 10:R25.
-        link: http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2690996/
-        display-text: |
-            Langmead B, Salzberg SL (2012) "Fast gapped-read alignment with Bowtie 2" Nature Methods 9 (4): 357–359.
-        link: http://www.ncbi.nlm.nih.gov/pubmed/22388286
         display-text: |
             Karkkainen J (2007) "Fast BWT in small space by blockwise suffix sorting" Theor Comput Sci 2007, 387:249-257.
         link: http://www.sciencedirect.com/science/article/pii/S0304397507005245
