@@ -31,11 +31,22 @@ def untar_files(logger, src_fn, dst_path):
     """
     Extract all index files into an output zip file on disk.
     """
+
+    #Check if file exists.
+    if exists(src_fn) == False:
+        logger.info("Tar file does not exists")
+        return False
+
+    # Open archive
     tar = tarfile.open(src_fn)
+
+    # Extract archive
     tar.extractall(dst_path)
     tar.close()
 
-def rplotandupload (logger, scratch, rscripts, plotscript, shock_url, hs_url, token, cummerbundplotset, title, description):
+    return True
+
+def rplotandupload (logger, scratch, rscripts, plotscript, shock_url, hs_url, token, cummerbundplotset, title, description, cuffdiff_dir):
     """
     Prepare URIs and call R script to generate image, json files.
     Upload the generated image and json files to Shock
@@ -43,10 +54,7 @@ def rplotandupload (logger, scratch, rscripts, plotscript, shock_url, hs_url, to
         to user provided list.
     """
 
-
-    # Base location for the cuffdiff data
-    cuffdiff_dir     = join(scratch, "cuffdiff")
-    #Check if directory exists.
+    #Check if data directory exists.
     if exists(cuffdiff_dir) == False:
         logger.info("Cuffdiff directory does not exists")
         return False
