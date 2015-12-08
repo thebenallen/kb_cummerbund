@@ -1,14 +1,14 @@
 #
 # Define basic display information
 #
-name     : Ceate Cummerbund plots 
+name     : Create Cummerbund plots 
 tooltip  : |
     Create cummerbund plots from cuffdiff results 
 
 screenshots :
     []
 
-replacement-text : Created Cummerbund plots
+replacement-text : Create Cummerbund plots
 
 #
 # Define the set of other narrative methods that should be suggested to the user.
