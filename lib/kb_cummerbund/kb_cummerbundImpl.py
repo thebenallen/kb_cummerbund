@@ -146,7 +146,8 @@ class kb_cummerbund:
             return returnVal
 
         # Run R script to run cummerbund json and update the cummerbund output json file
-        cuffdiff_dir = join(self.__SCRATCH, foldersinExtractFolder[0])
+        cuffdiff_dir = join(dstnExtractFolder, foldersinExtractFolder[0])
+	self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
 
         # Prepare output object.
         outputobject=dict()

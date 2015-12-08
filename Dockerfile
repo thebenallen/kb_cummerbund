@@ -9,7 +9,7 @@ MAINTAINER KBase Developer
 
 # -----------------------------------------
 
-RUN apt-get update && apt-get -y install r-bioc-cummerbund r-cran-rjson
+RUN apt-get update && apt-get -y install r-bioc-cummerbund r-cran-rjson r-cran-getopt
 
 COPY ./ /kb/module
 

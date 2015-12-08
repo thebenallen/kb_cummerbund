@@ -83,24 +83,31 @@ def rplotandupload (logger, scratch, rscripts, plotscript, shock_url, hs_url, to
     # Generate command to be executed.
     ropts            = ["Rscript", computescript]
 
-    ropts.append("--cuffdiff_dir", cuffdiff_dir)
-    ropts.append("--outpng", outpng)
-    ropts.append("--outjson", outjson)
+    ropts.append("--cuffdiff_dir")
+    ropts.append(cuffdiff_dir)
+
+    ropts.append("--outpng")
+    ropts.append(outpng)
+
+    ropts.append("--outjson")
+    ropts.append(outjson)
+
 
     # Make call to execute the system.
-    openedprocess = subprocess.Popen(ropts, shell=True, stdout=subprocess.PIPE)
+    roptstr = " ".join(str(x) for x in ropts)
+    openedprocess = subprocess.Popen(roptstr, shell=True, stdout=subprocess.PIPE)
     openedprocess.wait()
     #Make sure the openedprocess.returncode is zero (0)
     if openedprocess.returncode != 0:
         logger.info("R script did not return normally, return code - "
-            + openedprocess.returncode)
+            + str(openedprocess.returncode))
         return False
 
     # Upload image file and get the shock handle
     png_handle = script_util.create_shock_handle( logger,
        outpng, shock_url, hs_url, "png", token )
     #Check for the return value and if error take measure.
-    if png_handle.id == "":
+    if png_handle["id"] == "":
         logger.info("Could not create Shock handle")
         return False
 
@@ -108,7 +115,7 @@ def rplotandupload (logger, scratch, rscripts, plotscript, shock_url, hs_url, to
     json_handle = script_util.create_shock_handle( logger,
        outjson, shock_url, hs_url, "json", token )
     #Check for the return value and if error take measure.
-    if json_handle.id == "":
+    if json_handle["id"] == "":
         logger.info("Could not create Shock handle")
         return False
 
