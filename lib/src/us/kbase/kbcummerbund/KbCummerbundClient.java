@@ -153,7 +153,7 @@ public class KbCummerbundClient {
      * <pre>
      * </pre>
      * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundParams CummerbundParams} (original type "cummerbundParams")
-     * @return   instance of original type "ws_cummerbund_output" (object of type: KBaseRNASeq.cummerbund_output)
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
@@ -170,7 +170,7 @@ public class KbCummerbundClient {
      * <pre>
      * </pre>
      * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundParams CummerbundParams} (original type "cummerbundParams")
-     * @return   instance of original type "ws_cummerbund_output" (object of type: KBaseRNASeq.cummerbund_output)
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
@@ -187,7 +187,7 @@ public class KbCummerbundClient {
      * <pre>
      * </pre>
      * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundParams CummerbundParams} (original type "cummerbundParams")
-     * @return   instance of original type "ws_cummerbund_output" (object of type: KBaseRNASeq.cummerbund_output)
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */

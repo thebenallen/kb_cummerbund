@@ -352,7 +352,7 @@ a string
 
 =item Description
 
-object of type: KBaseRNASeq.RNASeqCuffdiffdifferentialExpression
+@id ws KBaseRNASeq.RNASeqCuffdiffdifferentialExpression
 
 
 =item Definition
@@ -383,7 +383,7 @@ a string
 
 =item Description
 
-object of type: KBaseRNASeq.cummerbund_output
+@id ws KBaseRNASeq.cummerbund_output
 
 
 =item Definition

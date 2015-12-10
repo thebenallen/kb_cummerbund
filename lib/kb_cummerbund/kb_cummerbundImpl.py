@@ -197,6 +197,6 @@ class kb_cummerbund:
         # At some point might do deeper type checking...
         if not isinstance(returnVal, basestring):
             raise ValueError('Method generate_cummerbund_plots return value ' +
-                    'returnVal is not type basestring as required.')
-            # return the results
+                             'returnVal is not type basestring as required.')
+        # return the results
         return [returnVal]
