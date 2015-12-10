@@ -6,7 +6,7 @@
   "categories" : ["active"],
   "widgets" : {
     "input" : null,
-    "output" : "kbaseCummerbundPlot",
+    "output" : "kbaseCummerbundPlot"
   },
   "parameters" : [ {
     "id" : "ws_cuffdiff_id",
