@@ -11,11 +11,11 @@ module kb_cummerbund {
 
 	typedef string workspace_name;
 
-	/* object of type: KBaseRNASeq.RNASeqCuffdiffdifferentialExpression */
+	/* @id ws KBaseRNASeq.RNASeqCuffdiffdifferentialExpression */
 
 	typedef string ws_cuffdiff_id;
 
-	/* object of type: KBaseRNASeq.cummerbund_output */
+	/* @id ws KBaseRNASeq.cummerbund_output */
 
 	typedef string ws_cummerbund_output;
 
