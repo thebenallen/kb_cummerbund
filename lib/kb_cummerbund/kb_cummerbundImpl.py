@@ -190,14 +190,7 @@ class kb_cummerbund:
                   'title': "Pairwise scatter plots",
                   'description': "Pair-wise scatterplots (FPKMs)" },
 
-                { 'file': "dendrogramplot.R",
-                  'title': "Dendrogram",
-                  'description': "Dendrogram  based on the JS (Jensen-Shannon divergence) distance" },
-
-                { 'file': "dendrogramrepplot.R",
-                  'title': "Dendrogram including replicates",
-                  'description': "Dendrogram including replicates based on the JS (Jensen-Shannon divergence) distance" },
-                { 'file': "volcanomatrixplot.R",
+                 { 'file': "volcanomatrixplot.R",
                   'title': "Volcano matrix plots",
                   'description': "Volcano matrix plots" },
 
@@ -217,6 +210,16 @@ class kb_cummerbund:
                   'title': "Multi-dimensional scaling plot including replicates",
                   'description': "Multi-dimensional scaling plot including replicates" }
             ]
+
+#TODO.. Giving Rplot.pdf
+#                { 'file': "dendrogramplot.R",
+#                  'title': "Dendrogram",
+#                  'description': "Dendrogram  based on the JS (Jensen-Shannon divergence) distance" },
+#
+#                { 'file': "dendrogramrepplot.R",
+#                  'title': "Dendrogram including replicates",
+#                  'description': "Dendrogram including replicates based on the JS (Jensen-Shannon divergence) distance" },
+         
 
         # Iterate through the plotlist and generate the images and json files.
         for plot in plotlist:
