@@ -160,12 +160,62 @@ class kb_cummerbund:
                 { 'file': "dispersionplot.R",
                   'title': "Dispersion plot",
                   'description': "Dispersion plot" },
+
+
+                { 'file': "fpkmscvplot.R",
+                  'title': "Genes CV plot",
+                  'description': "Genes squared coefficient of variation plot" },
+
+                { 'file': "isoformscvplot.R",
+                  'title': "Isoform CV plot",
+                  'description': "Isoform coefficient of variation plot" },
+
+                { 'file': "densityplot.R",
+                  'title': "Density plot",
+                  'description': "Distribution of FPKM scores across samples" },
+
+                { 'file': "csdensityrepplot.R",
+                  'title': "Replicates density plot",
+                  'description': "Distribution of FPKM scores across sample replicates" },
+
+                { 'file': "boxplot.R",
+                  'title': "Box plots",
+                  'description': "Box plots of FPKM distribution" },
+
+                { 'file': "boxrepplot.R",
+                  'title': "Box plots of replicates",
+                  'description': "Box plots of FPKM distribution of replicates" },
+
+                { 'file': "pairwisescatterplots.R",
+                  'title': "Pairwise scatter plots",
+                  'description': "Pair-wise scatterplots (FPKMs)" },
+
+                { 'file': "dendrogramplot.R",
+                  'title': "Dendrogram",
+                  'description': "Dendrogram  based on the JS (Jensen-Shannon divergence) distance" },
+
+                { 'file': "dendrogramrepplot.R",
+                  'title': "Dendrogram including replicates",
+                  'description': "Dendrogram including replicates based on the JS (Jensen-Shannon divergence) distance" },
+                { 'file': "volcanomatrixplot.R",
+                  'title': "Volcano matrix plots",
+                  'description': "Volcano matrix plots" },
+
                 { 'file': "pcaplot.R",
                   'title': "PCA plot",
                   'description': "PCA plot" },
-                { 'file': "fpkmscvplot.R",
-                  'title': "FPKM SCV plot",
-                  'description': "FPKM SCV plot" }
+
+                { 'file': "pcarepplot.R",
+                  'title': "PCA plot including replicates",
+                  'description': "PCA plot including replicates" },
+
+                { 'file': "mdsplot.R",
+                  'title': "Multi-dimensional scaling plot",
+                  'description': "Multi-dimensional scaling plot" },
+
+                { 'file': "mdsrepplot.R",
+                  'title': "Multi-dimensional scaling plot including replicates",
+                  'description': "Multi-dimensional scaling plot including replicates" }
             ]
 
         # Iterate through the plotlist and generate the images and json files.
