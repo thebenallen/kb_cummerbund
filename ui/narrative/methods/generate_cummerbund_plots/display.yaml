@@ -1,9 +1,9 @@
 #
 # Define basic display information
 #
-name     : Create Cummerbund plots 
+name     : Create CummeRbund plots 
 tooltip  : |
-    Create cummerbund plots from cuffdiff results 
+    This method allows to visualize a large number of data produced from Cuffdiff RNASeq differential expression analysis.  
 
 screenshots :
     []
@@ -32,24 +32,28 @@ suggestions :
 parameters :
     ws_cuffdiff_id:
         ui-name : |
-           cuffdiff_id 
+           Cuffdiff Output
         short-hint : |
-            Select input cuffdiff_id 
+            Specify the cuffdiff output as input
 
     ws_cummerbund_output:
         ui-name : |
-            Cummerbund plot output 
+            CummeRbund Plots 
         short-hint : |
-            Enter the name of the Cummerbund plot output
+            Specify the name of the CummeRbund plot
 
 description : |
-   <p>This method allows to create plots for differential RNASeq expression data.</p> 
-    
+   <p>This method helps in exploration, analysis and  visualization of Cufflinks high-throughput RNASeq data. It uses the data produced from Cuffdiff RNASeq differential expression analysis as input and allows to visualize the estimated overdispersion for each sample as a quality control measure.</p> 
+    <p>This method allows user to visualize different type of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot and volcano matrix plot.</p> 
     <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     
 publications :
-    -
+   -
         display-text: |
             Karkkainen J (2007) "Fast BWT in small space by blockwise suffix sorting" Theor Comput Sci 2007, 387:249-257.
-        link: http://www.sciencedirect.com/science/article/pii/S0304397507005245
+        link: http://www.sciencedirect.com/science/article/pii/S0304397507005245 
+           -
+        display-text: |
+           Goff L., Trapnell C., Kelley D. (2011). cummeRbund: Analysis, Exploration, Manipulation and Visualization of Cufflinks High-Throughput Sequencing Data.[R package version 1.2.0].
+        link: http://compbio.mit.edu/cummeRbund/
