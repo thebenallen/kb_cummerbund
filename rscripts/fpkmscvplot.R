@@ -27,6 +27,6 @@ genes.scv = fpkmSCVPlot(genes(cuff))
 png (file=opt$outpng,width=1080)
 genes.scv
 .invisible <- dev.off()
-write(toJSON(genes.scv$data), file=opt$outjson)
+#write(toJSON(genes.scv$data), file=opt$outjson)
 
 q(save="no")

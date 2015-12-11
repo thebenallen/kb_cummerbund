@@ -111,18 +111,19 @@ def rplotandupload (logger, scratch, rscripts, plotscript, shock_url, hs_url, to
         logger.info("Could not create Shock handle")
         return False
 
+   #TODO Removed all json handle related stuff. fix it later
     # Upload json file and get the shock handle
-    json_handle = script_util.create_shock_handle( logger,
-       outjson, shock_url, hs_url, "json", token )
+   # json_handle = script_util.create_shock_handle( logger,
+   #    outjson, shock_url, hs_url, "json", token )
     #Check for the return value and if error take measure.
-    if json_handle["id"] == "":
-        logger.info("Could not create Shock handle")
-        return False
+  #  if json_handle["id"] == "":
+   #     logger.info("Could not create Shock handle")
+    #    return False
 
     # Create a return list
+    #TODO fix this "png_json_handle"  : json_handle,
     cummerbundplot = {
         "png_handle"       : png_handle,
-        "png_json_handle"  : json_handle,
         "plot_title"       : title,
         "plot_description" : description
     }

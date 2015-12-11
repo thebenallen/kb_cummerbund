@@ -27,6 +27,6 @@ PCA <- PCAplot(genes(cuff),"PC1","PC2")
 png (file=opt$outpng,width=1080)
 PCA
 .invisible <- dev.off()
-write(toJSON(PCA$data), file=opt$outjson)
+#write(toJSON(PCA$data), file=opt$outjson)
 
 q(save="no")

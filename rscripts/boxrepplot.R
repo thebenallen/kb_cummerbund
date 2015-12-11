@@ -29,6 +29,6 @@ disp<- csBoxplot(genes(cuff), replicates=T)
 png (file=opt$outpng,width=1080)
 disp
 .invisible <- dev.off()
-write(toJSON(disp$data), file=opt$outjson)
+#write(toJSON(disp$data), file=opt$outjson)
 
 q(save="no")
