@@ -206,4 +206,63 @@ public class KbCummerbundClient {
                 return res.getResult().get(0);
         }
     }
+
+    /**
+     * <p>Original spec-file function name: create_expression_matrix</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.ExpressionMatrixParams ExpressionMatrixParams} (original type "expressionMatrixParams")
+     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String createExpressionMatrixAsync(ExpressionMatrixParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund.create_expression_matrix_async", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: create_expression_matrix</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.ExpressionMatrixParams ExpressionMatrixParams} (original type "expressionMatrixParams")
+     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public JobState<List<String>> createExpressionMatrixCheck(String jobId) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(jobId);
+        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
+        List<JobState<List<String>>> res = caller.jsonrpcCall("kb_cummerbund.create_expression_matrix_check", args, retType, true, true);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: create_expression_matrix</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.ExpressionMatrixParams ExpressionMatrixParams} (original type "expressionMatrixParams")
+     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String createExpressionMatrix(ExpressionMatrixParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        String jobId = createExpressionMatrixAsync(arg1, jsonRpcContext);
+        while (true) {
+            if (Thread.currentThread().isInterrupted())
+                throw new JsonClientException("Thread was interrupted");
+            try { 
+                Thread.sleep(this.asyncJobCheckTimeMs);
+            } catch(Exception ex) {
+                throw new JsonClientException("Thread was interrupted", ex);
+            }
+            JobState<List<String>> res = createExpressionMatrixCheck(jobId);
+            if (res.getFinished() != 0L)
+                return res.getResult().get(0);
+        }
+    }
 }

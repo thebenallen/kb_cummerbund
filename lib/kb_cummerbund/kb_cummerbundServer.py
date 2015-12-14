@@ -62,6 +62,8 @@ async_run_methods = {}
 async_check_methods = {}
 async_run_methods['kb_cummerbund.generate_cummerbund_plots_async'] = ['kb_cummerbund', 'generate_cummerbund_plots']
 async_check_methods['kb_cummerbund.generate_cummerbund_plots_check'] = ['kb_cummerbund', 'generate_cummerbund_plots']
+async_run_methods['kb_cummerbund.create_expression_matrix_async'] = ['kb_cummerbund', 'create_expression_matrix']
+async_check_methods['kb_cummerbund.create_expression_matrix_check'] = ['kb_cummerbund', 'create_expression_matrix']
 
 class AsyncJobServiceClient(object):
 
@@ -336,6 +338,10 @@ class Application(object):
                              name='kb_cummerbund.generate_cummerbund_plots',
                              types=[dict])
         self.method_authentication['kb_cummerbund.generate_cummerbund_plots'] = 'required'
+        self.rpc_service.add(impl_kb_cummerbund.create_expression_matrix,
+                             name='kb_cummerbund.create_expression_matrix',
+                             types=[dict])
+        self.method_authentication['kb_cummerbund.create_expression_matrix'] = 'required'
         self.auth_client = biokbase.nexus.Client(
             config={'server': 'nexus.api.globusonline.org',
                     'verify_ssl': True,

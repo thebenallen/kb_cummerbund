@@ -192,3 +192,21 @@ class kb_cummerbund(object):
             if job_state['finished']:
                 return job_state['result'][0]
   
+    def create_expression_matrix_async(self, expressionMatrixParams, json_rpc_context = None):
+        if json_rpc_context and type(json_rpc_context) is not dict:
+            raise ValueError('Method create_expression_matrix: argument json_rpc_context is not type dict as required.')
+        return self._call('kb_cummerbund.create_expression_matrix_async',
+                          [expressionMatrixParams], json_rpc_context)[0]
+
+    def create_expression_matrix_check(self, job_id):
+        resp = self._call('kb_cummerbund.create_expression_matrix_check', [job_id])
+        return resp[0]
+
+    def create_expression_matrix(self, expressionMatrixParams, json_rpc_context = None):
+        job_id = self.create_expression_matrix_async(expressionMatrixParams, json_rpc_context)
+        while True:
+            time.sleep(self.async_job_check_time)
+            job_state = self.create_expression_matrix_check(job_id)
+            if job_state['finished']:
+                return job_state['result'][0]
+  

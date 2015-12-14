@@ -254,6 +254,150 @@ sub generate_cummerbund_plots_check {
     }
 }
   
+
+
+=head2 create_expression_matrix
+
+  $return = $obj->create_expression_matrix($expressionMatrixParams)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$expressionMatrixParams is a kb_cummerbund.expressionMatrixParams
+$return is a kb_cummerbund.ws_expression_matrix_id
+expressionMatrixParams is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_cummerbund.workspace_name
+	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+	ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
+	include_replicates has a value which is a kb_cummerbund.bool
+workspace_name is a string
+ws_cuffdiff_id is a string
+ws_expression_matrix_id is a string
+bool is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$expressionMatrixParams is a kb_cummerbund.expressionMatrixParams
+$return is a kb_cummerbund.ws_expression_matrix_id
+expressionMatrixParams is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_cummerbund.workspace_name
+	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+	ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
+	include_replicates has a value which is a kb_cummerbund.bool
+workspace_name is a string
+ws_cuffdiff_id is a string
+ws_expression_matrix_id is a string
+bool is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+sub create_expression_matrix
+{
+    my($self, @args) = @_;
+    my $job_id = $self->create_expression_matrix_async(@args);
+    while (1) {
+        Time::HiRes::sleep($self->{async_job_check_time});
+        my $job_state_ref = $self->create_expression_matrix_check($job_id);
+        if ($job_state_ref->{"finished"} != 0) {
+            if (!exists $job_state_ref->{"result"}) {
+                $job_state_ref->{"result"} = [];
+            }
+            return wantarray ? @{$job_state_ref->{"result"}} : $job_state_ref->{"result"}->[0];
+        }
+    }
+}
+
+sub create_expression_matrix_async {
+    my($self, @args) = @_;
+# Authentication: required
+    if ((my $n = @args) != 1) {
+        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+                                   "Invalid argument count for function create_expression_matrix_async (received $n, expecting 1)");
+    }
+    {
+        my($expressionMatrixParams) = @args;
+        my @_bad_arguments;
+        (ref($expressionMatrixParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"expressionMatrixParams\" (value was \"$expressionMatrixParams\")");
+        if (@_bad_arguments) {
+            my $msg = "Invalid arguments passed to create_expression_matrix_async:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+                                   method_name => 'create_expression_matrix_async');
+        }
+    }
+    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
+        method => "kb_cummerbund.create_expression_matrix_async",
+        params => \@args});
+    if ($result) {
+        if ($result->is_error) {
+            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+                           code => $result->content->{error}->{code},
+                           method_name => 'create_expression_matrix_async',
+                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+            );
+        } else {
+            return $result->result->[0];  # job_id
+        }
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method create_expression_matrix_async",
+                        status_line => $self->{client}->status_line,
+                        method_name => 'create_expression_matrix_async');
+    }
+}
+
+sub create_expression_matrix_check {
+    my($self, @args) = @_;
+# Authentication: required
+    if ((my $n = @args) != 1) {
+        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+                                   "Invalid argument count for function create_expression_matrix_check (received $n, expecting 1)");
+    }
+    {
+        my($job_id) = @args;
+        my @_bad_arguments;
+        (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument 0 \"job_id\" (it should be a string)");
+        if (@_bad_arguments) {
+            my $msg = "Invalid arguments passed to create_expression_matrix_check:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+                                   method_name => 'create_expression_matrix_check');
+        }
+    }
+    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
+        method => "kb_cummerbund.create_expression_matrix_check",
+        params => \@args});
+    if ($result) {
+        if ($result->is_error) {
+            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+                           code => $result->content->{error}->{code},
+                           method_name => 'create_expression_matrix_check',
+                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+                          );
+        } else {
+            return $result->result->[0];
+        }
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method create_expression_matrix_check",
+                        status_line => $self->{client}->status_line,
+                        method_name => 'create_expression_matrix_check');
+    }
+}
+  
   
 
 sub version {
@@ -267,16 +411,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'generate_cummerbund_plots',
+                method_name => 'create_expression_matrix',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method generate_cummerbund_plots",
+            error => "Error invoking method create_expression_matrix",
             status_line => $self->{client}->status_line,
-            method_name => 'generate_cummerbund_plots',
+            method_name => 'create_expression_matrix',
         );
     }
 }
@@ -310,6 +454,37 @@ sub _validate_version {
 }
 
 =head1 TYPES
+
+
+
+=head2 bool
+
+=over 4
+
+
+
+=item Description
+
+indicates true or false values, false <= 0, true >=1
+
+
+=item Definition
+
+=begin html
+
+<pre>
+an int
+</pre>
+
+=end html
+
+=begin text
+
+an int
+
+=end text
+
+=back
 
 
 
@@ -406,6 +581,37 @@ a string
 
 
 
+=head2 ws_expression_matrix_id
+
+=over 4
+
+
+
+=item Description
+
+@id ws KBaseFeatureValues.ExpressionMatrix
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 cummerbundParams
 
 =over 4
@@ -432,6 +638,42 @@ a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_cummerbund.workspace_name
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
+
+
+=end text
+
+=back
+
+
+
+=head2 expressionMatrixParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_cummerbund.workspace_name
+ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
+include_replicates has a value which is a kb_cummerbund.bool
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_cummerbund.workspace_name
+ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
+include_replicates has a value which is a kb_cummerbund.bool
 
 
 =end text

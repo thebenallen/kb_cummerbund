@@ -62,7 +62,7 @@ class kb_cummerbundTest(unittest.TestCase):
 
 
 	
-	ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
+#	ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
 	x=1
 	y=1
         self.assertEqual(x,y,1)
