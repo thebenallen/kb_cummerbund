@@ -52,7 +52,7 @@ class kb_cummerbundTest(unittest.TestCase):
         return self.__class__.ctx
 
     def test_your_method(self):
-        # Prepare test objects in workspace if needed using 
+        # Prepare test objects in workspace if needed using
         # self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects': []})
         #
 	ws_out_id="cummerbund_out_obj"
@@ -61,8 +61,7 @@ class kb_cummerbundTest(unittest.TestCase):
         cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id}
 
 
-	
-#	ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
+	ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
 	x=1
 	y=1
         self.assertEqual(x,y,1)
@@ -72,4 +71,3 @@ class kb_cummerbundTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         pass
-        

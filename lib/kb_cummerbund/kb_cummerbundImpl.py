@@ -116,9 +116,8 @@ class kb_cummerbund:
             self.__LOGGER.info("Workspace did not return any objects")
             return returnVal
 
-
-        cuffdiff_dir = script_utils.extract_cuffdiff_data (self, s_res, user_token);
-	    self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
+        cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
+        self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
 
         if (cuffdiff_dir is False):
             return returnVal
@@ -233,7 +232,47 @@ class kb_cummerbund:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN create_expression_matrix
-        #END create_expression_matrix
+
+        # ctx is the context object
+        # return variables are: returnVal
+        #BEGIN generate_cummerbund_plots
+
+        params    = cummerbundParams
+        returnVal = params['ws_expression_matrix_id']
+
+        #Set up workspace client
+        user_token = ctx['token']
+        ws_client  = Workspace(url=self.__WS_URL, token=user_token)
+
+        #Read the input cuffdiff workspace object json file and get filehandle for cuffdiff tar file
+        s_res = ws_client.get_objects([{
+            'name' : params['ws_cuffdiff_id'],
+            'workspace' : params['workspace_name']
+            }])
+
+        # Check if workspace has data
+        if len(s_res) == 0:
+            self.__LOGGER.info("Workspace did not return any objects")
+            return returnVal
+
+        cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
+        self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
+
+        if (cuffdiff_dir is False):
+            return returnVal
+
+        # Run R script to run cummerbund json and update the cummerbund output json file
+        # Prepare output object.
+
+        if (params['include_replicates'] >= 1){
+
+           generate_and_upload_expression_matrix(
+        }
+
+
+
+
+#END create_expression_matrix
 
         # At some point might do deeper type checking...
         if not isinstance(returnVal, basestring):
