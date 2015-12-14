@@ -131,3 +131,40 @@ def rplotandupload (logger, scratch, rscripts, plotscript, shock_url, hs_url, to
 
     return True
 
+
+   def extract_cuffdiff_data (self, s_res, user_token):
+
+        returnVal = False
+
+        dx = script_util.download_file_from_shock( self.__LOGGER, 
+            self.__SHOCK_URL, cuffdiff_shock_id, cuffdiff_file_name,
+            self.__SCRATCH, filesize, user_token)
+
+       # Get input data Shock Id and Filename.
+        cuffdiff_shock_id = s_res[0]['data']['file']['id']
+        cuffdiff_file_name = s_res[0]['data']['file']['file_name']
+
+       #cuffdiff_file_name =None 
+        filesize = None
+    
+        #Decompress tar file and keep it in a directory
+        tarfile = join(self.__SCRATCH, cuffdiff_file_name)
+        dstnExtractFolder = join(self.__SCRATCH, "cuffdiffData")
+
+        if not os.path.exists(dstnExtractFolder):
+            os.makedirs(dstnExtractFolder)
+
+        untarStatus = script_util2.untar_files(self.__LOGGER, tarfile, dstnExtractFolder)
+        if untarStatus == False:
+            self.__LOGGER.info("Problem extracting the archive")
+            return returnVal
+
+        foldersinExtractFolder = os.listdir(dstnExtractFolder)
+
+        if len(foldersinExtractFolder) == 0:
+            self.__LOGGER.info("Problem extracting the archive")
+            return returnVal
+
+        # Run R script to run cummerbund json and update the cummerbund output json file
+        cuffdiff_dir = join(dstnExtractFolder, foldersinExtractFolder[0])
+	return cuffdiff_dir

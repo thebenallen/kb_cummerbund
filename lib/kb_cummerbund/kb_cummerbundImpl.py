@@ -116,39 +116,14 @@ class kb_cummerbund:
             self.__LOGGER.info("Workspace did not return any objects")
             return returnVal
 
-        # Get input data Shock Id and Filename.
-        cuffdiff_shock_id = s_res[0]['data']['file']['id']
-        cuffdiff_file_name = s_res[0]['data']['file']['file_name']
 
-        #cuffdiff_file_name =None 
-        filesize = None
+        cuffdiff_dir = script_utils.extract_cuffdiff_data (self, s_res, user_token);
+	    self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
 
-        # Download tar file
-        dx = script_util.download_file_from_shock( self.__LOGGER, 
-            self.__SHOCK_URL, cuffdiff_shock_id, cuffdiff_file_name,
-            self.__SCRATCH, filesize, user_token)
-    
-        #Decompress tar file and keep it in a directory
-        tarfile = join(self.__SCRATCH, cuffdiff_file_name)
-        dstnExtractFolder = join(self.__SCRATCH, "cuffdiffData")
-        if not os.path.exists(dstnExtractFolder):
-            os.makedirs(dstnExtractFolder)
-
-        untarStatus = script_util2.untar_files(self.__LOGGER, tarfile, dstnExtractFolder)
-        if untarStatus == False:
-            self.__LOGGER.info("Problem extracting the archive")
-            return returnVal
-
-        foldersinExtractFolder = os.listdir(dstnExtractFolder)
-
-        if len(foldersinExtractFolder) == 0:
-            self.__LOGGER.info("Problem extracting the archive")
+        if (cuffdiff_dir is False):
             return returnVal
 
         # Run R script to run cummerbund json and update the cummerbund output json file
-        cuffdiff_dir = join(dstnExtractFolder, foldersinExtractFolder[0])
-	self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
-
         # Prepare output object.
         outputobject=dict()
 
@@ -219,7 +194,7 @@ class kb_cummerbund:
 #                { 'file': "dendrogramrepplot.R",
 #                  'title': "Dendrogram including replicates",
 #                  'description': "Dendrogram including replicates based on the JS (Jensen-Shannon divergence) distance" },
-         
+
 
         # Iterate through the plotlist and generate the images and json files.
         for plot in plotlist:
