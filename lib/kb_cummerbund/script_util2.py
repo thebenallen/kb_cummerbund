@@ -170,3 +170,13 @@ def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token):
         cuffdiff_dir = join(dstnExtractFolder, foldersinExtractFolder[0])
 
         return cuffdiff_dir
+
+
+def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token, include_replicates):
+	returnVal = False
+        if exists(cuffdiff_dir) == False:
+           logger.info("Cuffdiff directory does not exists")
+            return False
+
+
+	

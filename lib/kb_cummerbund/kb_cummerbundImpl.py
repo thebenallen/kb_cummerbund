@@ -261,17 +261,21 @@ class kb_cummerbund:
         if (cuffdiff_dir is False):
             return returnVal
 
-        # Run R script to run cummerbund json and update the cummerbund output json file
+        # Run R script to get fpkmgenematrix.R
+          
         # Prepare output object.
 
-        if (params['include_replicates'] >= 1){
+        
+	status = script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SCRATCH, self.__RSCRIPTS,
+                plot['file'], self.__SHOCK_URL, self.__HS_URL, user_token,
+                cummerbundplotset, plot['title'], plot['description'], cuffdiff_dir)
+            if status == False:
+                self.__LOGGER.info("Problem generating expression matrix json file - " + plot['file'])
 
-           generate_and_upload_expression_matrix(
-        }
+       status =   script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token, params['include_replicated'])
 
-
-
-
+        if (result_method_success is False):
+            self.__LOGGER.info("Creation of expression matrix failed")
 #END create_expression_matrix
 
         # At some point might do deeper type checking...
