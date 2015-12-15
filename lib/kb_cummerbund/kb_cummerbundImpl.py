@@ -262,17 +262,18 @@ class kb_cummerbund:
             return returnVal
 
         # Run R script to get fpkmgenematrix.R
-          
+
         # Prepare output object.
 
-        
-	status = script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SCRATCH, self.__RSCRIPTS,
-                plot['file'], self.__SHOCK_URL, self.__HS_URL, user_token,
-                cummerbundplotset, plot['title'], plot['description'], cuffdiff_dir)
-            if status == False:
+
+        scriptfile = "fpkmgenematrix.R"
+        status = script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SCRATCH,
+                    self.__RSCRIPTS, scriptfile, self.__SHOCK_URL, self.__HS_URL, user_token,
+                    cuffdiff_dir)
+        if status == False:
                 self.__LOGGER.info("Problem generating expression matrix json file - " + plot['file'])
 
-       status =   script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token, params['include_replicated'])
+        status =   script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token, params['include_replicated'])
 
         if (result_method_success is False):
             self.__LOGGER.info("Creation of expression matrix failed")

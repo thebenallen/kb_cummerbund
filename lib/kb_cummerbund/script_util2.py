@@ -26,6 +26,7 @@ except:
 
 from biokbase.workspace.client import Workspace
 
+import biokbase.Transform.script_utils as script_utils
 
 def untar_files(logger, src_fn, dst_path):
     """
@@ -172,11 +173,59 @@ def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token):
         return cuffdiff_dir
 
 
-def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token, include_replicates):
-	returnVal = False
+def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile, shock_url, hs_url, token, cuffdiff_dir):
+        TSV_to_FeatureValue = "trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix"
+        returnVal = False
         if exists(cuffdiff_dir) == False:
-           logger.info("Cuffdiff directory does not exists")
+            logger.info("Cuffdiff directory does not exists")
             return False
 
+        #generate expression matrix
+        #input = Rscript fpkmgenematrix.R cuffdiff_dir outpath(os.join)
 
-	
+        outmatrix =  join (scratch, scriptfile) + ".matrix.txt"
+        outjson =    join (scratch, scriptfile) + "matrix.txt.json"
+
+        computescript = join (rscripts, rscriptfile)
+        if (exists(computescript) == False):
+                logger.info("Rscript does not exist")
+                return False
+        #Generate command to be executed
+        ropts = ["Rscript", computerscript]
+
+        ropts.append("--cuffdiff_dir")
+        ropts.append(cuffdiff_dir)
+
+        ropts.append("--out")
+        ropts.append(outmatrix)
+
+
+        roptstr = "".join(str(x) for x in ropts)
+
+        #Run Rscript to generate Expression matrix
+        openedprocess = subprocess.Popen (roptstr, shell=True, stdout=subprocess.PIPE)
+        openedprocess.wait()
+
+        if openedprocess.returncode !=0:
+            logger.info("R script did not return normally, return code -"
+                + str(openedprocess.returncode))
+            return False
+
+        #convert expression matrix TSV to json
+        cmd_expression_json = [TSV_to_FeatureValue,
+                                    '--object_name', outmatrix,
+                                    '--working_directory', scratch,
+                                    '--input_directory', scratch,
+                                    '--output_file_name', outjson ]
+        tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
+        stdout, stderr = tool_process.communicate()
+
+        if stdout is not None and len(stdout) > 0:
+            logger.info(stdout)
+        if stderr is not None and len(stderr) > 0:
+            logger.info(stderr)
+
+        if tool_process.returncode != 0:
+           return False
+
+        return outjson
