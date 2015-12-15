@@ -237,11 +237,12 @@ class kb_cummerbund:
         # return variables are: returnVal
         #BEGIN generate_cummerbund_plots
 
-        params    = cummerbundParams
+        params    = expressionMatrixParams
         returnVal = params['ws_expression_matrix_id']
 
         #Set up workspace client
         user_token = ctx['token']
+        workspace = params['workspace_name']
         ws_client  = Workspace(url=self.__WS_URL, token=user_token)
 
         #Read the input cuffdiff workspace object json file and get filehandle for cuffdiff tar file
@@ -255,6 +256,7 @@ class kb_cummerbund:
             self.__LOGGER.info("Workspace did not return any objects")
             return returnVal
 
+        #cuffdiff_dir = join (self.__SCRATCH , "cuffdiffData/cuffdiff")
         cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
         self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
 
@@ -264,22 +266,36 @@ class kb_cummerbund:
         # Run R script to get fpkmgenematrix.R
 
         # Prepare output object.
-
-
-        scriptfile = "fpkmgenematrix.R"
-        status = script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SCRATCH,
+        outjson = False;
+        if params['include_replicates'] ==0:
+         scriptfile = "fpkmgenematrix.R"
+         outjson = script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SCRATCH,
                     self.__RSCRIPTS, scriptfile, self.__SHOCK_URL, self.__HS_URL, user_token,
-                    cuffdiff_dir)
-        if status == False:
-                self.__LOGGER.info("Problem generating expression matrix json file - " + plot['file'])
+                    cuffdiff_dir, self.__WS_URL,workspace)
 
-        status =   script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token, params['include_replicated'])
 
-        if (result_method_success is False):
+        else:
+         scriptfile = "repfpkmgenematrix.R"
+         outjson = script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SCRATCH,
+                    self.__RSCRIPTS, scriptfile, self.__SHOCK_URL, self.__HS_URL, user_token,
+                    cuffdiff_dir, self.__WS_URL,workspace)
+
+        if outjson is False:
             self.__LOGGER.info("Creation of expression matrix failed")
-#END create_expression_matrix
+            return returnVal
+        with open("{0}/{1}".format(self.__SCRATCH , outjson),'r') as et:
+                  eo = json.load(et)
+        self.__LOGGER.info(workspace + self.__SCRATCH + outjson + params['ws_expression_matrix_id'])
+        ws_client.save_objects({'workspace' : workspace,
+            'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
+                           'data' : eo,
+                           'name' : params['ws_expression_matrix_id']
+                        }]})
 
-        # At some point might do deeper type checking...
+
+        #END create_expression_matrix
+
+               # At some point might do deeper type checking...
         if not isinstance(returnVal, basestring):
             raise ValueError('Method create_expression_matrix return value ' +
                              'returnVal is not type basestring as required.')

@@ -173,7 +173,7 @@ def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token):
         return cuffdiff_dir
 
 
-def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile, shock_url, hs_url, token, cuffdiff_dir):
+def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile, shock_url, hs_url, token, cuffdiff_dir, ws_url, workspace):
         TSV_to_FeatureValue = "trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix"
         returnVal = False
         if exists(cuffdiff_dir) == False:
@@ -184,14 +184,15 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
         #input = Rscript fpkmgenematrix.R cuffdiff_dir outpath(os.join)
 
         outmatrix =  join (scratch, scriptfile) + ".matrix.txt"
-        outjson =    join (scratch, scriptfile) + "matrix.txt.json"
+        outmatrix2 =  scriptfile + ".matrix.txt"
+        outjson =    scriptfile + ".matrix.txt.json"
 
-        computescript = join (rscripts, rscriptfile)
+        computescript = join (rscripts, scriptfile)
         if (exists(computescript) == False):
                 logger.info("Rscript does not exist")
                 return False
         #Generate command to be executed
-        ropts = ["Rscript", computerscript]
+        ropts = ["Rscript", computescript]
 
         ropts.append("--cuffdiff_dir")
         ropts.append(cuffdiff_dir)
@@ -200,7 +201,7 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
         ropts.append(outmatrix)
 
 
-        roptstr = "".join(str(x) for x in ropts)
+        roptstr = " ".join(str(x) for x in ropts)
 
         #Run Rscript to generate Expression matrix
         openedprocess = subprocess.Popen (roptstr, shell=True, stdout=subprocess.PIPE)
@@ -213,10 +214,14 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
 
         #convert expression matrix TSV to json
         cmd_expression_json = [TSV_to_FeatureValue,
+                                    '--workspace_service_url', ws_url,
+                                    '--workspace_name', workspace,
                                     '--object_name', outmatrix,
                                     '--working_directory', scratch,
                                     '--input_directory', scratch,
                                     '--output_file_name', outjson ]
+
+        logger.info (" ".join(cmd_expression_json))
         tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
         stdout, stderr = tool_process.communicate()
 
