@@ -45,7 +45,7 @@
   "behavior" : {
     "service-mapping" : {
     "url" : "",
-    "name" : "",
+    "name" : "kb_cummerbund",
     "method" : "create_expression_matrix",
     "input_mapping" : [
         {
