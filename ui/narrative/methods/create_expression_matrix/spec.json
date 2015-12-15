@@ -7,7 +7,7 @@
   "categories" : ["active"],
   "widgets" : {
     "input" : null,
-    "output" : null
+    "output" : "kbaseExpressionMatrix" 
   },
   "parameters" : [ {
     "id" : "ws_cuffdiff_id",
@@ -20,7 +20,7 @@
       "valid_ws_types" : ["KBaseRNASeq.RNASeqCuffdiffdifferentialExpression" ]
     }
   }, {
-    "id": "replicate_id",
+    "id": "include_replicates",
     "optional":false,
     "advanced":false,
     "allow_multiple":false,
@@ -31,18 +31,22 @@
       "unchecked_value": 0
     }
   }, {
-    "id" : "output_obj_name",
+    "id" : "ws_expression_matrix_id",
     "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
     "default_values" : [ "" ],
     "field_type" : "text"
-  } ],
+    "text_options" : {
+      "valid_ws_types" : [ "KBaseFeatureValues.ExpressionMatrix" ],
+      "is_output_name":true
+    } 
+ } ],
   "behavior" : {
     "service-mapping" : {
     "url" : "",
-    "name" : "KBaseRNASeq",
-    "method" : "createExpressionMatrix",
+    "name" : "",
+    "method" : "create_expression_matrix",
     "input_mapping" : [
         {
           "narrative_system_variable": "workspace",
@@ -53,18 +57,18 @@
           "target_property": "ws_cuffdiff_id"
         },
         {
-          "input_parameter": "replicate_id",
-          "target_property": "replicate_id"
+          "input_parameter": "include_replicates",
+          "target_property": "include_replicates"
         },
         {
-          "input_parameter": "output_obj_name",
-          "target_property": "output_obj_name"
+          "input_parameter": "ws_expression_matrix_id",
+          "target_property": "ws_expression_matrix_id"
        }
     ],
     "output_mapping": [
 	{
 	 "service_method_output_path": [0],
-         "target_property": "createExpressionMatrix"
+         "target_property": "create_expression_matrix"
 	}
       ]
     }
