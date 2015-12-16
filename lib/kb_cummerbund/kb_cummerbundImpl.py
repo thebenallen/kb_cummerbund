@@ -239,7 +239,6 @@ class kb_cummerbund:
 
         params    = expressionMatrixParams
         returnVal = params['ws_expression_matrix_id']
-
         #Set up workspace client
         user_token = ctx['token']
         workspace = params['workspace_name']
@@ -267,6 +266,8 @@ class kb_cummerbund:
 
         # Prepare output object.
         outjson = False;
+        #outjson = "repfpkmgenematrix.R.matrix.txt.json";
+
         if params['include_replicates'] ==0:
          scriptfile = "fpkmgenematrix.R"
          outjson = script_util2.generate_and_upload_expression_matrix(self.__LOGGER, self.__SCRATCH,
