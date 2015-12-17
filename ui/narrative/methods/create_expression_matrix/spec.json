@@ -67,6 +67,14 @@
     ],
     "output_mapping": [
 	{
+          "input_parameter": "ws_expression_matrix_id",
+          "target_property": "expressionMatrixID"
+        },
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspaceID"
+        },
+	{
 	 "service_method_output_path": [0],
          "target_property": "create_expression_matrix"
 	}
