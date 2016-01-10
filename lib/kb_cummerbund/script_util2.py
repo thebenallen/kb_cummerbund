@@ -150,16 +150,22 @@ def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token):
         #cuffdiff_file_name =None
 
         #Decompress tar file and keep it in a directory
-        tarfile = join(scratch, cuffdiff_file_name)
-        dstnExtractFolder = join(scratch, "cuffdiffData")
+        zipfile = join(scratch, cuffdiff_file_name)
+        dstnExtractFolder1 = join(scratch, "cuffdiffData")
+        dstnExtractFolder = join(dstnExtractFolder1, "cuffdiff")
 
         if not os.path.exists(dstnExtractFolder):
             os.makedirs(dstnExtractFolder)
 
-        untarStatus = untar_files(logger, tarfile, dstnExtractFolder)
-        if untarStatus == False:
+        #untarStatus = untar_files(logger, tarfile, dstnExtractFolder)
+        #if untarStatus == False:
+        #    logger.info("Problem extracting the archive")
+        #    return returnVal
+        unzipStatus = script_util.unzip_files(logger, zipfile, dstnExtractFolder)
+        if unzipStatus == False:
             logger.info("Problem extracting the archive")
             return returnVal
+
 
         foldersinExtractFolder = os.listdir(dstnExtractFolder)
 
@@ -168,7 +174,7 @@ def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token):
             return returnVal
 
         # Run R script to run cummerbund json and update the cummerbund output json file
-        cuffdiff_dir = join(dstnExtractFolder, foldersinExtractFolder[0])
+        cuffdiff_dir = dstnExtractFolder
 
         return cuffdiff_dir
 

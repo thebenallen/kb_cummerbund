@@ -56,8 +56,8 @@ class kb_cummerbundTest(unittest.TestCase):
         # self.getWsClient().save_objects({'workspace': self.getWsName(), 'objects': []})
         #
         ws_out_id="cummerbund_out_obj"
-        ws_id="pranjan77:1449259911756"
-        ws_obj_id="cuffdiff_input_data"
+        ws_id="pranjan77:1452055865024"
+        ws_obj_id="demo_test_cuffdiff_new"
         #cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id}
         ws_out_id2="exp_out_obj_rep"
         expParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_expression_matrix_id':ws_out_id2, 'include_replicates':1}

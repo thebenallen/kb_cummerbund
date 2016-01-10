@@ -297,7 +297,7 @@ class kb_cummerbund:
 
         #END create_expression_matrix
 
-               # At some point might do deeper type checking...
+        # At some point might do deeper type checking...
         if not isinstance(returnVal, basestring):
             raise ValueError('Method create_expression_matrix return value ' +
                              'returnVal is not type basestring as required.')
