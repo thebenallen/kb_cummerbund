@@ -111,7 +111,6 @@ def download_file_from_shock(logger,
 
     header = dict()
     header["Authorization"] = "Oauth {0}".format(token)
-    print header
 
     logger.info("Downloading shock node {0}/node/{1}".format(shock_service_url,shock_id))
 
