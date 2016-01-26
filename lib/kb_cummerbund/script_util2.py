@@ -179,6 +179,25 @@ def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token):
         return cuffdiff_dir
 
 
+def parse_expression_matrix_separate_comma(infile):
+    outfile = infile + ".parse.txt"
+    fp=open(outfile, "w")
+    with open(infile) as f:
+        newmatrix = []
+        for line in f:
+            genes  = line.split("\t",1)[0]
+            genes = genes.strip('"')
+            values = line.split("\t",1)[1:]
+            for gene in genes.split(","):
+                    newval = gene + "\t" + "\t".join(values)
+                    fp.write(newval)
+    f.close()
+    fp.close()
+    return  outfile
+
+
+
+
 def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile, shock_url, hs_url, token, cuffdiff_dir, ws_url, workspace):
         TSV_to_FeatureValue = "trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix"
         returnVal = False
@@ -189,9 +208,12 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
         #generate expression matrix
         #input = Rscript fpkmgenematrix.R cuffdiff_dir outpath(os.join)
 
-        outmatrix =  join (scratch, scriptfile) + ".matrix.txt"
+        outmatrix =  join (scratch, scriptfile) + ".matrix"
+        #outmatrixparse =  join (scratch, scriptfile) + ".matrix.parse.txt"
         outmatrix2 =  scriptfile + ".matrix.txt"
-        outjson =    scriptfile + ".matrix.txt.json"
+        outjson =    scriptfile + ".matrix.parse.txt.json"
+
+
 
         computescript = join (rscripts, scriptfile)
         if (exists(computescript) == False):
@@ -218,11 +240,13 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
                 + str(openedprocess.returncode))
             return False
 
+        matrix_parse = parse_expression_matrix_separate_comma(outmatrix)
         #convert expression matrix TSV to json
+
         cmd_expression_json = [TSV_to_FeatureValue,
                                     '--workspace_service_url', ws_url,
                                     '--workspace_name', workspace,
-                                    '--object_name', outmatrix,
+                                    '--object_name', matrix_parse,
                                     '--working_directory', scratch,
                                     '--input_directory', scratch,
                                     '--output_file_name', outjson ]
