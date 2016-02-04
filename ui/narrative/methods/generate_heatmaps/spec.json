@@ -70,11 +70,12 @@
     "default_values" : [ "200" ],
     "field_type" : "text",
     "text_options" : {
-  		"validate_as": "int",
-  		"max_int":200
+  		"validate_as": "int",  		
+  		"max_int": 200  		
+
     }
 
-  },
+  }
   
   
   
