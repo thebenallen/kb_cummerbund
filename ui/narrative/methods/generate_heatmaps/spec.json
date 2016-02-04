@@ -47,7 +47,7 @@
     "default_values" : [ "" ],
     "field_type" : "text",
     "text_options" : {
-  	"validate_as": "float",
+  	"validate_as": "float"
     }
   },
   {
@@ -58,7 +58,7 @@
     "default_values" : [ "" ],
     "field_type" : "text",
     "text_options" : {
-  		"validate_as": "float",
+  		"validate_as": "float"
     }
       	
   },
@@ -83,7 +83,7 @@
       "service-mapping" : {
       	"url" : "",
         "name" : "kb_cummerbund",
-        "method" : "generate_cummerbund_plots",
+        "method" : "create_heatmap_de_genes",
         "input_mapping" : [
         {
           "narrative_system_variable": "workspace",
@@ -94,11 +94,32 @@
         },{
           "input_parameter": "ws_cummerbund_output",
           "target_property": "ws_cummerbund_output"
-        }],
+        }
+        ,{
+          "input_parameter": "sample1",
+          "target_property": "sample1"
+        }
+        ,{
+          "input_parameter": "sample2",
+          "target_property": "sample2"
+        }
+        ,{
+          "input_parameter": "q_value_cutoff",
+          "target_property": "q_value_cutoff"
+        }
+        ,{
+          "input_parameter": "log2_fold_change_cutoff",
+          "target_property": "log2_fold_change_cutoff"
+        }
+        ,{
+          "input_parameter": "num_genes",
+          "target_property": "num_genes"
+        }
+        ],
      "output_mapping" : [
         {
          "service_method_output_path": [0],
-         "target_property": "generate_cummerbund_plots"
+         "target_property": "create_heatmap_de_genes"
         }
       ]
     }
