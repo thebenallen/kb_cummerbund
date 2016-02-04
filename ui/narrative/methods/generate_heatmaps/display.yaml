@@ -78,6 +78,3 @@ description : |
     
 publications :
    -
-             display-text: |
-           "Goff L., Trapnell C., Kelley D. (2011). cummeRbund: Analysis, Exploration, Manipulation and Visualization of Cufflinks High-Throughput Sequencing Data.[R package version 1.2.0].
-        link: http://compbio.mit.edu/cummeRbund/"
