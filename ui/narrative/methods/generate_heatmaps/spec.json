@@ -1,6 +1,6 @@
 {
-  "name" : "Generate Heatmap from Cufdiff output"
-  "ver" : "1.0.1",
+  "name": "Generate Heatmap from Cufdiff output"
+  "ver": "1.0.1",
   "authors" : [ ],
   "contact" : "help@kbase.us",
   "visible" : true,
