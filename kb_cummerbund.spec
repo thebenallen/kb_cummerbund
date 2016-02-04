@@ -33,8 +33,24 @@ module kb_cummerbund {
 		bool include_replicates;
 	} expressionMatrixParams;
 
+	typedef structure {
+		string sample1;
+		string sample2;
+		float q_value_cutoff;
+		float log2_fold_change_cutoff ;
+		int num_genes;
+		ws_cuffdiff_id ws_cuffdiff_id;
+		ws_cummerbund_output ws_cummerbund_output;
+	} heatmapParams;
+	
+
 
 	async funcdef generate_cummerbund_plots (cummerbundParams) returns (ws_cummerbund_output) authentication required;
 
 	async funcdef create_expression_matrix (expressionMatrixParams) returns (ws_expression_matrix_id) authentication required;
+	
+	async funcdef create_heatmap_de_genes (heatmapParams) returns (ws_cummerbund_output) authentication required;
+	/*
+	#async funcdef create_volcano_plot(volcanoplotParams) returns (ws_cummerbund_output) authentication required;
+*/
 };
