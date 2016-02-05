@@ -306,8 +306,8 @@ class kb_cummerbund:
         # return variables are: returnVal
         #BEGIN create_heatmap_de_genes
         fparams    = heatmapParams
-        #returnVal = fparams['ws_cummerbund_output']
-        returnVal = "ttt"
+        returnVal = fparams['ws_cummerbund_output']
+        #returnVal = "ttt"
         #Set up workspace client
         user_token = ctx['token']
         workspace = fparams['workspace_name']
@@ -334,7 +334,7 @@ class kb_cummerbund:
             }])
 
          #Check if workspace has data
-         if len(s_res) == 0:
+        if len(s_res) == 0:
             self.__LOGGER.info("Workspace did not return any objects")
             return returnVal
         cuffdiff_dir = join (self.__SCRATCH , "cuffdiffData/cuffdiff")
@@ -423,7 +423,7 @@ class kb_cummerbund:
         outputobject['rnaseq_experiment_id'] = "rnaseq_experiment_id"
         outputobject['cuffdiff_input_id'] = fparams['ws_cuffdiff_id']
 
-        fparams["ws_cummerbund_output"] = fparams['ws_expression_matrix_id']
+        fparams["ws_cummerbund_output"] = fparams['ws_cummerbund_output']
         res = ws_client.save_objects({
             "workspace":fparams['workspace_name'],
             "objects": [{
