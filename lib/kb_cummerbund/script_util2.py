@@ -388,7 +388,7 @@ def filter_expression_matrix(fparams, system_params):
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
     q_value_cutoff = fparams['q_value_cutoff']
-    include_inf = fparams['include_inf']
+    #include_inf = fparams['include_inf']
     log2_fold_change_cutoff = fparams['log2_fold_change_cutoff']
     infile  =fparams['infile']
     num_genes = fparams['num_genes']
@@ -423,9 +423,9 @@ def filter_expression_matrix(fparams, system_params):
                 continue
             log2_fold_change = linesplit[9]
 
-            if (include_inf==0):
-                if (log2_fold_change.find('inf') != -1 ):
-                    continue
+            #if (include_inf==0):
+            #    if (log2_fold_change.find('inf') != -1 ):
+            #        continue
             #logger.info(log2_fold_change)
 
             gene = linesplit[2]
@@ -499,7 +499,7 @@ def create_heatmap_from_genelist(fparams, system_params):
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
     q_value_cutoff = fparams['q_value_cutoff']
-    include_inf = fparams['include_inf']
+    #include_inf = fparams['include_inf']
     log2_fold_change_cutoff = fparams['log2_fold_change_cutoff']
     infile  =fparams['infile']
     num_genes = fparams['num_genes']
@@ -529,9 +529,9 @@ def create_heatmap_from_genelist(fparams, system_params):
                 continue
             log2_fold_change = linesplit[9]
 
-            if (include_inf==0):
-            	if (log2_fold_change.find('inf') != -1 ):
-            		continue
+          #  if (include_inf==0):
+          #  	if (log2_fold_change.find('inf') != -1 ):
+          #  		continue
             #logger.info(log2_fold_change)
 
             gene = linesplit[2]
