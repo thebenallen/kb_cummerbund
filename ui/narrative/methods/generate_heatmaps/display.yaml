@@ -1,9 +1,9 @@
 #
 # Define basic display information
 #
-name     : Create heatmaps from cuffdiff out 
+name     : View Expression Matrix Heatmap 
 tooltip  : |
-    This method allows to visualize heatmaps from Cuffdiff RNASeq differential expression analysis.  
+    This method allows to visualize static and interactive expression matrix heatmaps for RNA-seq differential expression data obtained from Cuffdiff.  
 
 screenshots :
     []
@@ -32,57 +32,57 @@ suggestions :
 parameters :
     ws_cuffdiff_id:
         ui-name : |
-           Cuffdiff Output
+           Differentially Expressed Data from Cuffdiff
         short-hint : |
-            Specify the cuffdiff output as input
+            Cuffdiff output as input to visualize heatmap
 
     ws_cummerbund_output:
         ui-name : |
-            CummeRbund Plots 
+            Heatmap Plot Name 
         short-hint : |
-            Specify the name of the CummeRbund Heatmap plot
+            Name of the CummeRbund Heatmap plot
     sample1:
         ui-name : |
-            Condition 1
+            Sample Label 1
         short-hint : |
-            First condition to identify differentially expressed genes
+            Sample condition to identify differentially expressed genes
     sample2:
         ui-name : |
-            Condition 2
+            Sample Label 2
         short-hint : |
-            Second condition to identify differentially expressed genes
+            Sample condition to identify differentially expressed genes
     q_value_cutoff:
         ui-name : |
-            alpha(q_value_cutoff)
+            Alpha Cutoff
         short-hint : |
-            Second condition to identify differentially expressed genes
+            q_value_cutoff
     log2_fold_change_cutoff:
         ui-name : |
-            log2(fold change) cutoff
+            Fold Change Cutoff
         short-hint : |
-            log2(fold change) cutoff
+            Log2(fold change) cutoff
     num_genes:
         ui-name : |
-            Maximum number of genes (should be less than 200)
+            Number of genes 
         short-hint : |
-            Maximum number of genes (should be less than 200)
+            Number of genes selected for heat map (Optimal number is 100)
     ws_expression_matrix_id1:
         ui-name : |
-            Workspace object name for expression matrix associated with heatmap
+            Expression matrix (no replicates)
         short-hint : |
-            Workspace object name for expression matrix associated with heatmap
+            Expression matrix output object associated with heatmap (excluding replicates)
     ws_expression_matrix_id2:
         ui-name : |
-            Workspace object name for expression matrix with replicates associated with heatmap
+            Expression matrix (with replicates)
         short-hint : |
-            Workspace object name for expression matrix with replicates associated with heatmap
+            Expression matrix output object associated with heatmap (with replicates)
             
 
 
 
 
 description : |
-   <p>This method helps in exploration, analysis and  visualization of Cufflinks high-throughput RNASeq data. It uses the data produced from Cuffdiff RNASeq differential expression analysis as input and allows to visualize the heatmap of differentially expressed genes</p> 
+   <p>This method helps in visualization of Cufflinks high-throughput RNA-seq data using csHeatmap method from CummeRbund Package. It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and allows to visualize the heatmap of differentially expressed genes. The expression matrix with or without replicates which were used to create heatmaps are also generated as output objects.</p> 
     <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     
