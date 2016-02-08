@@ -5,6 +5,8 @@ import re
 import io
 import urllib
 import hashlib
+import string
+import random
 import requests
 import logging
 import shutil
@@ -30,6 +32,26 @@ import biokbase.Transform.script_utils as script_utils
 
 
 
+def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+    
+def parse_expression_matrix_separate_comma(infile):
+    outfile = infile + ".parse.txt"
+    fp=open(outfile, "w")
+    with open(infile) as f:
+        newmatrix = []
+        for line in f:
+            genes  = line.split("\t",1)[0]
+            genes = genes.strip('"')
+            values = line.split("\t",1)[1:]
+            for gene in genes.split(","):
+                    newval = gene + "\t" + "\t".join(values)
+                    fp.write(newval)
+    f.close()
+    fp.close()
+    return  outfile
+
+
 
 def get_command_line_heatmap_basic(rparams):
 
@@ -52,6 +74,10 @@ def get_command_line_heatmap_basic(rparams):
 
     ropts.append("--include_replicates")
     ropts.append(rparams['include_replicates'])
+
+    ropts.append("--outmatrix")
+    ropts.append(rparams['outmatrix'])
+
     
     roptstr = " ".join(str(x) for x in ropts)
     
@@ -216,8 +242,7 @@ def rplotandupload2 (system_params, fparams, rparams, roptstr):
     openedprocess.wait()
     #Make sure the openedprocess.returncode is zero (0)
     if openedprocess.returncode != 0:
-        logger.info("R script did not return normally, return code - "
-            + str(openedprocess.returncode))
+        logger.info("R script did not return normally, return code - " + str(openedprocess.returncode))
         return False
 
     # Upload image file and get the shock handle
@@ -245,8 +270,39 @@ def rplotandupload2 (system_params, fparams, rparams, roptstr):
         "plot_description" : fparams['description']
     }
     fparams['cummerbundplotset'].append(cummerbundplot)
+    TSV_to_FeatureValue = "trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix"
 
-    return True
+    outmatrix =  rparams['outmatrix']
+        #outmatrixparse =  join (scratch, scriptfile) + ".matrix.parse.txt"
+    outjson =      "out.json"
+
+
+
+
+    matrix_parse = parse_expression_matrix_separate_comma(outmatrix)
+
+    cmd_expression_json = [TSV_to_FeatureValue,
+               '--workspace_service_url', ws_url,
+               '--workspace_name', workspace,
+               '--object_name', matrix_parse,
+               '--working_directory', scratch,
+               '--input_directory', scratch,
+               '--output_file_name', outjson ]
+
+    logger.info (" ".join(cmd_expression_json))
+    tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
+    stdout, stderr = tool_process.communicate()
+#    os.remove(matrix_parse)
+
+    if stdout is not None and len(stdout) > 0:
+            logger.info(stdout)
+    if stderr is not None and len(stderr) > 0:
+            logger.info(stderr)
+
+    if tool_process.returncode != 0:
+           return False
+    return outjson
+
 
 
 
@@ -296,22 +352,6 @@ def extract_cuffdiff_data (logger, shock_url, scratch, s_res, user_token):
         return cuffdiff_dir
 
 
-def parse_expression_matrix_separate_comma(infile):
-    outfile = infile + ".parse.txt"
-    fp=open(outfile, "w")
-    with open(infile) as f:
-        newmatrix = []
-        for line in f:
-            genes  = line.split("\t",1)[0]
-            genes = genes.strip('"')
-            values = line.split("\t",1)[1:]
-            for gene in genes.split(","):
-                    newval = gene + "\t" + "\t".join(values)
-                    fp.write(newval)
-    f.close()
-    fp.close()
-    return  outfile
-
 
 
 
@@ -319,7 +359,7 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
         TSV_to_FeatureValue = "trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix"
         returnVal = False
         if exists(cuffdiff_dir) == False:
-            logger.info("Cuffdiff directory does not exists")
+            logger.info("Cuffdiff directory does not exist")
             return False
 
         #generate expression matrix
@@ -381,6 +421,7 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
            return False
 
         return outjson
+
 
 
 def filter_expression_matrix(fparams, system_params):
@@ -615,6 +656,7 @@ def upload_feature_value (system_params, fparams):
     fparams['outfile'] = outfile
     fparams['outjson'] = outjson
 
+    
     x = filter_expression_matrix(fparams, system_params)
     #infile,sample1, sample2, q_value_cutoff=0.05, include_inf=1, log2_fold_change_cutoff=2, num_genes=100)
 
