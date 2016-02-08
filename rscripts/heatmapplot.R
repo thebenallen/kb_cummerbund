@@ -82,7 +82,7 @@ myggheat<-function(object, rescaling='none', clustering='none', labCol=T, labRow
 	## add the heat tiles with or without a white border for clarity
 	
 	if(border==TRUE)
-		g2=g+geom_rect(aes(xmin=colInd-1,xmax=colInd,ymin=rowInd-1,ymax=rowInd, fill=value),colour='grey')
+		g2=g+geom_rect(aes(xmin=colInd-1,xmax=colInd,ymin=rowInd-1,ymax=rowInd, fill=value),colour='black')
 	if(border==FALSE)
 		g2=g+geom_rect(aes(xmin=colInd-1,xmax=colInd,ymin=rowInd-1,ymax=rowInd, fill=value))
 	
@@ -183,7 +183,7 @@ opt$imagewidth = as.numeric(opt$imagewidth)
 
 opt$include_replicates = as.numeric(opt$include_replicates)
 
-
+defaultimageheight = opt$imageheight
 
 
 suppressMessages(require (cummeRbund))
@@ -203,7 +203,6 @@ features = subset(genes.features, select = c(gene_id, gene_short_name))
 
 
 
-png(filename = opt$outpng, width = opt$imagewidth, height = opt$imageheight, units = 'px')
 
 hmap=c()
 if (opt$include_replicates ==0){
@@ -213,6 +212,17 @@ hmap<-myggheat(myGenes,cluster='both', fullnames=T, replicates=F)
 hmap<-myggheat(myGenes,cluster='both', fullnames=T, replicates=T)
 
 }
+
+
+opt$imageheight = length(rownames(hmap$matrix))*12
+
+if (opt$imageheight > defaultimageheight){
+    opt$imageheight = defaultimageheight
+}
+
+png(filename = opt$outpng, width = opt$imagewidth, height = opt$imageheight, units = 'px')
+
+
 print(hmap$heatmap)
 .invisible <- dev.off()
 
