@@ -428,11 +428,11 @@ def filter_expression_matrix(fparams, system_params):
     cuffdiff_dir=fparams['cuffdiff_dir']
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
-    q_value_cutoff = fparams['q_value_cutoff']
+    q_value_cutoff = float(fparams['q_value_cutoff'])
     #include_inf = fparams['include_inf']
-    log2_fold_change_cutoff = fparams['log2_fold_change_cutoff']
+    log2_fold_change_cutoff = float(fparams['log2_fold_change_cutoff'])
     infile  =fparams['infile']
-    num_genes = fparams['num_genes']
+    num_genes = int(fparams['num_genes'])
     infile = fparams['infile']
     outfile = fparams['outfile']
 
