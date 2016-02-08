@@ -73,6 +73,7 @@
     "text_options" : {
   		"validate_as": "int",  		
   		"max_int": 200  		
+     }
     }, {
     "id" : "ws_expression_matrix_id1",
     "optional" : false,
@@ -89,12 +90,6 @@
     "field_type" : "text"
   }
 
-
-
-
-
-
-  }
   
   
   
