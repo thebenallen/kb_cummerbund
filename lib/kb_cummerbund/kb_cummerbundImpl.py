@@ -338,7 +338,7 @@ class kb_cummerbund:
             self.__LOGGER.info("Workspace did not return any objects")
             return returnVal
         cuffdiff_dir = join (self.__SCRATCH , "cuffdiffData/cuffdiff")
-        #cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
+        cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
         #cuffdiff_dir = "/kb/module/work/nnc/cuffdiff"
         self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
 
