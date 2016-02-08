@@ -438,17 +438,20 @@ def filter_expression_matrix(fparams, system_params):
 
     logger=system_params['logger']
 
-    for key in fparams:
-    	print "fparams: " + str(key) + " " + str(fparams[key])
-    for key in system_params:
-    	print "system_params: " + str(key) + " " + str(system_params[key])
+#    for key in fparams:
+#    	print "fparams: " + str(key) + " " + str(fparams[key])
+#    for key in system_params:
+#    	print "system_params: " + str(key) + " " + str(system_params[key])
 
 
     #if exists(cuffdiff_dir) == False:
     #    logger.info("Cuffdiff directory does not exists")
     #return False
-    if (num_genes > 500):
-        num_genes = 500;
+    logger.info("num_genes before: " + str(num_genes) )
+    if (num_genes > 200):
+        num_genes = 200;
+    logger.info("num_genes after: " + str(num_genes) )
+        
 
     fp=open(outfile, "w")
     x = "gene\tq_value\tlog2-fold_change\n"
