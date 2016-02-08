@@ -4,7 +4,7 @@
 name     : Create Expression Matrix
 
 tooltip  : |
-    This method creates the expression matrix for given RNASeq differential expression data. 
+    This method creates the expression matrix for a given RNA-seq differential expression data obtained from RNA-seq pipeline.
 screenshots :
     []
 
@@ -31,14 +31,14 @@ parameters :
         ui-name : |
             Replicates
         short-hint : |
-            Selection of replicates
+            Expression matrix with replicates
     ws_expression_matrix_id :
         ui-name : |
             Expression Matrix
         short-hint : |
             Provide the name of expression matrix
 description : |
-    <p>This method allows you to create the expression matrix for given RNAseq differentially expressed data.</p>
+    <p>This method allows you to create the expression matrix based on differentially expressed data obtained from cuffdiff method. It takes cuffdiff output as input and provides the average value of the expression values of the replicates. Replicates option allow users to get the expression matrix of all the conditions with replicates.The expression values are provided as log10(FPKM+1).</p>
       <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
        Priya Ranjan, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Jim Thomason, Fei He, Vivek Kumar</p>
 publications :
