@@ -58,8 +58,8 @@
       "subdata_selection": {
 
         "parameter_id" : "ws_cuffdiff_id",
-        "subdata_included" : ["data/analysis/condition"],
-        "path_to_subdata": ["data","analysis","condition"]
+        "subdata_included" : [analysis/condition"],
+        "path_to_subdata": ["analysis","condition"]
       },
       "multiselection":true,
       "show_src_obj":false,
