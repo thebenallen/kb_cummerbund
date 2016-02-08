@@ -40,6 +40,8 @@ module kb_cummerbund {
 		float log2_fold_change_cutoff ;
 		int num_genes;
 		ws_cuffdiff_id ws_cuffdiff_id;
+		ws_expression_matrix_id ws_expression_matrix_id1;
+		ws_expression_matrix_id ws_expression_matrix_id2;
 		ws_cummerbund_output ws_cummerbund_output;
 	} heatmapParams;
 	
