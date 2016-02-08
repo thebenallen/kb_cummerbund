@@ -1,6 +1,6 @@
 {
   "name": "Generate Heatmap from Cufdiff output",
-  "ver": "1.0.1",
+  "ver": "0.0.1",
   "authors" : [ ],
   "contact" : "help@kbase.us",
   "visible" : true,
@@ -26,21 +26,47 @@
     "allow_multiple" : false,
     "default_values" : [ "" ],
     "field_type" : "text"
-  } , {
+  } , 
+  {
     "id" : "sample1",
     "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
     "default_values" : [ "" ],
-    "field_type" : "text"
-  },{
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+
+        "parameter_id" : "ws_cuffdiff_id",
+        "subdata_included" : ["analysis/condition"],
+        "path_to_subdata": ["analysis","condition"]
+      },
+      "multiselection":false,
+      "show_src_obj":false,
+      "allow_custom":false
+    }
+    },
+    
+     {
     "id" : "sample2",
     "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
     "default_values" : [ "" ],
-    "field_type" : "text"
-  },{
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+
+        "parameter_id" : "ws_cuffdiff_id",
+        "subdata_included" : ["analysis/condition"],
+        "path_to_subdata": ["analysis","condition"]
+      },
+      "multiselection":fals,
+      "show_src_obj":false,
+      "allow_custom":false
+    }
+    },
+    {
     "id" : "q_value_cutoff",
     "optional" : false,
     "advanced" : false,
