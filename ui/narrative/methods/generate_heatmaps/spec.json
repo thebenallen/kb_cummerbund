@@ -61,7 +61,7 @@
         "subdata_included" : ["analysis/condition"],
         "path_to_subdata": ["analysis","condition"]
       },
-      "multiselection":fals,
+      "multiselection":false,
       "show_src_obj":false,
       "allow_custom":false
     }
