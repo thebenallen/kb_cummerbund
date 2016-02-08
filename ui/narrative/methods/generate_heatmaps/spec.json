@@ -73,7 +73,6 @@
     "text_options" : {
   		"validate_as": "int",  		
   		"max_int": 200  		
-
     }, {
     "id" : "ws_expression_matrix_id1",
     "optional" : false,
@@ -135,7 +134,18 @@
         ,{
           "input_parameter": "num_genes",
           "target_property": "num_genes"
+        },{
+          "input_parameter": "ws_expression_matrix_id1",
+          "target_property": "ws_expression_matrix_id1"
+        },{
+          "input_parameter": "ws_expression_matrix_id2",
+          "target_property": "ws_expression_matrix_id2"
         }
+        
+        
+        
+        
+        
         ],
      "output_mapping" : [
         {

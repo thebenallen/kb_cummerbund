@@ -66,7 +66,6 @@ parameters :
             Maximum number of genes (should be less than 200)
         short-hint : |
             Maximum number of genes (should be less than 200)
-
     ws_expression_matrix_id1:
         ui-name : |
             Workspace object name for expression matrix associated with heatmap
