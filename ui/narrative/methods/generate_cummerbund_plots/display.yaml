@@ -3,7 +3,7 @@
 #
 name     : Create CummeRbund plots 
 tooltip  : |
-    This method allows to visualize a large number of data produced from Cuffdiff RNASeq differential expression analysis.  
+    This method allows to visualize a large number of data produced from Cuffdiff RNA-seq differential expression analysis.  It offers several plots that allow for quality-control or global analysis of cufflinks data.
 
 screenshots :
     []
@@ -32,19 +32,19 @@ suggestions :
 parameters :
     ws_cuffdiff_id:
         ui-name : |
-           Cuffdiff Output
+           Expression Data from Cuffdiff
         short-hint : |
-            Specify the cuffdiff output as input
+            Cuffdiff output object as input
 
     ws_cummerbund_output:
         ui-name : |
             CummeRbund Plots 
         short-hint : |
-            Specify the name of the CummeRbund plot
+            Name of the CummeRbund Output
 
 description : |
-   <p>This method helps in exploration, analysis and  visualization of Cufflinks high-throughput RNASeq data. It uses the data produced from Cuffdiff RNASeq differential expression analysis as input and allows to visualize the estimated overdispersion for each sample as a quality control measure.</p> 
-    <p>This method allows user to visualize different type of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot and volcano matrix plot.</p> 
+   <p>This method helps in exploration, analysis and  visualization of Cufflinks high-throughput RNA-seq data.</p> 
+    <p>It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and This method allows user to visualize different type of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot, volcano matrix plot etc.</p> 
     <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     
