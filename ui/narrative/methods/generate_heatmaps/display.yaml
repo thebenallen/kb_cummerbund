@@ -3,7 +3,7 @@
 #
 name     : View Expression Matrix Heatmap 
 tooltip  : |
-    This method allows to visualize static and interactive expression matrix heatmaps for RNA-seq differential expression data obtained from Cuffdiff.  
+    Visualize static and interactive expression matrix heatmaps for RNA-seq differential expression data obtained from Cuffdiff.  
 
 screenshots :
     []
@@ -32,9 +32,9 @@ suggestions :
 parameters :
     ws_cuffdiff_id:
         ui-name : |
-           Differentially Expressed Data from Cuffdiff
+            Cuffdiff Output
         short-hint : |
-            Cuffdiff output as input to visualize heatmap
+            Differentially expressed data from Cuffdiff
 
     ws_cummerbund_output:
         ui-name : |
@@ -43,12 +43,12 @@ parameters :
             Name of the CummeRbund Heatmap plot
     sample1:
         ui-name : |
-            Sample Label 1
+            Treatment Label 1
         short-hint : |
             Sample condition to identify differentially expressed genes
     sample2:
         ui-name : |
-            Sample Label 2
+            Treatment Label 2
         short-hint : |
             Sample condition to identify differentially expressed genes
     q_value_cutoff:
@@ -60,29 +60,29 @@ parameters :
         ui-name : |
             Fold Change Cutoff
         short-hint : |
-            Log2(fold change) cutoff
+            Absolute value of Log2(fold change) cutoff
     num_genes:
         ui-name : |
-            Number of genes 
+            Number of Genes 
         short-hint : |
-            Number of genes selected for heat map (Optimal number is 100)
+            Number of genes selected for heat map display (Optimal number is 100)
     ws_expression_matrix_id1:
         ui-name : |
-            Expression matrix (no replicates)
+            Expression Matrix (Excludes Replicates)
         short-hint : |
             Expression matrix output object associated with heatmap (excluding replicates)
     ws_expression_matrix_id2:
         ui-name : |
-            Expression matrix (with replicates)
+            Expression matrix (Includes Replicates)
         short-hint : |
-            Expression matrix output object associated with heatmap (with replicates)
+            Expression matrix output object associated with heatmap (including replicates)
             
 
 
 
 
 description : |
-   <p>This method helps in visualization of Cufflinks high-throughput RNA-seq data using csHeatmap method from CummeRbund Package. It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and allows to visualize the heatmap of differentially expressed genes. The expression matrix with or without replicates which were used to create heatmaps are also generated as output objects.</p> 
+   <p>This method helps in the visualization of Cufflinks high-throughput RNA-seq data using CummeRbund Package (csHeatmap method). It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and creates a heatmap of differentially expressed genes. The expression matrix with or without replicates which were used to create heatmaps are also generated as output objects.</p> 
     <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     
