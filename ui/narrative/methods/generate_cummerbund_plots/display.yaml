@@ -1,9 +1,9 @@
 #
 # Define basic display information
 #
-name     : Create CummeRbund plots 
+name     : View CummeRbund Plots 
 tooltip  : |
-    This method allows to visualize a large number of data produced from Cuffdiff RNA-seq differential expression analysis.  It offers several plots that allow for quality-control or global analysis of cufflinks data.
+    Display a variety of plots to visualize and easily navigate through data produced from RNA-seq differential expression analysis in Cuffdiff.
 
 screenshots :
     []
@@ -32,9 +32,9 @@ suggestions :
 parameters :
     ws_cuffdiff_id:
         ui-name : |
-           Expression Data from Cuffdiff
+            Cuffdiff Output
         short-hint : |
-            Cuffdiff output object as input
+            Differentially expressed data from Cuffdiff
 
     ws_cummerbund_output:
         ui-name : |
@@ -44,8 +44,8 @@ parameters :
 
 description : |
    <p>This method helps in exploration, analysis and  visualization of Cufflinks high-throughput RNA-seq data.</p> 
-    <p>It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and This method allows user to visualize different type of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot, volcano matrix plot etc.</p> 
-    <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
+   <p>It uses the large amount of data produced from Cuffdiff RNA-seq differential expression analysis as input and allows user to easily navigate through it by visualizing different types of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot, volcano matrix plots, etc.</p> 
+   <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     
 publications :
