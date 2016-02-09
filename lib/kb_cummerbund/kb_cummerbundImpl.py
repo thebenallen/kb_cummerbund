@@ -133,56 +133,56 @@ class kb_cummerbund:
         plotlist = [
                 { 'file': "dispersionplot.R",
                   'title': "Dispersion plot",
-                  'description': "Dispersion plot" },
+                  'description': "Dispersion plot is the quality measure of the data. It estimates deviation from threshold against counts in FPKM." },
 
 
                 { 'file': "fpkmscvplot.R",
                   'title': "Genes CV plot",
-                  'description': "Genes squared coefficient of variation plot" },
+                  'description': "The squared coefficient of variation plot is a normalized measure of cross-replicate variability that can be useful for evaluating the quality of RNA-seq data." },
 
                 { 'file': "isoformscvplot.R",
                   'title': "Isoform CV plot",
-                  'description': "Isoform coefficient of variation plot" },
+                  'description': "The squared coefficient of variation plot is a normalized measure of cross-replicate variability that can be useful for evaluating the quality of RNA-seq data.Differences in CV2 can result in lower numbers of differentially expressed isoforms due to a higher degree of variability between replicate fpkm estimates." },
 
                 { 'file': "densityplot.R",
                   'title': "Density plot",
-                  'description': "Distribution of FPKM scores across samples" },
+                  'description': "The density plot shows the distribution of FPKM scores across samples" },
 
                 { 'file': "csdensityrepplot.R",
                   'title': "Replicates density plot",
-                  'description': "Distribution of FPKM scores across sample replicates" },
+                  'description': "The replicates density plot shows the distribution of FPKM scores across sample replicates" },
 
                 { 'file': "boxplot.R",
                   'title': "Box plots",
-                  'description': "Box plots of FPKM distribution" },
+                  'description': "The box plots show the FPKM distribution across samples." },
 
                 { 'file': "boxrepplot.R",
                   'title': "Box plots of replicates",
-                  'description': "Box plots of FPKM distribution of replicates" },
+                  'description': "The box plots of replicates show the FPKM distribution across sample replicates." },
 
                 { 'file': "pairwisescatterplots.R",
                   'title': "Pairwise scatter plots",
-                  'description': "Pair-wise scatterplots (FPKMs)" },
+                  'description': "The scatterplots show differences in gene expression between two samples. If two samples are identical, all genes will fall on the mid-line." },
 
                  { 'file': "volcanomatrixplot.R",
                   'title': "Volcano matrix plots",
-                  'description': "Volcano matrix plots" },
+                  'description': "Volcano matrix plot is a scatter plot that also identifies differentially expressed genes (by color) between samples based on log2 fold change cut off." },
 
                 { 'file': "pcaplot.R",
                   'title': "PCA plot",
-                  'description': "PCA plot" },
+                  'description': "Principal Component Analysis (PCA) is an informative approach for dimensionality reduction for exploring teh relationship between sample conditions." },
 
                 { 'file': "pcarepplot.R",
                   'title': "PCA plot including replicates",
-                  'description': "PCA plot including replicates" },
+                  'description': "Principal Component Analysis (PCA) is an informative approach for dimensionality reduction for exploring teh relationship between sample conditions including replicates." },
 
                 { 'file': "mdsplot.R",
                   'title': "Multi-dimensional scaling plot",
-                  'description': "Multi-dimensional scaling plot" },
+                  'description': "Multi-dimensional scaling plots are similar to PCA plots and useful for determining the major sources of variation in the dataset. " },
 
                 { 'file': "mdsrepplot.R",
                   'title': "Multi-dimensional scaling plot including replicates",
-                  'description': "Multi-dimensional scaling plot including replicates" }
+                  'description': "Multi-dimensional scaling plot including replicates are  similar to PCA plots and useful for determining the major sources of variation in the dataset with replicates. These can be useful to determine any systematic bias that may be present between conditions." }
             ]
 
 #TODO.. Giving Rplot.pdf
