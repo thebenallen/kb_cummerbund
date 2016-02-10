@@ -546,7 +546,7 @@ class kb_cummerbund:
         rparams['outpng'] = join (system_params['scratch'], "heatmap.png")
         rparams['imageheight'] = 1600
         rparams['imagewidth'] = 800
-        rparams['plotscript'] = join(system_params['rscripts'], "interactiveheatmapplot.R")
+        rparams['plotscript'] = join(system_params['rscripts'], "heatmapplotinteractive.R")
         rparams['include_replicates'] = 1
         rparams['outmatrix'] = join (system_params['scratch'], "outmatrix")
 
