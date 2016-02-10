@@ -1,5 +1,5 @@
 {
-  "name": "Generate Heatmap from Cufdiff output",
+  "name": "Generate interactive Heatmap from Cufdiff output",
   "ver": "0.0.1",
   "authors" : [ ],
   "contact" : "help@kbase.us",
@@ -7,7 +7,7 @@
   "categories" : ["active"],
   "widgets" : {
     "input" : null,
-    "output" : "kbaseCummerbundPlot"
+    "output" : "kbaseExpressionMatrixHeatmap"
   },
   "parameters" : [ {
     "id" : "ws_cuffdiff_id",

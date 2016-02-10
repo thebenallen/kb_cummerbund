@@ -1,9 +1,9 @@
 #
 # Define basic display information
 #
-name     : View Expression Matrix Heatmap 
+name     : View Interactive Expression Matrix Heatmap 
 tooltip  : |
-    Visualize static and interactive expression matrix heatmaps for RNA-seq differential expression data obtained from Cuffdiff.  
+    Visualize interactive expression matrix heatmaps for RNA-seq differential expression data obtained from Cuffdiff.  
 
 screenshots :
     []
