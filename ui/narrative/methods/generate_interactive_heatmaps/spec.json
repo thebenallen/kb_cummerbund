@@ -1,5 +1,5 @@
 {
-  "name": "Generate interactive Heatmap from Cufdiff output",
+  "name": "View Differentially Expressed Genes from Cuffdiff in Heatmap",
   "ver": "0.0.1",
   "authors" : [ ],
   "contact" : "help@kbase.us",
