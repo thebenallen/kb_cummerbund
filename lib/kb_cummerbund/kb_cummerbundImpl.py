@@ -417,7 +417,7 @@ class kb_cummerbund:
             fparams['description'] = plot['description']
 
 
-            status = script_util2.rplotandupload2(system_params,fparams, rparams, plot['roptstr'])
+            status = script_util2.rplotanduploadinteractive(system_params,fparams, rparams, plot['roptstr'])
             if status == False:
                    self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
             else:
