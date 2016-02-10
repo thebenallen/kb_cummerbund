@@ -267,65 +267,6 @@ public class KbCummerbundClient {
     }
 
     /**
-     * <p>Original spec-file function name: create_heatmap_de_genes</p>
-     * <pre>
-     * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.HeatmapParams HeatmapParams} (original type "heatmapParams")
-     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public String createHeatmapDeGenesAsync(HeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(arg1);
-        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
-        List<String> res = caller.jsonrpcCall("kb_cummerbund.create_heatmap_de_genes_async", args, retType, true, true, jsonRpcContext);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: create_heatmap_de_genes</p>
-     * <pre>
-     * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.HeatmapParams HeatmapParams} (original type "heatmapParams")
-     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public JobState<List<String>> createHeatmapDeGenesCheck(String jobId) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(jobId);
-        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
-        List<JobState<List<String>>> res = caller.jsonrpcCall("kb_cummerbund.create_heatmap_de_genes_check", args, retType, true, true);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: create_heatmap_de_genes</p>
-     * <pre>
-     * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.HeatmapParams HeatmapParams} (original type "heatmapParams")
-     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public String createHeatmapDeGenes(HeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        String jobId = createHeatmapDeGenesAsync(arg1, jsonRpcContext);
-        while (true) {
-            if (Thread.currentThread().isInterrupted())
-                throw new JsonClientException("Thread was interrupted");
-            try { 
-                Thread.sleep(this.asyncJobCheckTimeMs);
-            } catch(Exception ex) {
-                throw new JsonClientException("Thread was interrupted", ex);
-            }
-            JobState<List<String>> res = createHeatmapDeGenesCheck(jobId);
-            if (res.getFinished() != 0L)
-                return res.getResult().get(0);
-        }
-    }
-
-    /**
      * <p>Original spec-file function name: create_interactive_heatmap_de_genes</p>
      * <pre>
      * </pre>

@@ -60,11 +60,11 @@ module kb_cummerbund {
 
 	async funcdef create_expression_matrix (expressionMatrixParams) returns (ws_expression_matrix_id) authentication required;
 	
-	async funcdef create_heatmap_de_genes (heatmapParams) returns (ws_cummerbund_output) authentication required;
 
 	async funcdef create_interactive_heatmap_de_genes (interactiveHeatmapParams) returns (ws_expression_matrix_id) authentication required;
 
 	/*
 	#async funcdef create_volcano_plot(volcanoplotParams) returns (ws_cummerbund_output) authentication required;
+#	async funcdef create_heatmap_de_genes (heatmapParams) returns (ws_cummerbund_output) authentication required;
 */
 };

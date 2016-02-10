@@ -264,17 +264,35 @@ def rplotanduploadinteractive (system_params, fparams, rparams, roptstr):
 
     # Create a return list
     #TODO fix this "png_json_handle"  : json_handle,
-    cummerbundplot = {
-        "png_handle"       : png_handle,
-        "plot_title"       : fparams['title'],
-        "plot_description" : fparams['description']
-    }
-    fparams['cummerbundplotset'].append(cummerbundplot)
     TSV_to_FeatureValue = "trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix"
 
     outmatrix =  rparams['outmatrix']
         #outmatrixparse =  join (scratch, scriptfile) + ".matrix.parse.txt"
     outjson =      "out.json"
+
+    matrix_parse = parse_expression_matrix_separate_comma(outmatrix)
+
+    cmd_expression_json = [TSV_to_FeatureValue,
+               '--workspace_service_url', ws_url,
+               '--workspace_name', workspace,
+               '--object_name', matrix_parse,
+               '--working_directory', scratch,
+               '--input_directory', scratch,
+               '--output_file_name', outjson ]
+
+    logger.info (" ".join(cmd_expression_json))
+    tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
+    stdout, stderr = tool_process.communicate()
+#    os.remove(matrix_parse)
+
+    if stdout is not None and len(stdout) > 0:
+            logger.info(stdout)
+    if stderr is not None and len(stderr) > 0:
+            logger.info(stderr)
+
+    if tool_process.returncode != 0:
+           return False
+    return outjson
 
 
 
