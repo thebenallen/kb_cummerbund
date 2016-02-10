@@ -64,6 +64,10 @@ async_run_methods['kb_cummerbund.generate_cummerbund_plots_async'] = ['kb_cummer
 async_check_methods['kb_cummerbund.generate_cummerbund_plots_check'] = ['kb_cummerbund', 'generate_cummerbund_plots']
 async_run_methods['kb_cummerbund.create_expression_matrix_async'] = ['kb_cummerbund', 'create_expression_matrix']
 async_check_methods['kb_cummerbund.create_expression_matrix_check'] = ['kb_cummerbund', 'create_expression_matrix']
+async_run_methods['kb_cummerbund.create_heatmap_de_genes_async'] = ['kb_cummerbund', 'create_heatmap_de_genes']
+async_check_methods['kb_cummerbund.create_heatmap_de_genes_check'] = ['kb_cummerbund', 'create_heatmap_de_genes']
+async_run_methods['kb_cummerbund.create_interactive_heatmap_de_genes_async'] = ['kb_cummerbund', 'create_interactive_heatmap_de_genes']
+async_check_methods['kb_cummerbund.create_interactive_heatmap_de_genes_check'] = ['kb_cummerbund', 'create_interactive_heatmap_de_genes']
 
 class AsyncJobServiceClient(object):
 
@@ -261,7 +265,6 @@ class MethodContext(dict):
         self['method'] = None
         self['call_id'] = None
         self['rpc_context'] = None
-        self['provenance'] = None
         self._debug_levels = set([7, 8, 9, 'DEBUG', 'DEBUG2', 'DEBUG3'])
         self._logger = logger
 
@@ -343,6 +346,14 @@ class Application(object):
                              name='kb_cummerbund.create_expression_matrix',
                              types=[dict])
         self.method_authentication['kb_cummerbund.create_expression_matrix'] = 'required'
+        self.rpc_service.add(impl_kb_cummerbund.create_heatmap_de_genes,
+                             name='kb_cummerbund.create_heatmap_de_genes',
+                             types=[dict])
+        self.method_authentication['kb_cummerbund.create_heatmap_de_genes'] = 'required'
+        self.rpc_service.add(impl_kb_cummerbund.create_interactive_heatmap_de_genes,
+                             name='kb_cummerbund.create_interactive_heatmap_de_genes',
+                             types=[dict])
+        self.method_authentication['kb_cummerbund.create_interactive_heatmap_de_genes'] = 'required'
         self.auth_client = biokbase.nexus.Client(
             config={'server': 'nexus.api.globusonline.org',
                     'verify_ssl': True,
@@ -378,9 +389,6 @@ class Application(object):
                 ctx['module'], ctx['method'] = req['method'].split('.')
                 ctx['call_id'] = req['id']
                 ctx['rpc_context'] = {'call_stack': [{'time':self.now_in_utc(), 'method': req['method']}]}
-                prov_action = {'service': ctx['module'], 'method': ctx['method'], 
-                               'method_params': req['params']}
-                ctx['provenance'] = [prov_action]
                 try:
                     token = environ.get('HTTP_AUTHORIZATION')
                     # parse out the method being requested and check if it
@@ -604,10 +612,6 @@ def process_async_cli(input_file_path, output_file_path, token):
     if 'context' in req:
         ctx['rpc_context'] = req['context']
     ctx['CLI'] = 1
-    ctx['module'], ctx['method'] = req['method'].split('.')
-    prov_action = {'service': ctx['module'], 'method': ctx['method'], 
-                   'method_params': req['params']}
-    ctx['provenance'] = [prov_action]
     resp = None
     try:
         resp = application.rpc_service.call_py(ctx, req)

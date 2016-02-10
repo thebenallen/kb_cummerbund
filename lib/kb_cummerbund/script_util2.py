@@ -196,6 +196,90 @@ def rplotandupload (logger, scratch, rscripts, plotscript, shock_url, hs_url, to
     return True
 
 
+def rplotanduploadinteractive (system_params, fparams, rparams, roptstr):
+    """
+    Prepare URIs and call R script to generate image, json files.
+    Upload the generated image and json files to Shock
+    Get Shock handles and prepare cummerbundplotset object and append
+        to user provided list.
+    """
+    logger      = system_params['logger']
+    scratch     = system_params['scratch']
+    shock_url   = system_params['shock_url']
+    hs_url      = system_params['hs_url']
+    ws_url      = system_params['ws_url']
+    token       = system_params['token']
+    workspace   = system_params['workspace']
+    rscripts   = system_params['rscripts']
+
+
+    logger=system_params['logger']
+
+
+
+    #Check if data directory exists.
+#    if exists(cuffdiff_dir) == False:
+#        logger.info("Cuffdiff directory does not exists")
+#        return False
+
+#    # Generated image location
+#    outpng           = join(scratch,  plotscript) + ".png"
+#    #Need to check if its already present
+#    if exists(outpng):
+#        logger.info("PNG file already exists")
+#        return False
+
+#    # Generated json location
+#    outjson          = join(scratch,  plotscript) + ".json"
+#    #Need to check if its already present
+#    if exists(outjson):
+#        logger.info("JSON file already exists")
+#        return False
+
+
+    logger.info(roptstr)
+    openedprocess = subprocess.Popen(roptstr, shell=True, stdout=subprocess.PIPE)
+    openedprocess.wait()
+    #Make sure the openedprocess.returncode is zero (0)
+    if openedprocess.returncode != 0:
+        logger.info("R script did not return normally, return code - " + str(openedprocess.returncode))
+        return False
+
+    # Upload image file and get the shock handle
+#    png_handle = script_util.create_shock_handle( logger,
+#       rparams['outpng'], system_params['shock_url'], system_params['hs_url'], "png", system_params['token'] )
+    #Check for the return value and if error take measure.
+#    if png_handle["id"] == "":
+#        logger.info("Could not create Shock handle")
+#        return False
+
+   #TODO Removed all json handle related stuff. fix it later
+    # Upload json file and get the shock handle
+   # json_handle = script_util.create_shock_handle( logger,
+   #    outjson, shock_url, hs_url, "json", token )
+    #Check for the return value and if error take measure.
+  #  if json_handle["id"] == "":
+   #     logger.info("Could not create Shock handle")
+    #    return False
+
+    # Create a return list
+    #TODO fix this "png_json_handle"  : json_handle,
+    cummerbundplot = {
+        "png_handle"       : png_handle,
+        "plot_title"       : fparams['title'],
+        "plot_description" : fparams['description']
+    }
+    fparams['cummerbundplotset'].append(cummerbundplot)
+    TSV_to_FeatureValue = "trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix"
+
+    outmatrix =  rparams['outmatrix']
+        #outmatrixparse =  join (scratch, scriptfile) + ".matrix.parse.txt"
+    outjson =      "out.json"
+
+
+
+
+
 def rplotandupload2 (system_params, fparams, rparams, roptstr):
     """
     Prepare URIs and call R script to generate image, json files.

@@ -53,7 +53,7 @@ module kb_cummerbund {
 		int num_genes;
 		ws_cuffdiff_id ws_cuffdiff_id;
 		ws_expression_matrix_id ws_expression_matrix_id;
-	} ineractiveHeatmapParams;
+	} interactiveHeatmapParams;
 	
 
 	async funcdef generate_cummerbund_plots (cummerbundParams) returns (ws_cummerbund_output) authentication required;

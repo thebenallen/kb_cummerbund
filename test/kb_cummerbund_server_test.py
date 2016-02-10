@@ -80,9 +80,9 @@ class kb_cummerbundTest(unittest.TestCase):
         #self.assertEqual(x,y,1)
         ws_out_id3 = "exp3"
         num_g = "100"
-        heatmapParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id3, 'ws_expression_matrix_id1':"abc", 'ws_expression_matrix_id2':"def",
+        interactiveHeatmapParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id3, 'ws_expression_matrix_id':"abc",
 		'sample1':'WT_R1', 'sample2' :'Hy5_R1', 'q_value_cutoff':0.05,  'log2_fold_change_cutoff': 2, 'num_genes' :num_g ,'include_replicates':1}
-        ret = self.getImpl().create_heatmap_de_genes(self.getContext(), heatmapParams)
+        ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
         # Run your method by
         # ret = self.getImpl().your_method(self.getContext(), parameters...)
         #
