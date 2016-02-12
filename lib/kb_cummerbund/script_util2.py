@@ -550,8 +550,8 @@ def filter_expression_matrix(fparams, system_params):
     #    logger.info("Cuffdiff directory does not exists")
     #return False
     logger.info("num_genes before: " + str(num_genes) )
-    if (num_genes > 200):
-        num_genes = 200;
+    if (num_genes > 500):
+        num_genes = 500;
     logger.info("num_genes after: " + str(num_genes) )
         
 
