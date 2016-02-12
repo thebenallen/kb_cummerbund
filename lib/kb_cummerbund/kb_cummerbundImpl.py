@@ -411,7 +411,9 @@ class kb_cummerbund:
                   outjson = status
                   with open("{0}/{1}".format(self.__SCRATCH , outjson),'r') as et2:
                     eo2 = json.load(et2)
+                    genome_ref = s_res[0]['data']['analysis']['genome_id']
                     eo2['type']='untransformed'
+                    eo2['genome_ref'] = genome_ref
                     self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
                     ws_client.save_objects({'workspace' : workspace,
                            'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',

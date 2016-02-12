@@ -565,6 +565,11 @@ def filter_expression_matrix(fparams, system_params):
         for line in f:
             linesplit  = line.split()
             qval = linesplit[12]
+            significance = linesplit[13]
+          
+            if (significance =='no'):
+                continue
+          
             if (qval =='q_value'):
                 continue
             log2_fold_change = linesplit[9]

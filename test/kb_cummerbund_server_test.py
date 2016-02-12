@@ -67,14 +67,14 @@ class kb_cummerbundTest(unittest.TestCase):
         #run get cummernund plot
 
         cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id}
-        #ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
+        ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
 
 
         #run get expression matrix
 
         ws_out_id2="exp_out_obj_rep_ath_comma"
         expParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_expression_matrix_id':ws_out_id2, 'include_replicates':1}
-        #ret = self.getImpl().create_expression_matrix (self.getContext(), expParams)
+        ret = self.getImpl().create_expression_matrix (self.getContext(), expParams)
         #x=1
         #y=1
         #self.assertEqual(x,y,1)
