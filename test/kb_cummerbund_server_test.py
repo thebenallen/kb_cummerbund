@@ -58,8 +58,8 @@ class kb_cummerbundTest(unittest.TestCase):
         #ws_id="pranjan77:1452551559640"
         #ws_obj_id="Ath_wt_hy5_cuffdiff"
 
-        ws_id="pranjan77:1454700987350"
-        ws_obj_id="Ath_WT_hy5_cuffdiff"
+        ws_id="pranjan77:1455302100985"
+        ws_obj_id="Ath_cuffdiff_new"
 
 
         ws_out_id="cummerbund_out_obj_ath"
@@ -67,22 +67,22 @@ class kb_cummerbundTest(unittest.TestCase):
         #run get cummernund plot
 
         cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id}
-        ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
+        #ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
 
 
         #run get expression matrix
 
         ws_out_id2="exp_out_obj_rep_ath_comma"
         expParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_expression_matrix_id':ws_out_id2, 'include_replicates':1}
-        ret = self.getImpl().create_expression_matrix (self.getContext(), expParams)
+        #ret = self.getImpl().create_expression_matrix (self.getContext(), expParams)
         #x=1
         #y=1
         #self.assertEqual(x,y,1)
         ws_out_id3 = "exp3"
         num_g = "100"
         interactiveHeatmapParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id3, 'ws_expression_matrix_id':"abc",
-		'sample1':'WT_R1', 'sample2' :'Hy5_R1', 'q_value_cutoff':0.05,  'log2_fold_change_cutoff': 2, 'num_genes' :num_g ,'include_replicates':1}
-        ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
+		'sample1':'WT', 'sample2' :'hy5', 'q_value_cutoff':0.05,  'log2_fold_change_cutoff': 2, 'num_genes' :num_g ,'include_replicates':1}
+        #ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
         # Run your method by
         # ret = self.getImpl().your_method(self.getContext(), parameters...)
         #

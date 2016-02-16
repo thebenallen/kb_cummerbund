@@ -11,6 +11,19 @@ MAINTAINER KBase Developer
 
 RUN apt-get update && apt-get -y install r-bioc-cummerbund r-cran-rjson r-cran-getopt
 
+
+RUN \
+  . /kb/dev_container/user-env.sh && \
+  cd /kb/dev_container/modules && \
+  rm -rf jars && \
+  rm -rf transform && \
+  git clone https://github.com/kbase/jars && \
+  git clone https://github.com/kbase/transform && \
+  cd /kb/dev_container/modules/jars && \
+  make deploy && \
+  cd /kb/dev_container/modules/transform && \
+  make && make deploy
+
 COPY ./ /kb/module
 
 RUN mkdir -p /kb/module/work/tmp
