@@ -1,7 +1,7 @@
 #
 # Define basic display information
 #
-name     : Create Expression Matrix
+name     : Create Expression Matrix From Cuffdiff
 
 tooltip  : |
     Create the expression matrix for the differential expression data from RNA-seq pipeline.
