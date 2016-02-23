@@ -1,0 +1,32 @@
+{
+    "ver" : "1.0.0",
+        "authors" : [ ],
+        "contact" : "help@kbase.us",
+        "visble" : true,
+        "categories" : ["viewers"],
+        "widgets" : {
+            "input" : null,
+            "output" : "kbaseCummerbundPlot"
+        },
+        "parameters" : [ {
+            "id" : "ws_cummerbund_output",
+            "optional" : false,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ "KBaseRNASeq.cummerbund_output" ]
+            }
+        } ],
+        "behavior" : {
+            "none" : {
+                "output_mapping" : [
+                {
+                    "service_method_output_path": [0],
+                    "target_property": "generate_cummerbund_plots"
+                }
+                ]
+            }
+        },
+}
