@@ -3,7 +3,7 @@
 #
 name     : View Differentially Expressed Genes from Cuffdiff in Heatmap
 tooltip  : |
-    Compare two conditions in RNA-Seq expression data to identify differentially expressed genes and view them in an interactive heatmap   
+    Compare a pair of conditions in RNA-seq expression data to identify differentially expressed genes and view them in an interactive heatmap   
 
 screenshots :
     []
