@@ -3,4 +3,8 @@
 # kb_cummerbund
 ---
 
-This is the basic readme for this module. Include any usage or deployment instructions and links to other documentation here.
+<p>This service has methods that helps in exploration, analysis and  visualization of Cufflinks high-throughput RNA-seq data.</p> 
+   <p>It uses the large amount of data produced from Cuffdiff RNA-seq differential expression analysis as input and allows user to easily navigate through it by visualizing different types of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot, volcano matrix plots, etc.</p> 
+   
+  
+   
