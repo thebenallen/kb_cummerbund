@@ -7,6 +7,8 @@ tooltip  : |
 
 screenshots :
     []
+    
+icon: cuffdiff-yellow.png
 
 replacement-text : Create heatmaps
 
