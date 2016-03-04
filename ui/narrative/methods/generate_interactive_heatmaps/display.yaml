@@ -62,19 +62,16 @@ parameters :
         ui-name : |
             Number of Genes 
         short-hint : |
-            Number of genes selected for heat map display (Optimal number is 100)
+            Number of genes selected for heatmap display (Optimal number is 100)
     ws_expression_matrix_id:
         ui-name : |
-            Expression matrix (Includes Replicates)
+            Expression Matrix
         short-hint : |
-            Expression matrix output object associated with heatmap (including replicates)
+            Filtered expression matrix associated with the heatmap. 
             
 
-
-
-
 description : |
-   <p>This method helps in the visualization of Cufflinks high-throughput RNA-seq data using CummeRbund Package (csHeatmap method). It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and creates a heatmap of differentially expressed genes. The expression matrix with or without replicates which were used to create heatmaps are also generated as output objects.</p> 
+   <p>This method helps in the visualization of Cufflinks high-throughput RNA-seq data using CummeRbund Package (csHeatmap method). It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and creates a heatmap of differentially expressed genes. Note that, the matrix is filtered based on Alpha Cutoff, Fold Change Cutoff and Number of Genes and sorted by Fold Change Cutoff.</p> 
     <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     
