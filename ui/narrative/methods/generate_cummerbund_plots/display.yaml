@@ -3,7 +3,7 @@
 #
 name     : View CummeRbund Plots 
 tooltip  : |
-    Display a variety of plots to visualize and easily navigate through data produced from RNA-seq differential expression analysis in Cuffdiff.
+    Explore a variety of plots to visualize and easily navigate through data produced from RNA-Seq differential expression analysis in Cuffdiff.
 
 screenshots :
     []
