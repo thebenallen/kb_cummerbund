@@ -1,0 +1,47 @@
+#
+# Define basic display information
+#
+name     : View interactive volcano plot 
+subtitle : |
+    View interactive volcano plot
+tooltip  : |
+    View interactive volcano plot 
+
+screenshots :
+    []
+
+#
+# Define the set of other narrative methods that should be suggested to the user.
+#
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+
+#
+# Configure the display and description of the parameters
+#
+parameters :
+    param0 :
+        ui-name : |
+           Differential expression statistics 
+        short-hint : |
+           Differential expression statistics 
+        long-hint  : |
+           Differential expression statistics 
+
+
+description : |
+    view interactive volcano plot 
+
+
+technical-description : |
+    View interactive volcano plot 
