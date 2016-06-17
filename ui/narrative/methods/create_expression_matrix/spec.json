@@ -17,7 +17,7 @@
     "default_values" : [ "" ],
     "field_type" : "text",
     "text_options" : {
-      "valid_ws_types" : ["KBaseRNASeq.RNASeqCuffdiffdifferentialExpression" ]
+      "valid_ws_types" : ["KBaseRNASeq.RNASeqDifferentialExpression" ]
     }
   }, {
     "id": "include_replicates",
