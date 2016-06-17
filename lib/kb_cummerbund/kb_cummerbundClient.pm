@@ -48,6 +48,11 @@ sub new
         $async_job_check_time = $arg_hash{"async_job_check_time_ms"} / 1000.0;
     }
     $self->{async_job_check_time} = $async_job_check_time;
+    my $async_version = undef;
+    if (exists $arg_hash{"async_version"}) {
+        $async_version = $arg_hash{"async_version"};
+    }
+    $self->{async_version} = $async_version;
 
     chomp($self->{hostname} = `hostname`);
     $self->{hostname} ||= 'unknown-host';
@@ -197,9 +202,13 @@ sub generate_cummerbund_plots_async {
                                    method_name => 'generate_cummerbund_plots_async');
         }
     }
+    my $context = undef;
+    if ($self->{async_version}) {
+        $context = {'service_ver' => $self->{async_version}};
+    }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
         method => "kb_cummerbund.generate_cummerbund_plots_async",
-        params => \@args});
+        params => \@args}, context => $context);
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
@@ -341,9 +350,13 @@ sub create_expression_matrix_async {
                                    method_name => 'create_expression_matrix_async');
         }
     }
+    my $context = undef;
+    if ($self->{async_version}) {
+        $context = {'service_ver' => $self->{async_version}};
+    }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
         method => "kb_cummerbund.create_expression_matrix_async",
-        params => \@args});
+        params => \@args}, context => $context);
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
@@ -487,9 +500,13 @@ sub create_interactive_heatmap_de_genes_async {
                                    method_name => 'create_interactive_heatmap_de_genes_async');
         }
     }
+    my $context = undef;
+    if ($self->{async_version}) {
+        $context = {'service_ver' => $self->{async_version}};
+    }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
         method => "kb_cummerbund.create_interactive_heatmap_de_genes_async",
-        params => \@args});
+        params => \@args}, context => $context);
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,

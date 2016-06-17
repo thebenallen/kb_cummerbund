@@ -22,6 +22,7 @@ import us.kbase.common.service.UnauthorizedException;
 public class KbCummerbundClient {
     private JsonClientCaller caller;
     private long asyncJobCheckTimeMs = 5000;
+    private String asyncVersion = null;
 
 
     /** Constructs a client with a custom URL and no user credentials.
@@ -148,6 +149,14 @@ public class KbCummerbundClient {
         this.asyncJobCheckTimeMs = newValue;
     }
 
+    public String getAsyncVersion() {
+        return this.asyncVersion;
+    }
+
+    public void setAsyncVersion(String newValue) {
+        this.asyncVersion = newValue;
+    }
+
     /**
      * <p>Original spec-file function name: generate_cummerbund_plots</p>
      * <pre>
@@ -205,6 +214,23 @@ public class KbCummerbundClient {
             if (res.getFinished() != 0L)
                 return res.getResult().get(0);
         }
+    }
+
+    /**
+     * <p>Original spec-file function name: generate_cummerbund_plots</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundParams CummerbundParams} (original type "cummerbundParams")
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String generateCummerbundPlotsSync(CummerbundParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund.generate_cummerbund_plots", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
     }
 
     /**
@@ -267,6 +293,23 @@ public class KbCummerbundClient {
     }
 
     /**
+     * <p>Original spec-file function name: create_expression_matrix</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.ExpressionMatrixParams ExpressionMatrixParams} (original type "expressionMatrixParams")
+     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String createExpressionMatrixSync(ExpressionMatrixParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund.create_expression_matrix", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: create_interactive_heatmap_de_genes</p>
      * <pre>
      * </pre>
@@ -323,5 +366,22 @@ public class KbCummerbundClient {
             if (res.getFinished() != 0L)
                 return res.getResult().get(0);
         }
+    }
+
+    /**
+     * <p>Original spec-file function name: create_interactive_heatmap_de_genes</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.InteractiveHeatmapParams InteractiveHeatmapParams} (original type "interactiveHeatmapParams")
+     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String createInteractiveHeatmapDeGenesSync(InteractiveHeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund.create_interactive_heatmap_de_genes", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
     }
 }

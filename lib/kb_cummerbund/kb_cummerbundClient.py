@@ -109,7 +109,7 @@ class kb_cummerbund(object):
     def __init__(self, url=None, timeout=30 * 60, user_id=None,
                  password=None, token=None, ignore_authrc=False,
                  trust_all_ssl_certificates=False,
-                 async_job_check_time_ms=5000):
+                 async_job_check_time_ms=5000,async_version=None):
         if url is None:
             raise ValueError('A url is required')
         scheme, _, _, _, _, _ = _urlparse.urlparse(url)
@@ -120,6 +120,7 @@ class kb_cummerbund(object):
         self._headers = dict()
         self.trust_all_ssl_certificates = trust_all_ssl_certificates
         self.async_job_check_time = async_job_check_time_ms / 1000.0
+        self.async_version = async_version
         # token overrides user_id and password
         if token is not None:
             self._headers['AUTHORIZATION'] = token
@@ -177,6 +178,10 @@ class kb_cummerbund(object):
     def generate_cummerbund_plots_async(self, cummerbundParams, json_rpc_context = None):
         if json_rpc_context and type(json_rpc_context) is not dict:
             raise ValueError('Method generate_cummerbund_plots: argument json_rpc_context is not type dict as required.')
+        if self.async_version:
+            if not json_rpc_context:
+                json_rpc_context = {}
+            json_rpc_context['service_ver'] = self.async_version
         return self._call('kb_cummerbund.generate_cummerbund_plots_async',
                           [cummerbundParams], json_rpc_context)[0]
 
@@ -195,6 +200,10 @@ class kb_cummerbund(object):
     def create_expression_matrix_async(self, expressionMatrixParams, json_rpc_context = None):
         if json_rpc_context and type(json_rpc_context) is not dict:
             raise ValueError('Method create_expression_matrix: argument json_rpc_context is not type dict as required.')
+        if self.async_version:
+            if not json_rpc_context:
+                json_rpc_context = {}
+            json_rpc_context['service_ver'] = self.async_version
         return self._call('kb_cummerbund.create_expression_matrix_async',
                           [expressionMatrixParams], json_rpc_context)[0]
 
@@ -213,6 +222,10 @@ class kb_cummerbund(object):
     def create_interactive_heatmap_de_genes_async(self, interactiveHeatmapParams, json_rpc_context = None):
         if json_rpc_context and type(json_rpc_context) is not dict:
             raise ValueError('Method create_interactive_heatmap_de_genes: argument json_rpc_context is not type dict as required.')
+        if self.async_version:
+            if not json_rpc_context:
+                json_rpc_context = {}
+            json_rpc_context['service_ver'] = self.async_version
         return self._call('kb_cummerbund.create_interactive_heatmap_de_genes_async',
                           [interactiveHeatmapParams], json_rpc_context)[0]
 
