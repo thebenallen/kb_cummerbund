@@ -285,7 +285,7 @@ class kb_cummerbund:
                   eo = json.load(et)
         eo['type']='untransformed'
         genome_ref = s_res[0]['data']['genome_id']
-        eo['genome_ref'] = genome_ref
+        #eo['genome_ref'] = genome_ref
 
         self.__LOGGER.info(workspace + self.__SCRATCH + outjson + params['ws_expression_matrix_id'])
         ws_client.save_objects({'workspace' : workspace,
@@ -416,7 +416,7 @@ class kb_cummerbund:
                     eo2 = json.load(et2)
                     genome_ref = s_res[0]['data']['genome_id']
                     eo2['type']='untransformed'
-                    eo2['genome_ref'] = genome_ref
+                    #eo2['genome_ref'] = genome_ref
                     self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
                     ws_client.save_objects({'workspace' : workspace,
                            'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
