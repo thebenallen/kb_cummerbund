@@ -58,8 +58,9 @@ class kb_cummerbundTest(unittest.TestCase):
         #ws_id="pranjan77:1452551559640"
         #ws_obj_id="Ath_wt_hy5_cuffdiff"
 
-        ws_id="pranjan77:1454700987350"
-        ws_obj_id="Ath_WT_hy5_cuffdiff"
+        ws_id="pranjan77:1466168703797"
+        ws_obj_id="Ptr_4samples_cuffdiff"
+        ws_obj_id="ecoli_6samples_cuffdiff_output"
 
 
         ws_out_id="cummerbund_out_obj_ath"
