@@ -16,6 +16,11 @@ module kb_cummerbund {
 	/* @id ws KBaseRNASeq.cummerbund_output */
 	typedef string ws_cummerbund_output;
 
+	/* Differential stat workspace id */
+	typedef string ws_diffstat_output;
+
+
+
 	/* @id ws KBaseFeatureValues.ExpressionMatrix */
 	typedef string ws_expression_matrix_id;
 
@@ -25,6 +30,17 @@ module kb_cummerbund {
 		ws_cuffdiff_id ws_cuffdiff_id;
 		ws_cummerbund_output ws_cummerbund_output;
 	} cummerbundParams;
+
+
+	typedef structure {
+		workspace_name workspace_name;
+		ws_cuffdiff_id ws_cuffdiff_id;
+		ws_cummerbund_output ws_cummerbund_output;
+		ws_diffstat_output ws_diffstat_output;
+	} cummerbundstatParams;
+
+
+
 
 	typedef structure {
 		workspace_name workspace_name;
@@ -57,6 +73,7 @@ module kb_cummerbund {
 	
 
 	async funcdef generate_cummerbund_plots (cummerbundParams) returns (ws_cummerbund_output) authentication required;
+	async funcdef generate_cummerbund_plot2 (cummerbundstatParams) returns (ws_cummerbund_output) authentication required;
 
 	async funcdef create_expression_matrix (expressionMatrixParams) returns (ws_expression_matrix_id) authentication required;
 	

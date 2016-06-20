@@ -63,6 +63,8 @@ async_run_methods = {}
 async_check_methods = {}
 async_run_methods['kb_cummerbund.generate_cummerbund_plots_async'] = ['kb_cummerbund', 'generate_cummerbund_plots']
 async_check_methods['kb_cummerbund.generate_cummerbund_plots_check'] = ['kb_cummerbund', 'generate_cummerbund_plots']
+async_run_methods['kb_cummerbund.generate_cummerbund_plot2_async'] = ['kb_cummerbund', 'generate_cummerbund_plot2']
+async_check_methods['kb_cummerbund.generate_cummerbund_plot2_check'] = ['kb_cummerbund', 'generate_cummerbund_plot2']
 async_run_methods['kb_cummerbund.create_expression_matrix_async'] = ['kb_cummerbund', 'create_expression_matrix']
 async_check_methods['kb_cummerbund.create_expression_matrix_check'] = ['kb_cummerbund', 'create_expression_matrix']
 async_run_methods['kb_cummerbund.create_interactive_heatmap_de_genes_async'] = ['kb_cummerbund', 'create_interactive_heatmap_de_genes']
@@ -342,6 +344,10 @@ class Application(object):
                              name='kb_cummerbund.generate_cummerbund_plots',
                              types=[dict])
         self.method_authentication['kb_cummerbund.generate_cummerbund_plots'] = 'required'
+        self.rpc_service.add(impl_kb_cummerbund.generate_cummerbund_plot2,
+                             name='kb_cummerbund.generate_cummerbund_plot2',
+                             types=[dict])
+        self.method_authentication['kb_cummerbund.generate_cummerbund_plot2'] = 'required'
         self.rpc_service.add(impl_kb_cummerbund.create_expression_matrix,
                              name='kb_cummerbund.create_expression_matrix',
                              types=[dict])

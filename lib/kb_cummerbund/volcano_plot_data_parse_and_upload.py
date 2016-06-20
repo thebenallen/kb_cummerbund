@@ -2,7 +2,8 @@ import re
 import subprocess
 import math
 import json
-infile="../cuffdiffData/cuffdiff/gene_exp.diff"	
+import sys
+import os.path
 
 def volcano_plot_data_parse_and_upload(infile,outf):
     header=0
@@ -90,4 +91,9 @@ def volcano_plot_data_parse_and_upload(infile,outf):
             counter = counter + 1
         fpw=open(outf, "w")
         fpw.write( json.dumps(diffstat))
+        if (os.path.isfile(outf)):
+            return outf
+        else:
+            return False
+         
 
