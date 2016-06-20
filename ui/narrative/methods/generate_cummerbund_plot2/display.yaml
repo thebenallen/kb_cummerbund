@@ -1,0 +1,72 @@
+#
+# Define basic display information
+#
+name     : View CummeRbund Plots and interactive plot 
+tooltip  : |
+    Explore a variety of plots to visualize and easily navigate through data produced from RNA-Seq differential expression analysis in Cuffdiff.
+
+screenshots :
+    []
+
+icon: cummerbund-yellow.png
+
+replacement-text : Create Cummerbund plots
+
+#
+# Define the set of other narrative methods that should be suggested to the user.
+#
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+
+#
+# Configure the display and description of the parameters
+#
+parameters :
+    ws_cuffdiff_id:
+        ui-name : |
+            Cuffdiff Output
+        short-hint : |
+            Differentially expressed data from Cuffdiff
+
+    ws_cummerbund_output:
+        ui-name : |
+            CummeRbund Plots 
+        short-hint : |
+            Name of the CummeRbund Output
+
+    ws_diffstat_output:
+        ui-name : |
+            Differential statistics plot 
+        short-hint : |
+            Name of the differential statistics output
+
+
+
+description : |
+   <p>This method helps in exploration, analysis and  visualization of Cufflinks high-throughput RNA-seq data.</p> 
+   <p>It uses the large amount of data produced from Cuffdiff RNA-seq differential expression analysis as input and allows user to easily navigate through it by visualizing different types of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot, volcano matrix plots, etc.</p>
+    
+    <p><strong>WARNING:</strong> This method is one of the steps of the <a href= "http://kbase.us/rna-seq/"> KBase RNA-seq Pipeline </a> and is not intended to run standalone.</p>
+
+   <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
+    Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
+    
+publications :
+   -
+        display-text: |
+            Karkkainen J (2007) "Fast BWT in small space by blockwise suffix sorting" Theor Comput Sci 2007, 387:249-257.
+        link: http://www.sciencedirect.com/science/article/pii/S0304397507005245 
+           -
+        display-text: |
+           Goff L., Trapnell C., Kelley D. (2011). cummeRbund: Analysis, Exploration, Manipulation and Visualization of Cufflinks High-Throughput Sequencing Data.[R package version 1.2.0].
+        link: http://compbio.mit.edu/cummeRbund/
