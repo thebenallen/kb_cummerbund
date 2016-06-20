@@ -231,7 +231,7 @@ class kb_cummerbund:
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN generate_cummerbund_plot2
-        params    = cummerbunstatdParams
+        params    = cummerbundstatParams
         returnVal = params['ws_cummerbund_output']
 
         #Set up workspace client
@@ -363,7 +363,7 @@ class kb_cummerbund:
             "objects": [{
                 "type":"KBaseGwasData.differentialexpressionstat",
                 "data":statdata,
-                "name":params["ws_diffstat_output"]
+                "name":params["ws_diffstat_output"]}]
             })
 
  
