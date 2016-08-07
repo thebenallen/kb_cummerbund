@@ -265,6 +265,154 @@ sub generate_cummerbund_plots_check {
   
 
 
+=head2 generate_cummerbund_plot2
+
+  $return = $obj->generate_cummerbund_plot2($cummerbundstatParams)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$cummerbundstatParams is a kb_cummerbund.cummerbundstatParams
+$return is a kb_cummerbund.ws_cummerbund_output
+cummerbundstatParams is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_cummerbund.workspace_name
+	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
+	ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
+workspace_name is a string
+ws_cuffdiff_id is a string
+ws_cummerbund_output is a string
+ws_diffstat_output is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$cummerbundstatParams is a kb_cummerbund.cummerbundstatParams
+$return is a kb_cummerbund.ws_cummerbund_output
+cummerbundstatParams is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a kb_cummerbund.workspace_name
+	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
+	ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
+workspace_name is a string
+ws_cuffdiff_id is a string
+ws_cummerbund_output is a string
+ws_diffstat_output is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+sub generate_cummerbund_plot2
+{
+    my($self, @args) = @_;
+    my $job_id = $self->generate_cummerbund_plot2_async(@args);
+    while (1) {
+        Time::HiRes::sleep($self->{async_job_check_time});
+        my $job_state_ref = $self->generate_cummerbund_plot2_check($job_id);
+        if ($job_state_ref->{"finished"} != 0) {
+            if (!exists $job_state_ref->{"result"}) {
+                $job_state_ref->{"result"} = [];
+            }
+            return wantarray ? @{$job_state_ref->{"result"}} : $job_state_ref->{"result"}->[0];
+        }
+    }
+}
+
+sub generate_cummerbund_plot2_async {
+    my($self, @args) = @_;
+# Authentication: required
+    if ((my $n = @args) != 1) {
+        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+                                   "Invalid argument count for function generate_cummerbund_plot2_async (received $n, expecting 1)");
+    }
+    {
+        my($cummerbundstatParams) = @args;
+        my @_bad_arguments;
+        (ref($cummerbundstatParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"cummerbundstatParams\" (value was \"$cummerbundstatParams\")");
+        if (@_bad_arguments) {
+            my $msg = "Invalid arguments passed to generate_cummerbund_plot2_async:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+                                   method_name => 'generate_cummerbund_plot2_async');
+        }
+    }
+    my $context = undef;
+    if ($self->{async_version}) {
+        $context = {'service_ver' => $self->{async_version}};
+    }
+    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
+        method => "kb_cummerbund.generate_cummerbund_plot2_async",
+        params => \@args}, context => $context);
+    if ($result) {
+        if ($result->is_error) {
+            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+                           code => $result->content->{error}->{code},
+                           method_name => 'generate_cummerbund_plot2_async',
+                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+            );
+        } else {
+            return $result->result->[0];  # job_id
+        }
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method generate_cummerbund_plot2_async",
+                        status_line => $self->{client}->status_line,
+                        method_name => 'generate_cummerbund_plot2_async');
+    }
+}
+
+sub generate_cummerbund_plot2_check {
+    my($self, @args) = @_;
+# Authentication: required
+    if ((my $n = @args) != 1) {
+        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+                                   "Invalid argument count for function generate_cummerbund_plot2_check (received $n, expecting 1)");
+    }
+    {
+        my($job_id) = @args;
+        my @_bad_arguments;
+        (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument 0 \"job_id\" (it should be a string)");
+        if (@_bad_arguments) {
+            my $msg = "Invalid arguments passed to generate_cummerbund_plot2_check:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+                                   method_name => 'generate_cummerbund_plot2_check');
+        }
+    }
+    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
+        method => "kb_cummerbund.generate_cummerbund_plot2_check",
+        params => \@args});
+    if ($result) {
+        if ($result->is_error) {
+            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+                           code => $result->content->{error}->{code},
+                           method_name => 'generate_cummerbund_plot2_check',
+                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+                          );
+        } else {
+            return $result->result->[0];
+        }
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method generate_cummerbund_plot2_check",
+                        status_line => $self->{client}->status_line,
+                        method_name => 'generate_cummerbund_plot2_check');
+    }
+}
+  
+
+
 =head2 create_expression_matrix
 
   $return = $obj->create_expression_matrix($expressionMatrixParams)
@@ -744,6 +892,37 @@ a string
 
 
 
+=head2 ws_diffstat_output
+
+=over 4
+
+
+
+=item Description
+
+Differential stat workspace id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 ws_expression_matrix_id
 
 =over 4
@@ -801,6 +980,42 @@ a reference to a hash where the following keys are defined:
 workspace_name has a value which is a kb_cummerbund.workspace_name
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
+
+
+=end text
+
+=back
+
+
+
+=head2 cummerbundstatParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_cummerbund.workspace_name
+ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
+ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace_name has a value which is a kb_cummerbund.workspace_name
+ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
+ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
 
 
 =end text

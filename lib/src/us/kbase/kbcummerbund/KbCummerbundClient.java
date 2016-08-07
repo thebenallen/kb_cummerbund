@@ -234,6 +234,82 @@ public class KbCummerbundClient {
     }
 
     /**
+     * <p>Original spec-file function name: generate_cummerbund_plot2</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundstatParams CummerbundstatParams} (original type "cummerbundstatParams")
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String generateCummerbundPlot2Async(CummerbundstatParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund.generate_cummerbund_plot2_async", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: generate_cummerbund_plot2</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundstatParams CummerbundstatParams} (original type "cummerbundstatParams")
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public JobState<List<String>> generateCummerbundPlot2Check(String jobId) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(jobId);
+        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
+        List<JobState<List<String>>> res = caller.jsonrpcCall("kb_cummerbund.generate_cummerbund_plot2_check", args, retType, true, true);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: generate_cummerbund_plot2</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundstatParams CummerbundstatParams} (original type "cummerbundstatParams")
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String generateCummerbundPlot2(CummerbundstatParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        String jobId = generateCummerbundPlot2Async(arg1, jsonRpcContext);
+        while (true) {
+            if (Thread.currentThread().isInterrupted())
+                throw new JsonClientException("Thread was interrupted");
+            try { 
+                Thread.sleep(this.asyncJobCheckTimeMs);
+            } catch(Exception ex) {
+                throw new JsonClientException("Thread was interrupted", ex);
+            }
+            JobState<List<String>> res = generateCummerbundPlot2Check(jobId);
+            if (res.getFinished() != 0L)
+                return res.getResult().get(0);
+        }
+    }
+
+    /**
+     * <p>Original spec-file function name: generate_cummerbund_plot2</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundstatParams CummerbundstatParams} (original type "cummerbundstatParams")
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String generateCummerbundPlot2Sync(CummerbundstatParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund.generate_cummerbund_plot2", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
      * <p>Original spec-file function name: create_expression_matrix</p>
      * <pre>
      * </pre>

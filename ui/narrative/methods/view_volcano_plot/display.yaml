@@ -37,7 +37,16 @@ parameters :
            Differential expression statistics 
         long-hint  : |
            Differential expression statistics 
-
+    sample1:
+        ui-name : |
+            Treatment Label 1
+        short-hint : |
+            Sample condition to identify differentially expressed genes
+    sample2:
+        ui-name : |
+            Treatment Label 2
+        short-hint : |
+            Sample condition to identify differentially expressed genes
 
 description : |
     view interactive volcano plot 

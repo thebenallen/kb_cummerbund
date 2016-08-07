@@ -1,0 +1,73 @@
+{
+  "ver" : "1.0.1",
+  "authors" : [ ],
+  "contact" : "help@kbase.us",
+  "visible" : true,
+  "categories" : ["active","expression"],
+  "widgets" : {
+    "input" : null,
+    "output" : "kbaseCummerbundPlot"
+  },
+  "parameters" : [ 
+    {
+    "id" : "ws_cuffdiff_id",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ "KBaseRNASeq.RNASeqDifferentialExpression" ]
+    }
+  },
+  {
+    "id" : "ws_diffstat_output",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text"
+  },
+
+  {
+    "id" : "ws_cummerbund_output",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text"
+  } ],
+  "behavior" : {
+      "service-mapping" : {
+      	"url" : "",
+        "name" : "kb_cummerbund",
+        "method" : "generate_cummerbund_plot2",
+        "input_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "ws_cuffdiff_id",
+          "target_property": "ws_cuffdiff_id"
+        },
+        {
+          "input_parameter": "ws_diffstat_output",
+          "target_property": "ws_diffstat_output"
+        },
+
+        {
+          "input_parameter": "ws_cummerbund_output",
+          "target_property": "ws_cummerbund_output"
+        }],
+     "output_mapping" : [
+        {
+         "service_method_output_path": [0],
+         "target_property": "generate_cummerbund_plots"
+        }
+      ]
+    }
+  },
+  "job_id_output_field" : "docker"
+}
+
