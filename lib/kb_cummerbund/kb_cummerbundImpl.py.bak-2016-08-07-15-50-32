@@ -24,8 +24,7 @@ except:
     from biokbase.AbstractHandle.Client import AbstractHandle as HandleService
 
 import kb_cummerbundutils
-import requests.packages.urllib3
-requests.packages.urllib3.disable_warnings()
+
 
 
 

@@ -30,6 +30,8 @@ from biokbase.workspace.client import Workspace
 
 import biokbase.Transform.script_utils as script_utils
 
+import requests.packages.urllib3
+requests.packages.urllib3.disable_warnings()
 
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
