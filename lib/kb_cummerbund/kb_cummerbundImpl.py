@@ -576,7 +576,7 @@ class kb_cummerbund:
 		    'text_message':report
 		}
 
-		reportName = 'run_exp_'+str(hex(uuid.getnode()))
+		reportName = 'create_interactive_heatmap_de_genes_'+str(hex(uuid.getnode()))
 		report_info = ws_client.save_objects({
 		    'workspace':fparams['workspace_name'],
 		    'objects':[
@@ -666,7 +666,7 @@ class kb_cummerbund:
 		    'text_message':report
 		}
 
-	reportName = 'run_exp_'+str(hex(uuid.getnode()))
+	reportName = 'create_interactive_heatmap_de_genes_'+str(hex(uuid.getnode()))
 	report_info = ws_client.save_objects({
 	    'workspace':fparams['workspace_name'],
 	    'objects':[
