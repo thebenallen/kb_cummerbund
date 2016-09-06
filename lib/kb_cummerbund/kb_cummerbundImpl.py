@@ -475,7 +475,6 @@ class kb_cummerbund:
         system_params['workspace'] = workspace
 
 
-        print system_params
 
 
 
@@ -534,6 +533,7 @@ class kb_cummerbund:
 
 
 
+        print fparams
         
 
 
