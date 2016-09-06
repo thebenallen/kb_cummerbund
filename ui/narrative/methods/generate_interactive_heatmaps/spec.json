@@ -31,7 +31,7 @@
 
 {
      "id" : "logMode",
-    "optional" : true,
+    "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
     "default_values" : [ "log2" ],
@@ -58,7 +58,7 @@
 
 {
      "id" : "removezeroes",
-    "optional" : true,
+    "optional" : false,
     "advanced" : false,
     "allow_multiple" : false,
     "default_values" : [ "1" ],
