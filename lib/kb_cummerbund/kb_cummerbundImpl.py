@@ -501,6 +501,24 @@ class kb_cummerbund:
         fparams['infile'] = join (cuffdiff_dir, "gene_exp.diff")
         fparams['outfile'] = join(system_params['scratch'],  "gene_exp.diff.filter")
 
+
+        #User selects 3 options None, All , pair.
+        #If the user has selected None, no filtering based on sample is done
+        #If the user has selected All, all pairwise options are taken into account
+        #If ths uer has selecte pair, only one pair will be taken care of
+
+        #fparams['condition_select']  
+        # 0 for all condition pairs, 1 for a certain pair selected
+        fparams['pairs']=0
+        if (fparams['condition_select'] == 'Novalue'):
+           fparams['pairs']=0
+        if (fparams['condition_select'] == 'selected_pair'):
+           fparams['pairs']=1
+        if (fparams['condition_select'] == 'all_pairs'):
+           fparams['pairs']=2
+
+        rparams['pairs'] = fparams ['pairs']
+ 
         filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
         self.__LOGGER.info("matrix is " + filtered_matrix)
 

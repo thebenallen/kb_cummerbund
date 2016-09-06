@@ -80,6 +80,10 @@ def get_command_line_heatmap_basic(rparams):
     ropts.append("--outmatrix")
     ropts.append(rparams['outmatrix'])
 
+    ropts.append("--pairs")
+    ropts.append(rparams['pairs'])
+
+
     
     roptstr = " ".join(str(x) for x in ropts)
     
@@ -530,6 +534,7 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
 
 def filter_expression_matrix(fparams, system_params):
     cuffdiff_dir=fparams['cuffdiff_dir']
+    selected_condition_option = fparams['pairs']
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
     q_value_cutoff = float(fparams['q_value_cutoff'])
@@ -554,7 +559,6 @@ def filter_expression_matrix(fparams, system_params):
     logger.info("num_genes before: " + str(num_genes) )
     #if (num_genes > 500):
     #    num_genes = 500;
-    logger.info("num_genes after: " + str(num_genes) )
         
 
     fp=open(outfile, "w")
@@ -569,8 +573,9 @@ def filter_expression_matrix(fparams, system_params):
             qval = linesplit[12]
             significance = linesplit[13]
           
-            if (significance =='no'):
-                continue
+     #       if (significance =='no'):
+     #           ii=1
+     #           continue
           
             if (qval =='q_value'):
                 continue
@@ -584,17 +589,10 @@ def filter_expression_matrix(fparams, system_params):
             gene = linesplit[2]
             sample1_name = linesplit[4]
             sample2_name = linesplit[5]
-            match=0
-            if (sample1_name == sample1):
-                match = match + 1
-            if (sample2_name == sample1):
-                match = match + 1
-            if (sample1_name == sample2):
-                match = match + 1
-            if (sample2_name == sample2):
-                match = match + 1
 
-            if (match != 2):
+            keep_row = 1
+            keep_row = is_valid_row(selected_condition_option, sample1, sample2, sample1_name, sample2_name)
+            if (keep_row == 0):
                 continue
             if (float(qval) > q_value_cutoff):
                 continue
@@ -626,6 +624,38 @@ def filter_expression_matrix(fparams, system_params):
         f.close()
         fp.close()
         return outfile
+
+
+def is_valid_row(selected_condition_option, sample1, sample2, sample1_name, sample2_name):
+
+    #User selects 3 options None, All , pair.
+    #If the user has selected None (0), no filtering based on sample is done
+    #If the user has selected All (2), all pairwise options are taken into account
+    #If ths uer has selecte pair (1), only one pair will be taken care of
+
+    #return 1 if you want to consider the row for differential expression
+
+     if (selected_condition_option==0):
+         return 1
+     if (selected_condition_option==2):
+         return 1
+     if (selected_condition_option==1):
+            match=0
+            if (sample1_name == sample1):
+                match = match + 1
+            if (sample2_name == sample1):
+                match = match + 1
+            if (sample1_name == sample2):
+                match = match + 1
+            if (sample2_name == sample2):
+                match = match + 1
+            if (match != 2):
+               return 0
+         
+     return 1
+
+
+
 
 def get_gene_list_from_filter_step(fparams):
         outfile = fparams['outfile']

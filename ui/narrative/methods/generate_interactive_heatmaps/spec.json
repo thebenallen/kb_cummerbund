@@ -1,0 +1,196 @@
+{
+  "name": "View Differentially Expressed Genes from Cuffdiff in Heatmap",
+  "ver": "0.0.1",
+  "authors" : [ ],
+  "contact" : "help@kbase.us",
+  "visible" : true,
+  "categories" : ["active"],
+  "widgets" : {
+    "input" : null,
+    "output" : "kbaseExpressionMatrixHeatmap"
+  },
+  "parameters" : [ {
+    "id" : "ws_cuffdiff_id",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ "KBaseRNASeq.RNASeqDifferentialExpression" ]
+    }
+  }, 
+  {
+    "id" : "condition_select",
+    "optional" : true,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "dropdown",
+    "dropdown_options": {
+        "options": [
+          { 
+            "value": "all_conditions",
+            "display":"All condition comparison",
+            "id": "all_conditions",
+            "ui_name": "all_conditions"
+          },
+          {
+            "value": "selected_pair",
+            "display":"Selected pair comparison",
+            "id": "selected_pair",
+            "ui_name": "selected_pair"
+
+          }
+
+        ]
+
+    }
+    
+    },
+ 
+  
+  
+  {
+    "id" : "sample1",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+
+        "parameter_id" : "ws_cuffdiff_id",
+        "subdata_included" : ["condition"],
+        "path_to_subdata": ["condition"]
+      },
+      "multiselection":false,
+      "show_src_obj":false,
+      "allow_custom":false
+    }
+    },
+    
+     {
+    "id" : "sample2",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+
+        "parameter_id" : "ws_cuffdiff_id",
+        "subdata_included" : ["condition"],
+        "path_to_subdata": ["condition"]
+      },
+      "multiselection":false,
+      "show_src_obj":false,
+      "allow_custom":false
+    }
+    },
+    {
+    "id" : "q_value_cutoff",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+  	"validate_as": "float"
+    }
+  },
+  {
+    "id" : "log2_fold_change_cutoff",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+  		"validate_as": "float"
+    }
+      	
+  },
+  {
+    "id" : "num_genes",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "100" ],
+    "field_type" : "text",
+    "text_options" : {
+  		"validate_as": "int"  		
+     }
+    }, {
+    "id" : "ws_expression_matrix_id",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text"
+  }   
+  
+  ],
+  "behavior" : {
+      "service-mapping" : {
+      	"url" : "",
+        "name" : "kb_cummerbund",
+        "method" : "create_interactive_heatmap_de_genes",
+        "input_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "ws_cuffdiff_id",
+          "target_property": "ws_cuffdiff_id"
+        },
+        {
+          "input_parameter": "condition_select",
+          "target_property": "condition_select"
+        },
+
+        {
+          "input_parameter": "sample1",
+          "target_property": "sample1"
+        }
+        ,{
+          "input_parameter": "sample2",
+          "target_property": "sample2"
+        }
+        ,{
+          "input_parameter": "q_value_cutoff",
+          "target_property": "q_value_cutoff"
+        }
+        ,{
+          "input_parameter": "log2_fold_change_cutoff",
+          "target_property": "log2_fold_change_cutoff"
+        }
+        ,{
+          "input_parameter": "num_genes",
+          "target_property": "num_genes"
+        },{
+          "input_parameter": "ws_expression_matrix_id",
+          "target_property": "ws_expression_matrix_id"
+        }        
+        
+        
+        ],
+     "output_mapping" : [
+       {
+          "input_parameter": "ws_expression_matrix_id",
+          "target_property": "expression_object"
+        },
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace"
+        }
+
+      ]
+    }
+  },
+  "job_id_output_field" : "docker"
+}
+
