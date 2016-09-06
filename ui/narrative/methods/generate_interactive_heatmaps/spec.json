@@ -90,7 +90,7 @@
     "optional" : true,
     "advanced" : true,
     "allow_multiple" : false,
-    "default_values" : [ "no_condition_filter_selected" ],
+    "default_values" : [ "" ],
     "field_type" : "dropdown",
     "dropdown_options": {
 

@@ -534,26 +534,8 @@ class kb_cummerbund:
 
 
         print fparams
-        
-
-
-        filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
-        self.__LOGGER.info("matrix is " + filtered_matrix)
-
-        fparams['infile'] = join (system_params['scratch'], "gene_exp.diff.filter")
-        fparams['outfile'] = join(system_params['scratch'],  "gene_exp.diff.filter.genelist")
-
-
-
-        genelist_filtered_matrix_file = script_util2.get_gene_list_from_filter_step(fparams)
-
-
-        # Prepare output object.
-        outjson = False;
- 
-
         rparams = {}
-        rparams['genelist'] = filtered_matrix
+        
         rparams['cuffdiff_dir'] = fparams['cuffdiff_dir']
         rparams['outpng'] = join (system_params['scratch'], "heatmap.png")
         rparams['imageheight'] = 1600
@@ -564,6 +546,25 @@ class kb_cummerbund:
         rparams['logMode'] = fparams['logMode1']
         rparams['removezeroes'] = fparams['removezeroes']
         rparams['outmatrix'] = join (system_params['scratch'], "outmatrix")
+
+       
+
+        if (fparams['pairs'] != 0):
+            filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
+            self.__LOGGER.info("matrix is " + filtered_matrix)
+
+            fparams['infile'] = join (system_params['scratch'], "gene_exp.diff.filter")
+            fparams['outfile'] = join(system_params['scratch'],  "gene_exp.diff.filter.genelist")
+
+            genelist_filtered_matrix_file = script_util2.get_gene_list_from_filter_step(fparams)
+
+            rparams['genelist'] = filtered_matrix
+
+
+
+        # Prepare output object.
+        outjson = False;
+ 
 
         roptstr_basic_heatmap_rep = script_util2.get_command_line_heatmap_basic (rparams)
 
