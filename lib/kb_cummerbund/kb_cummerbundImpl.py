@@ -650,6 +650,7 @@ class kb_cummerbund:
 			 }]})
 
                         info=res[0]
+                        report = "Successfully created expression matrix"
 			reportObj = {
 			    'objects_created':[{
 			     'ref': str(info[6]) +'/' + str(info[0]) + '/' + str(info[4]),
