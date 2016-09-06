@@ -79,13 +79,6 @@ parameters :
             Fold Change Cutoff
         short-hint : |
             Absolute value of Log2(fold change) cutoff
-    num_genes:
-        ui-name : |
-            Maximum Number of Genes cutoff
-        short-hint : |
-            Number of maximum genes selected to keep in expression matrix
-           
-
 
 
 

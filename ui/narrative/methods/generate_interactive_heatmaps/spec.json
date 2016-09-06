@@ -172,18 +172,7 @@
   		"validate_as": "float"
     }
       	
-  },
-  {
-    "id" : "num_genes",
-    "optional" : false,
-    "advanced" : false,
-    "allow_multiple" : false,
-    "default_values" : [ "1000" ],
-    "field_type" : "text",
-    "text_options" : {
-  		"validate_as": "int"  		
-     }
-    }
+  }
  
   ],
   "behavior" : {
@@ -199,6 +188,18 @@
         {
           "input_parameter": "ws_cuffdiff_id",
           "target_property": "ws_cuffdiff_id"
+        }
+        ,{
+          "input_parameter": "ws_expression_matrix_id",
+          "target_property": "ws_expression_matrix_id"
+        }
+        ,{
+          "input_parameter": "logMode",
+          "target_property": "logMode"
+        }
+        ,{
+          "input_parameter": "removezeroes",
+          "target_property": "removezeroes"
         },
         {
           "input_parameter": "condition_select",
@@ -221,22 +222,7 @@
           "input_parameter": "log2_fold_change_cutoff",
           "target_property": "log2_fold_change_cutoff"
         }
-        ,{
-          "input_parameter": "logMode",
-          "target_property": "logMode"
-        }
-        ,{
-          "input_parameter": "removezeroes",
-          "target_property": "removezeroes"
-        }
-        ,{
-          "input_parameter": "num_genes",
-          "target_property": "num_genes"
-        },{
-          "input_parameter": "ws_expression_matrix_id",
-          "target_property": "ws_expression_matrix_id"
-        }        
-        
+
         ],
 
 			"output_mapping": [
