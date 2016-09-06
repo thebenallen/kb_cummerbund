@@ -5,10 +5,12 @@ import sys
 import os
 import ast
 import glob
+import uuid
 import json
 import logging
 import time
 import subprocess
+from pprint import pprint,pformat
 import threading, traceback
 from collections import OrderedDict
 from pprint import pprint
@@ -547,6 +549,12 @@ class kb_cummerbund:
         rparams['removezeroes'] = fparams['removezeroes']
         rparams['outmatrix'] = join (system_params['scratch'], "outmatrix")
 
+
+        provenance = [{}]
+        if 'provenance' in ctx:
+            provenance = ctx['provenance']
+        # add additional info to provenance here, in this case the input data object reference
+        provenance[0]['input_ws_objects']=[workspace+'/'+fparams['ws_cuffdiff_id']]
        
         report = ""
         if (fparams['pairs'] != 0):
@@ -570,7 +578,7 @@ class kb_cummerbund:
 
 		reportName = 'run_exp_'+str(hex(uuid.getnode()))
 		report_info = ws_client.save_objects({
-		    'workspace':workspace_name,
+		    'workspace':fparams['workspace_name'],
 		    'objects':[
 			 {
 			  'type':'KBaseReport.Report',
@@ -632,20 +640,23 @@ class kb_cummerbund:
 		      with open("{0}/{1}".format(self.__SCRATCH , outjson),'r') as et2:
 			eo2 = json.load(et2)
 			genome_ref = s_res[0]['data']['genome_id']
-			eo2['type']='untransformed'
+			eo2['type']=fparams['logMode']
 			#eo2['genome_ref'] = genome_ref
 			self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
-			ws_client.save_objects({'workspace' : workspace,
+			res = ws_client.save_objects({'workspace' : workspace,
 			       'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
 			       'data' : eo2,
 			       'name' : plot['exp']
 			 }]})
 
-
-            reportObj = {
-		    'objects_created':[],
-		    'text_message':report
-		}
+                        info=res[0]
+			reportObj = {
+			    'objects_created':[{
+			     'ref': str(info[6]) +'/' + str(info[0]) + '/' + str(info[4]),
+                             'description': 'Expression matrix'
+			     }],
+			    'text_message':report
+			   }
 
         except:
 		report += "There was an error in generating expression matrix"
@@ -656,7 +667,7 @@ class kb_cummerbund:
 
 	reportName = 'run_exp_'+str(hex(uuid.getnode()))
 	report_info = ws_client.save_objects({
-	    'workspace':workspace_name,
+	    'workspace':fparams['workspace_name'],
 	    'objects':[
 		 {
 		  'type':'KBaseReport.Report',
