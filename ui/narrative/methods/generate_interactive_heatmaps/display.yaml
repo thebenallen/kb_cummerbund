@@ -37,9 +37,21 @@ parameters :
             Differentially expressed data from Cuffdiff
     ws_expression_matrix_id:
         ui-name : |
-            Expression matrix (Includes Replicates)
+            Expression matrix 
         short-hint : |
-            Expression matrix output object associated with heatmap (including replicates)
+            Expression matrix output object 
+    logMode:
+        ui-name : |
+            Matrix transformation
+        short-hint : |
+            Matrix transformation
+
+
+    removezeroes:
+        ui-name : |
+           Expression based filtering 
+        short-hint : |
+           Expression based filtering of genes
 
 
     condition_select:

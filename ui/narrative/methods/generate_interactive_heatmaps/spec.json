@@ -7,7 +7,7 @@
   "categories" : ["active"],
   "widgets" : {
     "input" : null,
-    "output" : "kbaseExpressionMatrixHeatmap"
+    "output" : "kbaseExpressionMatrix"
   },
   "parameters" : [ {
     "id" : "ws_cuffdiff_id",
@@ -20,6 +20,57 @@
       "valid_ws_types" : [ "KBaseRNASeq.RNASeqDifferentialExpression" ]
     }
   }, 
+
+{
+     "id" : "logMode",
+    "optional" : true,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "2" ],
+    "field_type" : "dropdown",
+    "dropdown_options":{
+      "options": [
+        {
+          "value":"0",
+          "display": "FPKM"
+        },
+        {
+          "value": "2",
+          "display": "log2 (FPKM + 1)"
+        },
+        {
+          "value":"10",
+          "display": "log10 (FPKM + 1)"
+        }
+
+      ]
+    }
+  },
+
+{
+     "id" : "removezeroes",
+    "optional" : true,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "1" ],
+    "field_type" : "dropdown",
+    "dropdown_options":{
+      "options": [
+        {
+          "value": "0",
+          "display": "Keep all genes"
+        },
+        {
+          "value": "1",
+          "display": "Remove genes without expression in any condition"
+        }
+      ]
+    }
+  },
+
+
+
+
   {
     "id" : "condition_select",
     "optional" : true,
@@ -30,7 +81,7 @@
     "dropdown_options": {
         "options": [
           { 
-            "value": "all_conditions",
+            "value": "all_pairs",
             "display":"All condition comparison",
             "id": "all_conditions",
             "ui_name": "all_conditions"
@@ -169,6 +220,14 @@
           "target_property": "log2_fold_change_cutoff"
         }
         ,{
+          "input_parameter": "logMode",
+          "target_property": "logMode"
+        }
+        ,{
+          "input_parameter": "removezeroes",
+          "target_property": "removezeroes"
+        }
+        ,{
           "input_parameter": "num_genes",
           "target_property": "num_genes"
         },{
@@ -176,21 +235,26 @@
           "target_property": "ws_expression_matrix_id"
         }        
         
-        
         ],
-     "output_mapping" : [
-       {
-          "input_parameter": "ws_expression_matrix_id",
-          "target_property": "expression_object"
-        },
-        {
-          "narrative_system_variable": "workspace",
-          "target_property": "workspace"
-        }
 
-      ]
-    }
-  },
-  "job_id_output_field" : "docker"
+			"output_mapping": [
+				{
+					"input_parameter": "ws_expression_matrix_id",
+					"target_property": "expressionMatrixID"
+				},
+				{
+					"narrative_system_variable": "workspace",
+					"target_property": "workspaceID"
+				},
+				{
+					"service_method_output_path": [0],
+					"target_property": "create_expression_matrix"
+				}
+			]
+		}
+	},
+"job_id_output_field" : "docker"
 }
+
+
 

@@ -502,6 +502,10 @@ class kb_cummerbund:
         fparams['outfile'] = join(system_params['scratch'],  "gene_exp.diff.filter")
 
 
+#        fparams['condition_select'] ="all_pairs"
+#        fparams['logMode'] = 0
+#        fparams['removezeroes'] = 0
+
         #User selects 3 options None, All , pair.
         #If the user has selected None, no filtering based on sample is done
         #If the user has selected All, all pairwise options are taken into account
@@ -517,7 +521,6 @@ class kb_cummerbund:
         if (fparams['condition_select'] == 'all_pairs'):
            fparams['pairs']=2
 
-        rparams['pairs'] = fparams ['pairs']
  
         filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
         self.__LOGGER.info("matrix is " + filtered_matrix)
@@ -542,6 +545,9 @@ class kb_cummerbund:
         rparams['imagewidth'] = 800
         rparams['plotscript'] = join(system_params['rscripts'], "heatmapplotinteractive.R")
         rparams['include_replicates'] = 1
+        rparams['pairs'] = fparams ['pairs']
+        rparams['logMode'] = fparams['logMode']
+        rparams['removezeroes'] = fparams['removezeroes']
         rparams['outmatrix'] = join (system_params['scratch'], "outmatrix")
 
         roptstr_basic_heatmap_rep = script_util2.get_command_line_heatmap_basic (rparams)

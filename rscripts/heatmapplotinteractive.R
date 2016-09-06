@@ -19,7 +19,7 @@ myggheat<-function(object, rescaling='none', clustering='none', labCol=T, labRow
 	}else{
 		m=fpkmMatrix(object,fullnames=fullnames)
 	}
-	s=list("matrix"=m, "heatmap"=g2)
+	s=list("matrix"=m)
 	## finally add the fill colour ramp of your choice (default is blue to red)-- and return
 	return (s)
 	
@@ -199,8 +199,6 @@ suppressMessages(require (rjson))
 #defaultimageheight = opt$imageheight
 
 
-suppressMessages(require (cummeRbund))
-suppressMessages(require (rjson))
 
 
 
@@ -208,18 +206,43 @@ suppressMessages(require (rjson))
 #opt$pairs =1 whene just one condition is user for finding differentially expressed genes
 #opt$pairs =2 when all conditions are used for finding differentially expressed genes
 
+genes.repFpkm.matrix = c()
+pseudocount = 1 
+
+
+
 if (opt$pairs == 0){
   #samples = samples(cuff)$sample_name
+  cuff=readCufflinks(opt$cuffdiff)
   genes.features = annotation (genes(cuff))
   features = subset(genes.features, select = c(gene_id, gene_short_name))
   genes.repFpkm.matrix = repFpkmMatrix(genes(cuff))
-  #gene_id = rownames(genes.repFpkm.matrix)
-  #genes.repFpkm.matrix = cbind(gene_id, genes.repFpkm.matrix)
-  #repFpkmMatrix = merge(features, genes.repFpkm.matrix, by.x = "gene_id", by.y = "gene_id")
-  #repFpkmMatrix$gene_id=NULL
+  
+  #remove genes with no expression in any condition
+  if (opt$removezeroes==1){
+    genes.repFpkm.matrix=genes.repFpkm.matrix[!apply(genes.repFpkm.matrix,1,sum)==0,]
+  }
+
+
+  #Log transformation
+  if(opt$logMode==2) 
+  {
+    genes.repFpkm.matrix = log2(genes.repFpkm.matrix+pseudocount)
+  }
+
+  if(opt$logMode==10) 
+  {
+    genes.repFpkm.matrix = log10(genes.repFpkm.matrix+pseudocount)
+  }
+
+  gene_id = rownames(genes.repFpkm.matrix)
+  genes.repFpkm.matrix = cbind(gene_id, genes.repFpkm.matrix)
+  repFpkmMatrix = merge(features, genes.repFpkm.matrix, by.x = "gene_id", by.y = "gene_id")
+  repFpkmMatrix$gene_id=NULL
+  genes.repFpkm.matrix = repFpkmMatrix
 }
 
-else {
+if (opt$pairs > 0){
   cuff=readCufflinks(opt$cuffdiff)
   x=read.table(opt$genelist)
   genes = as.vector(unlist(x[1]))
@@ -230,23 +253,21 @@ else {
   hmap=c()
   hmap<-myggheat(myGenes,cluster='both', fullnames=T, replicates=T)
   genes.repFpkm.matrix = hmap$matrix
-}
-
 
   
 #remove genes with no expression in any condition
-if (removezeroes==1){
+if (opt$removezeroes==1){
   genes.repFpkm.matrix=genes.repFpkm.matrix[!apply(genes.repFpkm.matrix,1,sum)==0,]
 }
 
 
 #Log transformation
-if(logMode==2) 
+if(opt$logMode==2) 
 {
   genes.repFpkm.matrix = log2(genes.repFpkm.matrix+pseudocount)
 }
 
-if(logMode==10) 
+if(opt$logMode==10) 
 {
   genes.repFpkm.matrix = log10(genes.repFpkm.matrix+pseudocount)
 }
@@ -260,11 +281,9 @@ df = genes.repFpkm.matrix
 foo <- data.frame(do.call('rbind', strsplit(as.character(df$gene_id),'|',fixed=TRUE)))
 colnames(foo)=c("short_gene_id", "x_id")
 genes.repFpkm.matrix = cbind(foo$short_gene_id, genes.repFpkm.matrix)
-
-
 genes.repFpkm.matrix$gene_id=NULL
 colnames(genes.repFpkm.matrix)[1] = "gene_id"
-
+}
 
 #print expression matrix to file
 write.table(genes.repFpkm.matrix, file =opt$outmatrix, sep="\t", row.names=F)

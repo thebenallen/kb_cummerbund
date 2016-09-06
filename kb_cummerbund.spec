@@ -64,6 +64,9 @@ module kb_cummerbund {
 	typedef structure {
 		string sample1;
 		string sample2;
+		string logMode;
+		string removezeroes;
+		string condition_select;
 		float q_value_cutoff;
 		float log2_fold_change_cutoff ;
 		int num_genes;

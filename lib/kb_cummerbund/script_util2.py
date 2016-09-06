@@ -83,6 +83,13 @@ def get_command_line_heatmap_basic(rparams):
     ropts.append("--pairs")
     ropts.append(rparams['pairs'])
 
+    ropts.append("--logMode")
+    ropts.append(rparams['logMode'])
+
+    ropts.append("--removezeroes")
+    ropts.append(rparams['removezeroes'])
+
+
 
     
     roptstr = " ".join(str(x) for x in ropts)

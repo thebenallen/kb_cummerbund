@@ -83,7 +83,7 @@ class kb_cummerbundTest(unittest.TestCase):
         ws_out_id3 = "exp3"
         num_g = "100"
         interactiveHeatmapParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id3, 'ws_expression_matrix_id':"abc",
-		'sample1':'ecoli_8083', 'sample2' :'ecoli_8085', 'q_value_cutoff':0.5,  'log2_fold_change_cutoff': 1, 'num_genes' :num_g ,'include_replicates':1}
+                'sample1':'ecoli_8083', 'sample2' :'ecoli_8085', 'q_value_cutoff':0.5,  'log2_fold_change_cutoff': 1, 'num_genes' :num_g ,'include_replicates':1, 'condition_select':'selected_pair', 'removezeroes':1, 'logMode':2}
         ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
         # Run your method by
         # ret = self.getImpl().your_method(self.getContext(), parameters...)
