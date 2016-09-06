@@ -7,7 +7,7 @@
   "categories" : ["active"],
   "widgets" : {
     "input" : null,
-    "output" : "kbaseExpressionMatrix"
+    "output" : "no-display"
   },
   "parameters" : [ {
     "id" : "ws_cuffdiff_id",

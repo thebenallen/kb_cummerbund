@@ -548,73 +548,133 @@ class kb_cummerbund:
         rparams['outmatrix'] = join (system_params['scratch'], "outmatrix")
 
        
-
+        report = ""
         if (fparams['pairs'] != 0):
-            filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
-            self.__LOGGER.info("matrix is " + filtered_matrix)
 
-            fparams['infile'] = join (system_params['scratch'], "gene_exp.diff.filter")
-            fparams['outfile'] = join(system_params['scratch'],  "gene_exp.diff.filter.genelist")
+           try:
+                filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
+                self.__LOGGER.info("matrix is " + filtered_matrix)
+                fparams['infile'] = join (system_params['scratch'], "gene_exp.diff.filter")
+                fparams['outfile'] = join(system_params['scratch'],  "gene_exp.diff.filter.genelist")
+                genelist_filtered_matrix_file = script_util2.get_gene_list_from_filter_step(fparams)
+                rparams['genelist'] = filtered_matrix
+           except:
+                report += "There was an error in creating expression matrix"
+                report += "No differentially expressed genes were found"
+                report += "Please change / double  your filtering criteria"
 
-            genelist_filtered_matrix_file = script_util2.get_gene_list_from_filter_step(fparams)
+	        reportObj = {
+		    'objects_created':[],
+		    'text_message':report
+		}
 
-            rparams['genelist'] = filtered_matrix
+		reportName = 'run_exp_'+str(hex(uuid.getnode()))
+		report_info = ws_client.save_objects({
+		    'workspace':workspace_name,
+		    'objects':[
+			 {
+			  'type':'KBaseReport.Report',
+			  'data':reportObj,
+			  'name':reportName,
+			  'meta':{},
+			  'hidden':1, # important!  make sure the report is hidden
+			  'provenance':provenance
+			 }
+		    ] })[0]  
+		print('saved Report: '+pformat(report_info))
 
+		returnVal = { "report_name" : reportName,"report_ref" : str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]) }
 
-
-        # Prepare output object.
-        outjson = False;
- 
-
-        roptstr_basic_heatmap_rep = script_util2.get_command_line_heatmap_basic (rparams)
-
-        # Run R script to run cummerbund json and update the cummerbund output json file
-        # Prepare output object.
-        outputobject=dict()
-
-
-
-
-        # Prepare output plot list
-        cummerbundplotset=[]
-
-        # List of plots to generate
-        plotlist = [
-                  
-                { 'roptstr': roptstr_basic_heatmap_rep,
-                  'title': "Heatmap",
-                  'description': "Heatmap", 
-                  'exp' : fparams['ws_expression_matrix_id']
-                  }
-
-            ]
-        fparams['cummerbundplotset'] = cummerbundplotset
-        # Iterate through the plotlist and generate the images and json files.
-        for plot in plotlist:
-            fparams['title'] = plot['title']
-            fparams['description'] = plot['description']
+                return [returnVal]
 
 
-            status = script_util2.rplotanduploadinteractive(system_params,fparams, rparams, plot['roptstr'])
-            if status == False:
-                   self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
-            else:
-                  self.__LOGGER.info(status)
+        try:
+	    # Prepare output object.
+	    outjson = False;
+     
 
-                  outjson = status
-                  with open("{0}/{1}".format(self.__SCRATCH , outjson),'r') as et2:
-                    eo2 = json.load(et2)
-                    genome_ref = s_res[0]['data']['genome_id']
-                    eo2['type']='untransformed'
-                    #eo2['genome_ref'] = genome_ref
-                    self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
-                    ws_client.save_objects({'workspace' : workspace,
-                           'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
-                           'data' : eo2,
-                           'name' : plot['exp']
-                     }]})
+	    roptstr_basic_heatmap_rep = script_util2.get_command_line_heatmap_basic (rparams)
 
-        returnVal = fparams['ws_expression_matrix_id']
+	    # Run R script to run cummerbund json and update the cummerbund output json file
+	    # Prepare output object.
+	    outputobject=dict()
+
+
+
+
+	    # Prepare output plot list
+	    cummerbundplotset=[]
+
+	    # List of plots to generate
+	    plotlist = [
+		      
+		    { 'roptstr': roptstr_basic_heatmap_rep,
+		      'title': "Heatmap",
+		      'description': "Heatmap", 
+		      'exp' : fparams['ws_expression_matrix_id']
+		      }
+
+		]
+	    fparams['cummerbundplotset'] = cummerbundplotset
+	    # Iterate through the plotlist and generate the images and json files.
+	    for plot in plotlist:
+		fparams['title'] = plot['title']
+		fparams['description'] = plot['description']
+
+
+		status = script_util2.rplotanduploadinteractive(system_params,fparams, rparams, plot['roptstr'])
+		if status == False:
+		       self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
+		else:
+		      self.__LOGGER.info(status)
+
+		      outjson = status
+		      with open("{0}/{1}".format(self.__SCRATCH , outjson),'r') as et2:
+			eo2 = json.load(et2)
+			genome_ref = s_res[0]['data']['genome_id']
+			eo2['type']='untransformed'
+			#eo2['genome_ref'] = genome_ref
+			self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
+			ws_client.save_objects({'workspace' : workspace,
+			       'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
+			       'data' : eo2,
+			       'name' : plot['exp']
+			 }]})
+
+
+            reportObj = {
+		    'objects_created':[],
+		    'text_message':report
+		}
+
+        except:
+		report += "There was an error in generating expression matrix"
+	        reportObj = {
+		    'objects_created':[],
+		    'text_message':report
+		}
+
+	reportName = 'run_exp_'+str(hex(uuid.getnode()))
+	report_info = ws_client.save_objects({
+	    'workspace':workspace_name,
+	    'objects':[
+		 {
+		  'type':'KBaseReport.Report',
+		  'data':reportObj,
+		  'name':reportName,
+		  'meta':{},
+		  'hidden':1, # important!  make sure the report is hidden
+		  'provenance':provenance
+		 }
+	    ] })[0]  
+	print('saved Report: '+pformat(report_info))
+
+	returnVal = { "report_name" : reportName,"report_ref" : str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]) }
+
+#	return [returnVal]
+
+
+        #returnVal = fparams['ws_expression_matrix_id']
 
         #END create_interactive_heatmap_de_genes
 
