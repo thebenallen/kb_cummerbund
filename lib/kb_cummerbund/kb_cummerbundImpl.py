@@ -514,14 +514,29 @@ class kb_cummerbund:
         #fparams['condition_select']  
         # 0 for all condition pairs, 1 for a certain pair selected
         fparams['pairs']=0
-        if (fparams['condition_select'] == 'Novalue'):
+        if (fparams['condition_select'] == 'no_condition_filter_selected'):
            fparams['pairs']=0
         if (fparams['condition_select'] == 'selected_pair'):
            fparams['pairs']=1
         if (fparams['condition_select'] == 'all_pairs'):
            fparams['pairs']=2
 
- 
+        fparams['logModetmp'] = 'log2'
+        if (fparams['logMode']=='fpkm'):
+            fparams['logModetmp'] = 0
+        if (fparams['logMode']=='log2'):
+            fparams['logModetmp'] = 2
+        if (fparams['logMode']=='log10'):
+            fparams['logModetmp'] = 10
+
+
+
+
+
+
+        
+
+
         filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
         self.__LOGGER.info("matrix is " + filtered_matrix)
 
@@ -546,7 +561,7 @@ class kb_cummerbund:
         rparams['plotscript'] = join(system_params['rscripts'], "heatmapplotinteractive.R")
         rparams['include_replicates'] = 1
         rparams['pairs'] = fparams ['pairs']
-        rparams['logMode'] = fparams['logMode']
+        rparams['logMode'] = fparams['logMode1']
         rparams['removezeroes'] = fparams['removezeroes']
         rparams['outmatrix'] = join (system_params['scratch'], "outmatrix")
 
