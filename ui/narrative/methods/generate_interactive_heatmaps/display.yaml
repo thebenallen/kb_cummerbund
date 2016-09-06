@@ -1,14 +1,14 @@
 #
 # Define basic display information
 #
-name     : View Differentially Expressed Genes from Cuffdiff in Heatmap
+name     : Create Expression Matrix From Cuffdiff Output
 tooltip  : |
-    Compare two conditions in RNA-Seq expression data to identify differentially expressed genes and view them in an interactive heatmap   
+     Create expression matrix from cuffdiff output
 
 screenshots :
     []
 
-replacement-text : Create heatmaps
+replacement-text : Create expression matrix
 
 #
 # Define the set of other narrative methods that should be suggested to the user.
@@ -63,12 +63,12 @@ parameters :
         ui-name : |
             Treatment Label 1
         short-hint : |
-            Sample condition to identify differentially expressed genes
+            Sample condition 1  to identify differentially expressed genes
     sample2:
         ui-name : |
             Treatment Label 2
         short-hint : |
-            Sample condition to identify differentially expressed genes
+            Sample condition 2 to identify differentially expressed genes
     q_value_cutoff:
         ui-name : |
             Alpha Cutoff
@@ -83,7 +83,7 @@ parameters :
 
 
 description : |
-   <p>This method helps in the visualization of Cufflinks high-throughput RNA-seq data using CummeRbund Package (csHeatmap method). It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and creates a heatmap of differentially expressed genes. The expression matrix with or without replicates which were used to create heatmaps are also generated as output objects.</p> 
+   <p>This method uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and creates an expression matrix. Advanced options are available to select condition of filtering and transforming expression matrix </p> 
     <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     
