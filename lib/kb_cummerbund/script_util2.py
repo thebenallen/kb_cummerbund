@@ -59,9 +59,12 @@ def get_command_line_heatmap_basic(rparams):
 
 #TODO: Check existence of files and directories
     ropts            = ["Rscript", rparams['plotscript']]
-    ropts.append("--genelist")
-    ropts.append(rparams['genelist'])
-        
+
+    try:
+        ropts.append("--genelist")
+        ropts.append(rparams['genelist'])
+    except:
+        xx=1 #do nothing
     ropts.append("--cuffdiff")
     ropts.append(rparams['cuffdiff_dir'])
         
