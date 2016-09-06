@@ -543,7 +543,7 @@ class kb_cummerbund:
         rparams['plotscript'] = join(system_params['rscripts'], "heatmapplotinteractive.R")
         rparams['include_replicates'] = 1
         rparams['pairs'] = fparams ['pairs']
-        rparams['logMode'] = fparams['logMode1']
+        rparams['logMode'] = fparams['logModetmp']
         rparams['removezeroes'] = fparams['removezeroes']
         rparams['outmatrix'] = join (system_params['scratch'], "outmatrix")
 
