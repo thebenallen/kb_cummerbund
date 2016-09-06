@@ -1,5 +1,5 @@
 {
-  "name": "View Differentially Expressed Genes from Cuffdiff in Heatmap",
+  "name": "Create Expression Matrix From Cuffdiff Output",
   "ver": "0.0.1",
   "authors" : [ ],
   "contact" : "help@kbase.us",
@@ -93,12 +93,21 @@
     "default_values" : [ "no_condition_filter_selected" ],
     "field_type" : "dropdown",
     "dropdown_options": {
+
         "options": [
+          { 
+            "value": "no_condition_filter_selected",
+            "display":"No filtering based on differential expression",
+            "id": "no_condition_filter_selected",
+            "ui_name": "no_condition_filter_selected",
+            "selected" : true
+          },
+
           { 
             "value": "all_pairs",
             "display":"All condition comparison",
-            "id": "all_conditions",
-            "ui_name": "all_conditions"
+            "id": "all_pairs",
+            "ui_name": "all_pairs"
           },
           {
             "value": "selected_pair",
