@@ -64,7 +64,9 @@ def get_command_line_heatmap_basic(rparams):
         ropts.append("--genelist")
         ropts.append(rparams['genelist'])
     except:
-        xx=1 #do nothing
+        ropts.append("--genelist")
+        ropts.append("nogenelist")
+       
     ropts.append("--cuffdiff")
     ropts.append(rparams['cuffdiff_dir'])
         
