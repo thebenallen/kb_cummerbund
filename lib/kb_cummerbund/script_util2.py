@@ -548,7 +548,7 @@ def filter_expression_matrix(fparams, system_params):
     #include_inf = fparams['include_inf']
     log2_fold_change_cutoff = float(fparams['log2_fold_change_cutoff'])
     infile  =fparams['infile']
-    num_genes = int(fparams['num_genes'])
+    num_genes = 1000000000000000000000 #no upper bound
     infile = fparams['infile']
     outfile = fparams['outfile']
 
