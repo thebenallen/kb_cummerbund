@@ -553,6 +553,11 @@ def filter_expression_matrix(fparams, system_params):
     log2_fold_change_cutoff = float(fparams['log2_fold_change_cutoff'])
     infile  =fparams['infile']
     num_genes = 1000000000000000000000 #no upper bound
+    try:
+        num_genes=fparams['num_genes']
+    except:
+        num_genes = 10000000000000000
+
     infile = fparams['infile']
     outfile = fparams['outfile']
 

@@ -364,7 +364,7 @@ class kb_cummerbund:
         res = ws_client.save_objects({
             "workspace":params['workspace_name'],
             "objects": [{
-                "type":"KBaseGwasData.differentialexpressionstat",
+                "type":"KBaseRNASeq.DifferentialExpressionStat",
                 "data":statdata,
                 "name":params["ws_diffstat_output"]}]
             })
@@ -569,7 +569,7 @@ class kb_cummerbund:
            except:
                 report += "There was an error in creating expression matrix"
                 report += "No differentially expressed genes were found"
-                report += "Please change / double  your filtering criteria"
+                report += "Please change / double check  your filtering criteria"
 
 	        reportObj = {
 		    'objects_created':[],

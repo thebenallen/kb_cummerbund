@@ -74,6 +74,11 @@ parameters :
             Alpha Cutoff
         short-hint : |
             q_value_cutoff
+    num_genes:
+        ui-name : |
+            Number of Genes 
+        short-hint : |
+            Number of maximum top differentially expressed genes in expression matrix
     log2_fold_change_cutoff:
         ui-name : |
             Fold Change Cutoff

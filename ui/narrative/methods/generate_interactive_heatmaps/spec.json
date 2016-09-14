@@ -186,7 +186,18 @@
   		"validate_as": "float"
     }
       	
-  }
+  },
+{
+    "id" : "num_genes",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "1000" ],
+    "field_type" : "text",
+    "text_options" : {
+  		"validate_as": "int"  		
+     }
+}
  
   ],
   "behavior" : {
@@ -236,6 +247,11 @@
           "input_parameter": "log2_fold_change_cutoff",
           "target_property": "log2_fold_change_cutoff"
         }
+        ,{
+          "input_parameter": "num_genes",
+          "target_property": "num_genes"
+        }
+
 
         ],
             "output_mapping": [
