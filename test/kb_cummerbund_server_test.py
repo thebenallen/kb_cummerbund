@@ -60,7 +60,7 @@ class kb_cummerbundTest(unittest.TestCase):
 
         #ws_id="pranjan77:1472587176942"
         #ws_obj_id="Ath_test_cuffdiff_validation"
-        ws_id = 'srividya22:1472738597212'
+        ws_id = 'pranjan77:1473962459187'
         ws_obj_id="test_3_samples_cuffdiff"
 
 
@@ -68,8 +68,8 @@ class kb_cummerbundTest(unittest.TestCase):
 
         #run get cummernund plot
 
-        cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id}
-       # ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
+        cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id, 'ws_diffstat_output': 'diffstat_out'}
+        ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
 
 
         #run get expression matrix

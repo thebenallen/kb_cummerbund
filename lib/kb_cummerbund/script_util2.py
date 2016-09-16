@@ -554,7 +554,7 @@ def filter_expression_matrix(fparams, system_params):
     infile  =fparams['infile']
     num_genes = 1000000000000000000000 #no upper bound
     try:
-        num_genes=fparams['num_genes']
+        num_genes=int(fparams['num_genes'])
     except:
         num_genes = 10000000000000000
 
