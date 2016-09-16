@@ -58,12 +58,15 @@ class kb_cummerbundTest(unittest.TestCase):
         #ws_id="pranjan77:1452551559640"
         #ws_obj_id="Ath_wt_hy5_cuffdiff"
 
-        #ws_id="pranjan77:1472587176942"
-        #ws_obj_id="Ath_test_cuffdiff_validation"
-        ws_id = 'pranjan77:1473962459187'
-        ws_obj_id="test_3_samples_cuffdiff"
-
-
+        ws_id="pranjan77:1473889422580"
+        c1 = 'WT'
+        c2 = 'hy5'
+        ws_obj_id="Ath_test_cuffdiff_validation"
+ 
+        #ws_id = 'pranjan77:1473962459187'
+        #c1 = 'ecoli_8083'
+        #c2 = 'ecoli_8085'
+        #ws_obj_id="test_3_samples_cuffdiff"
         ws_out_id="expx1"
 
         #run get cummernund plot
@@ -87,12 +90,26 @@ class kb_cummerbundTest(unittest.TestCase):
                 'logMode': 'log2', 
                 'removezeroes': 1,
                 'condition_select':'all_pairs',
+                'sample1':c1, 
+                'sample2' :c2, 
+                'q_value_cutoff':0.1,
+                'log2_fold_change_cutoff': 1.2, 
+                'num_genes' :num_g
+                }
+        interactiveHeatmapParams={
+                'workspace_name': ws_id, 
+                'ws_cuffdiff_id': ws_obj_id, 
+                'ws_expression_matrix_id':ws_out_id3,
+                'logMode': 'log2', 
+                'removezeroes': 1,
+                'condition_select':'all_pairs',
                 'sample1':'ecoli_8083', 
                 'sample2' :'ecoli_8085', 
                 'q_value_cutoff':0.1,
                 'log2_fold_change_cutoff': 1.2, 
                 'num_genes' :num_g
                 }
+
         ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
         # Run your method by
         # ret = self.getImpl().your_method(self.getContext(), parameters...)

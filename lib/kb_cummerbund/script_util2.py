@@ -550,6 +550,7 @@ def filter_expression_matrix(fparams, system_params):
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
     q_value_cutoff = float(fparams['q_value_cutoff'])
+    
     #include_inf = fparams['include_inf']
     log2_fold_change_cutoff = float(fparams['log2_fold_change_cutoff'])
     infile  =fparams['infile']
@@ -589,6 +590,8 @@ def filter_expression_matrix(fparams, system_params):
         i=0
         for line in f:
             linesplit  = line.split()
+            if (linesplit[1] == "-"):
+               continue
             qval = linesplit[12]
             significance = linesplit[13]
           
