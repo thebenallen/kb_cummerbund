@@ -546,6 +546,7 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
 def filter_expression_matrix(fparams, system_params):
     cuffdiff_dir=fparams['cuffdiff_dir']
     selected_condition_option = fparams['pairs']
+    
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
     q_value_cutoff = float(fparams['q_value_cutoff'])
@@ -581,6 +582,8 @@ def filter_expression_matrix(fparams, system_params):
     x = "gene\tq_value\tlog2-fold_change\n"
     fp.write(x)
     mylist = []
+
+    logger.info(fparams )
     with open(infile) as f:
         qval_dict={}
         i=0
