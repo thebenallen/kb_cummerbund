@@ -68,10 +68,11 @@ class kb_cummerbundTest(unittest.TestCase):
         #c2 = 'ecoli_8085'
         #ws_obj_id="test_3_samples_cuffdiff"
         ws_out_id="expx1"
+        diffstat_out="expx12"
 
         #run get cummernund plot
         cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id, 'ws_diffstat_output': 'diffstat_out'}
-        #ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
+        ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
 
 
         #run get expression matrix
@@ -110,7 +111,7 @@ class kb_cummerbundTest(unittest.TestCase):
                 'num_genes' :num_g
                 }
 
-        ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
+        #ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
         # Run your method by
         # ret = self.getImpl().your_method(self.getContext(), parameters...)
         #
