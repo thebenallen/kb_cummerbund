@@ -65,7 +65,7 @@ def filter_notest_inf(infile):
 	   except KeyError:
               condition_pair_dict[unique_key]={} 
               condition_pair_dict[unique_key]["voldata"] =[] 
-           stats = {"gene": linedata[1] , 
+           stats = {"gene": linedata[2] , 
                     "function": "", 
                     "log2fc": float(linedata[9]),
                     "log2fc_f": float(linedata[9]),
