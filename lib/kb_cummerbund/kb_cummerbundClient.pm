@@ -43,16 +43,23 @@ sub new
 	headers => [],
     };
     my %arg_hash = @args;
-    my $async_job_check_time = 5.0;
+    $self->{async_job_check_time} = 0.1;
     if (exists $arg_hash{"async_job_check_time_ms"}) {
-        $async_job_check_time = $arg_hash{"async_job_check_time_ms"} / 1000.0;
+        $self->{async_job_check_time} = $arg_hash{"async_job_check_time_ms"} / 1000.0;
     }
-    $self->{async_job_check_time} = $async_job_check_time;
-    my $async_version = undef;
-    if (exists $arg_hash{"async_version"}) {
-        $async_version = $arg_hash{"async_version"};
+    $self->{async_job_check_time_scale_percent} = 150;
+    if (exists $arg_hash{"async_job_check_time_scale_percent"}) {
+        $self->{async_job_check_time_scale_percent} = $arg_hash{"async_job_check_time_scale_percent"};
     }
-    $self->{async_version} = $async_version;
+    $self->{async_job_check_max_time} = 300;  # 5 minutes
+    if (exists $arg_hash{"async_job_check_max_time_ms"}) {
+        $self->{async_job_check_max_time} = $arg_hash{"async_job_check_max_time_ms"} / 1000.0;
+    }
+    my $service_version = undef;
+    if (exists $arg_hash{"service_version"}) {
+        $service_version = $arg_hash{"async_version"};
+    }
+    $self->{service_version} = $service_version;
 
     chomp($self->{hostname} = `hostname`);
     $self->{hostname} ||= 'unknown-host';
@@ -118,6 +125,43 @@ sub new
     return $self;
 }
 
+sub _check_job {
+    my($self, @args) = @_;
+# Authentication: ${method.authentication}
+    if ((my $n = @args) != 1) {
+        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+                                   "Invalid argument count for function _check_job (received $n, expecting 1)");
+    }
+    {
+        my($job_id) = @args;
+        my @_bad_arguments;
+        (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument 0 \"job_id\" (it should be a string)");
+        if (@_bad_arguments) {
+            my $msg = "Invalid arguments passed to _check_job:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+                                   method_name => '_check_job');
+        }
+    }
+    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
+        method => "kb_cummerbund._check_job",
+        params => \@args});
+    if ($result) {
+        if ($result->is_error) {
+            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+                           code => $result->content->{error}->{code},
+                           method_name => '_check_job',
+                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+                          );
+        } else {
+            return $result->result->[0];
+        }
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method _check_job",
+                        status_line => $self->{client}->status_line,
+                        method_name => '_check_job');
+    }
+}
+
 
 
 
@@ -172,10 +216,15 @@ ws_cummerbund_output is a string
 sub generate_cummerbund_plots
 {
     my($self, @args) = @_;
-    my $job_id = $self->generate_cummerbund_plots_async(@args);
+    my $job_id = $self->_generate_cummerbund_plots_submit(@args);
+    my $async_job_check_time = $self->{async_job_check_time};
     while (1) {
-        Time::HiRes::sleep($self->{async_job_check_time});
-        my $job_state_ref = $self->generate_cummerbund_plots_check($job_id);
+        Time::HiRes::sleep($async_job_check_time);
+        $async_job_check_time *= $self->{async_job_check_time_scale_percent} / 100.0;
+        if ($async_job_check_time > $self->{async_job_check_max_time}) {
+            $async_job_check_time = $self->{async_job_check_max_time};
+        }
+        my $job_state_ref = $self->_check_job($job_id);
         if ($job_state_ref->{"finished"} != 0) {
             if (!exists $job_state_ref->{"result"}) {
                 $job_state_ref->{"result"} = [];
@@ -185,84 +234,48 @@ sub generate_cummerbund_plots
     }
 }
 
-sub generate_cummerbund_plots_async {
+sub _generate_cummerbund_plots_submit {
     my($self, @args) = @_;
 # Authentication: required
     if ((my $n = @args) != 1) {
         Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-                                   "Invalid argument count for function generate_cummerbund_plots_async (received $n, expecting 1)");
+                                   "Invalid argument count for function _generate_cummerbund_plots_submit (received $n, expecting 1)");
     }
     {
         my($cummerbundParams) = @args;
         my @_bad_arguments;
         (ref($cummerbundParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"cummerbundParams\" (value was \"$cummerbundParams\")");
         if (@_bad_arguments) {
-            my $msg = "Invalid arguments passed to generate_cummerbund_plots_async:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            my $msg = "Invalid arguments passed to _generate_cummerbund_plots_submit:\n" . join("", map { "\t$_\n" } @_bad_arguments);
             Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-                                   method_name => 'generate_cummerbund_plots_async');
+                                   method_name => '_generate_cummerbund_plots_submit');
         }
     }
     my $context = undef;
-    if ($self->{async_version}) {
-        $context = {'service_ver' => $self->{async_version}};
+    if ($self->{service_version}) {
+        $context = {'service_ver' => $self->{service_version}};
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "kb_cummerbund.generate_cummerbund_plots_async",
+        method => "kb_cummerbund._generate_cummerbund_plots_submit",
         params => \@args}, context => $context);
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
                            code => $result->content->{error}->{code},
-                           method_name => 'generate_cummerbund_plots_async',
+                           method_name => '_generate_cummerbund_plots_submit',
                            data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
             );
         } else {
             return $result->result->[0];  # job_id
         }
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method generate_cummerbund_plots_async",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method _generate_cummerbund_plots_submit",
                         status_line => $self->{client}->status_line,
-                        method_name => 'generate_cummerbund_plots_async');
+                        method_name => '_generate_cummerbund_plots_submit');
     }
 }
 
-sub generate_cummerbund_plots_check {
-    my($self, @args) = @_;
-# Authentication: required
-    if ((my $n = @args) != 1) {
-        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-                                   "Invalid argument count for function generate_cummerbund_plots_check (received $n, expecting 1)");
-    }
-    {
-        my($job_id) = @args;
-        my @_bad_arguments;
-        (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument 0 \"job_id\" (it should be a string)");
-        if (@_bad_arguments) {
-            my $msg = "Invalid arguments passed to generate_cummerbund_plots_check:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-            Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-                                   method_name => 'generate_cummerbund_plots_check');
-        }
-    }
-    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "kb_cummerbund.generate_cummerbund_plots_check",
-        params => \@args});
-    if ($result) {
-        if ($result->is_error) {
-            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-                           code => $result->content->{error}->{code},
-                           method_name => 'generate_cummerbund_plots_check',
-                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-                          );
-        } else {
-            return $result->result->[0];
-        }
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method generate_cummerbund_plots_check",
-                        status_line => $self->{client}->status_line,
-                        method_name => 'generate_cummerbund_plots_check');
-    }
-}
-  
+ 
 
 
 =head2 generate_cummerbund_plot2
@@ -320,10 +333,15 @@ ws_diffstat_output is a string
 sub generate_cummerbund_plot2
 {
     my($self, @args) = @_;
-    my $job_id = $self->generate_cummerbund_plot2_async(@args);
+    my $job_id = $self->_generate_cummerbund_plot2_submit(@args);
+    my $async_job_check_time = $self->{async_job_check_time};
     while (1) {
-        Time::HiRes::sleep($self->{async_job_check_time});
-        my $job_state_ref = $self->generate_cummerbund_plot2_check($job_id);
+        Time::HiRes::sleep($async_job_check_time);
+        $async_job_check_time *= $self->{async_job_check_time_scale_percent} / 100.0;
+        if ($async_job_check_time > $self->{async_job_check_max_time}) {
+            $async_job_check_time = $self->{async_job_check_max_time};
+        }
+        my $job_state_ref = $self->_check_job($job_id);
         if ($job_state_ref->{"finished"} != 0) {
             if (!exists $job_state_ref->{"result"}) {
                 $job_state_ref->{"result"} = [];
@@ -333,84 +351,48 @@ sub generate_cummerbund_plot2
     }
 }
 
-sub generate_cummerbund_plot2_async {
+sub _generate_cummerbund_plot2_submit {
     my($self, @args) = @_;
 # Authentication: required
     if ((my $n = @args) != 1) {
         Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-                                   "Invalid argument count for function generate_cummerbund_plot2_async (received $n, expecting 1)");
+                                   "Invalid argument count for function _generate_cummerbund_plot2_submit (received $n, expecting 1)");
     }
     {
         my($cummerbundstatParams) = @args;
         my @_bad_arguments;
         (ref($cummerbundstatParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"cummerbundstatParams\" (value was \"$cummerbundstatParams\")");
         if (@_bad_arguments) {
-            my $msg = "Invalid arguments passed to generate_cummerbund_plot2_async:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            my $msg = "Invalid arguments passed to _generate_cummerbund_plot2_submit:\n" . join("", map { "\t$_\n" } @_bad_arguments);
             Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-                                   method_name => 'generate_cummerbund_plot2_async');
+                                   method_name => '_generate_cummerbund_plot2_submit');
         }
     }
     my $context = undef;
-    if ($self->{async_version}) {
-        $context = {'service_ver' => $self->{async_version}};
+    if ($self->{service_version}) {
+        $context = {'service_ver' => $self->{service_version}};
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "kb_cummerbund.generate_cummerbund_plot2_async",
+        method => "kb_cummerbund._generate_cummerbund_plot2_submit",
         params => \@args}, context => $context);
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
                            code => $result->content->{error}->{code},
-                           method_name => 'generate_cummerbund_plot2_async',
+                           method_name => '_generate_cummerbund_plot2_submit',
                            data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
             );
         } else {
             return $result->result->[0];  # job_id
         }
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method generate_cummerbund_plot2_async",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method _generate_cummerbund_plot2_submit",
                         status_line => $self->{client}->status_line,
-                        method_name => 'generate_cummerbund_plot2_async');
+                        method_name => '_generate_cummerbund_plot2_submit');
     }
 }
 
-sub generate_cummerbund_plot2_check {
-    my($self, @args) = @_;
-# Authentication: required
-    if ((my $n = @args) != 1) {
-        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-                                   "Invalid argument count for function generate_cummerbund_plot2_check (received $n, expecting 1)");
-    }
-    {
-        my($job_id) = @args;
-        my @_bad_arguments;
-        (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument 0 \"job_id\" (it should be a string)");
-        if (@_bad_arguments) {
-            my $msg = "Invalid arguments passed to generate_cummerbund_plot2_check:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-            Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-                                   method_name => 'generate_cummerbund_plot2_check');
-        }
-    }
-    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "kb_cummerbund.generate_cummerbund_plot2_check",
-        params => \@args});
-    if ($result) {
-        if ($result->is_error) {
-            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-                           code => $result->content->{error}->{code},
-                           method_name => 'generate_cummerbund_plot2_check',
-                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-                          );
-        } else {
-            return $result->result->[0];
-        }
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method generate_cummerbund_plot2_check",
-                        status_line => $self->{client}->status_line,
-                        method_name => 'generate_cummerbund_plot2_check');
-    }
-}
-  
+ 
 
 
 =head2 create_expression_matrix
@@ -468,10 +450,15 @@ bool is an int
 sub create_expression_matrix
 {
     my($self, @args) = @_;
-    my $job_id = $self->create_expression_matrix_async(@args);
+    my $job_id = $self->_create_expression_matrix_submit(@args);
+    my $async_job_check_time = $self->{async_job_check_time};
     while (1) {
-        Time::HiRes::sleep($self->{async_job_check_time});
-        my $job_state_ref = $self->create_expression_matrix_check($job_id);
+        Time::HiRes::sleep($async_job_check_time);
+        $async_job_check_time *= $self->{async_job_check_time_scale_percent} / 100.0;
+        if ($async_job_check_time > $self->{async_job_check_max_time}) {
+            $async_job_check_time = $self->{async_job_check_max_time};
+        }
+        my $job_state_ref = $self->_check_job($job_id);
         if ($job_state_ref->{"finished"} != 0) {
             if (!exists $job_state_ref->{"result"}) {
                 $job_state_ref->{"result"} = [];
@@ -481,84 +468,48 @@ sub create_expression_matrix
     }
 }
 
-sub create_expression_matrix_async {
+sub _create_expression_matrix_submit {
     my($self, @args) = @_;
 # Authentication: required
     if ((my $n = @args) != 1) {
         Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-                                   "Invalid argument count for function create_expression_matrix_async (received $n, expecting 1)");
+                                   "Invalid argument count for function _create_expression_matrix_submit (received $n, expecting 1)");
     }
     {
         my($expressionMatrixParams) = @args;
         my @_bad_arguments;
         (ref($expressionMatrixParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"expressionMatrixParams\" (value was \"$expressionMatrixParams\")");
         if (@_bad_arguments) {
-            my $msg = "Invalid arguments passed to create_expression_matrix_async:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            my $msg = "Invalid arguments passed to _create_expression_matrix_submit:\n" . join("", map { "\t$_\n" } @_bad_arguments);
             Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-                                   method_name => 'create_expression_matrix_async');
+                                   method_name => '_create_expression_matrix_submit');
         }
     }
     my $context = undef;
-    if ($self->{async_version}) {
-        $context = {'service_ver' => $self->{async_version}};
+    if ($self->{service_version}) {
+        $context = {'service_ver' => $self->{service_version}};
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "kb_cummerbund.create_expression_matrix_async",
+        method => "kb_cummerbund._create_expression_matrix_submit",
         params => \@args}, context => $context);
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
                            code => $result->content->{error}->{code},
-                           method_name => 'create_expression_matrix_async',
+                           method_name => '_create_expression_matrix_submit',
                            data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
             );
         } else {
             return $result->result->[0];  # job_id
         }
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method create_expression_matrix_async",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method _create_expression_matrix_submit",
                         status_line => $self->{client}->status_line,
-                        method_name => 'create_expression_matrix_async');
+                        method_name => '_create_expression_matrix_submit');
     }
 }
 
-sub create_expression_matrix_check {
-    my($self, @args) = @_;
-# Authentication: required
-    if ((my $n = @args) != 1) {
-        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-                                   "Invalid argument count for function create_expression_matrix_check (received $n, expecting 1)");
-    }
-    {
-        my($job_id) = @args;
-        my @_bad_arguments;
-        (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument 0 \"job_id\" (it should be a string)");
-        if (@_bad_arguments) {
-            my $msg = "Invalid arguments passed to create_expression_matrix_check:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-            Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-                                   method_name => 'create_expression_matrix_check');
-        }
-    }
-    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "kb_cummerbund.create_expression_matrix_check",
-        params => \@args});
-    if ($result) {
-        if ($result->is_error) {
-            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
-                           code => $result->content->{error}->{code},
-                           method_name => 'create_expression_matrix_check',
-                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
-                          );
-        } else {
-            return $result->result->[0];
-        }
-    } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method create_expression_matrix_check",
-                        status_line => $self->{client}->status_line,
-                        method_name => 'create_expression_matrix_check');
-    }
-}
-  
+ 
 
 
 =head2 create_interactive_heatmap_de_genes
@@ -573,10 +524,13 @@ sub create_expression_matrix_check {
 
 <pre>
 $interactiveHeatmapParams is a kb_cummerbund.interactiveHeatmapParams
-$return is a kb_cummerbund.ws_expression_matrix_id
+$return is a kb_cummerbund.ResultsToReport
 interactiveHeatmapParams is a reference to a hash where the following keys are defined:
 	sample1 has a value which is a string
 	sample2 has a value which is a string
+	logMode has a value which is a string
+	removezeroes has a value which is a string
+	condition_select has a value which is a string
 	q_value_cutoff has a value which is a float
 	log2_fold_change_cutoff has a value which is a float
 	num_genes has a value which is an int
@@ -584,6 +538,9 @@ interactiveHeatmapParams is a reference to a hash where the following keys are d
 	ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
 ws_cuffdiff_id is a string
 ws_expression_matrix_id is a string
+ResultsToReport is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
 
 </pre>
 
@@ -592,10 +549,13 @@ ws_expression_matrix_id is a string
 =begin text
 
 $interactiveHeatmapParams is a kb_cummerbund.interactiveHeatmapParams
-$return is a kb_cummerbund.ws_expression_matrix_id
+$return is a kb_cummerbund.ResultsToReport
 interactiveHeatmapParams is a reference to a hash where the following keys are defined:
 	sample1 has a value which is a string
 	sample2 has a value which is a string
+	logMode has a value which is a string
+	removezeroes has a value which is a string
+	condition_select has a value which is a string
 	q_value_cutoff has a value which is a float
 	log2_fold_change_cutoff has a value which is a float
 	num_genes has a value which is an int
@@ -603,6 +563,9 @@ interactiveHeatmapParams is a reference to a hash where the following keys are d
 	ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
 ws_cuffdiff_id is a string
 ws_expression_matrix_id is a string
+ResultsToReport is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
 
 
 =end text
@@ -618,10 +581,15 @@ ws_expression_matrix_id is a string
 sub create_interactive_heatmap_de_genes
 {
     my($self, @args) = @_;
-    my $job_id = $self->create_interactive_heatmap_de_genes_async(@args);
+    my $job_id = $self->_create_interactive_heatmap_de_genes_submit(@args);
+    my $async_job_check_time = $self->{async_job_check_time};
     while (1) {
-        Time::HiRes::sleep($self->{async_job_check_time});
-        my $job_state_ref = $self->create_interactive_heatmap_de_genes_check($job_id);
+        Time::HiRes::sleep($async_job_check_time);
+        $async_job_check_time *= $self->{async_job_check_time_scale_percent} / 100.0;
+        if ($async_job_check_time > $self->{async_job_check_max_time}) {
+            $async_job_check_time = $self->{async_job_check_max_time};
+        }
+        my $job_state_ref = $self->_check_job($job_id);
         if ($job_state_ref->{"finished"} != 0) {
             if (!exists $job_state_ref->{"result"}) {
                 $job_state_ref->{"result"} = [];
@@ -631,85 +599,210 @@ sub create_interactive_heatmap_de_genes
     }
 }
 
-sub create_interactive_heatmap_de_genes_async {
+sub _create_interactive_heatmap_de_genes_submit {
     my($self, @args) = @_;
 # Authentication: required
     if ((my $n = @args) != 1) {
         Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-                                   "Invalid argument count for function create_interactive_heatmap_de_genes_async (received $n, expecting 1)");
+                                   "Invalid argument count for function _create_interactive_heatmap_de_genes_submit (received $n, expecting 1)");
     }
     {
         my($interactiveHeatmapParams) = @args;
         my @_bad_arguments;
         (ref($interactiveHeatmapParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"interactiveHeatmapParams\" (value was \"$interactiveHeatmapParams\")");
         if (@_bad_arguments) {
-            my $msg = "Invalid arguments passed to create_interactive_heatmap_de_genes_async:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            my $msg = "Invalid arguments passed to _create_interactive_heatmap_de_genes_submit:\n" . join("", map { "\t$_\n" } @_bad_arguments);
             Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-                                   method_name => 'create_interactive_heatmap_de_genes_async');
+                                   method_name => '_create_interactive_heatmap_de_genes_submit');
         }
     }
     my $context = undef;
-    if ($self->{async_version}) {
-        $context = {'service_ver' => $self->{async_version}};
+    if ($self->{service_version}) {
+        $context = {'service_ver' => $self->{service_version}};
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "kb_cummerbund.create_interactive_heatmap_de_genes_async",
+        method => "kb_cummerbund._create_interactive_heatmap_de_genes_submit",
         params => \@args}, context => $context);
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
                            code => $result->content->{error}->{code},
-                           method_name => 'create_interactive_heatmap_de_genes_async',
+                           method_name => '_create_interactive_heatmap_de_genes_submit',
                            data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
             );
         } else {
             return $result->result->[0];  # job_id
         }
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method create_interactive_heatmap_de_genes_async",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method _create_interactive_heatmap_de_genes_submit",
                         status_line => $self->{client}->status_line,
-                        method_name => 'create_interactive_heatmap_de_genes_async');
+                        method_name => '_create_interactive_heatmap_de_genes_submit');
     }
 }
 
-sub create_interactive_heatmap_de_genes_check {
+ 
+
+
+=head2 create_interactive_heatmap_de_genes_old
+
+  $return = $obj->create_interactive_heatmap_de_genes_old($heatmapParams)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$heatmapParams is a kb_cummerbund.heatmapParams
+$return is a kb_cummerbund.ResultsToReport
+heatmapParams is a reference to a hash where the following keys are defined:
+	sample1 has a value which is a string
+	sample2 has a value which is a string
+	q_value_cutoff has a value which is a float
+	log2_fold_change_cutoff has a value which is a float
+	num_genes has a value which is an int
+	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+	ws_expression_matrix_id1 has a value which is a kb_cummerbund.ws_expression_matrix_id
+	ws_expression_matrix_id2 has a value which is a kb_cummerbund.ws_expression_matrix_id
+	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
+ws_cuffdiff_id is a string
+ws_expression_matrix_id is a string
+ws_cummerbund_output is a string
+ResultsToReport is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$heatmapParams is a kb_cummerbund.heatmapParams
+$return is a kb_cummerbund.ResultsToReport
+heatmapParams is a reference to a hash where the following keys are defined:
+	sample1 has a value which is a string
+	sample2 has a value which is a string
+	q_value_cutoff has a value which is a float
+	log2_fold_change_cutoff has a value which is a float
+	num_genes has a value which is an int
+	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
+	ws_expression_matrix_id1 has a value which is a kb_cummerbund.ws_expression_matrix_id
+	ws_expression_matrix_id2 has a value which is a kb_cummerbund.ws_expression_matrix_id
+	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
+ws_cuffdiff_id is a string
+ws_expression_matrix_id is a string
+ws_cummerbund_output is a string
+ResultsToReport is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+sub create_interactive_heatmap_de_genes_old
+{
+    my($self, @args) = @_;
+    my $job_id = $self->_create_interactive_heatmap_de_genes_old_submit(@args);
+    my $async_job_check_time = $self->{async_job_check_time};
+    while (1) {
+        Time::HiRes::sleep($async_job_check_time);
+        $async_job_check_time *= $self->{async_job_check_time_scale_percent} / 100.0;
+        if ($async_job_check_time > $self->{async_job_check_max_time}) {
+            $async_job_check_time = $self->{async_job_check_max_time};
+        }
+        my $job_state_ref = $self->_check_job($job_id);
+        if ($job_state_ref->{"finished"} != 0) {
+            if (!exists $job_state_ref->{"result"}) {
+                $job_state_ref->{"result"} = [];
+            }
+            return wantarray ? @{$job_state_ref->{"result"}} : $job_state_ref->{"result"}->[0];
+        }
+    }
+}
+
+sub _create_interactive_heatmap_de_genes_old_submit {
     my($self, @args) = @_;
 # Authentication: required
     if ((my $n = @args) != 1) {
         Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-                                   "Invalid argument count for function create_interactive_heatmap_de_genes_check (received $n, expecting 1)");
+                                   "Invalid argument count for function _create_interactive_heatmap_de_genes_old_submit (received $n, expecting 1)");
     }
     {
-        my($job_id) = @args;
+        my($heatmapParams) = @args;
         my @_bad_arguments;
-        (!ref($job_id)) or push(@_bad_arguments, "Invalid type for argument 0 \"job_id\" (it should be a string)");
+        (ref($heatmapParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"heatmapParams\" (value was \"$heatmapParams\")");
         if (@_bad_arguments) {
-            my $msg = "Invalid arguments passed to create_interactive_heatmap_de_genes_check:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+            my $msg = "Invalid arguments passed to _create_interactive_heatmap_de_genes_old_submit:\n" . join("", map { "\t$_\n" } @_bad_arguments);
             Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-                                   method_name => 'create_interactive_heatmap_de_genes_check');
+                                   method_name => '_create_interactive_heatmap_de_genes_old_submit');
         }
     }
+    my $context = undef;
+    if ($self->{service_version}) {
+        $context = {'service_ver' => $self->{service_version}};
+    }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "kb_cummerbund.create_interactive_heatmap_de_genes_check",
-        params => \@args});
+        method => "kb_cummerbund._create_interactive_heatmap_de_genes_old_submit",
+        params => \@args}, context => $context);
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
                            code => $result->content->{error}->{code},
-                           method_name => 'create_interactive_heatmap_de_genes_check',
+                           method_name => '_create_interactive_heatmap_de_genes_old_submit',
+                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+            );
+        } else {
+            return $result->result->[0];  # job_id
+        }
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method _create_interactive_heatmap_de_genes_old_submit",
+                        status_line => $self->{client}->status_line,
+                        method_name => '_create_interactive_heatmap_de_genes_old_submit');
+    }
+}
+
+ 
+  
+sub status
+{
+    my($self, @args) = @_;
+    if ((my $n = @args) != 0) {
+        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+                                   "Invalid argument count for function status (received $n, expecting 0)");
+    }
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+        method => "kb_cummerbund.status",
+        params => \@args,
+    });
+    if ($result) {
+        if ($result->is_error) {
+            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+                           code => $result->content->{error}->{code},
+                           method_name => 'status',
                            data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
                           );
         } else {
-            return $result->result->[0];
+            return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method create_interactive_heatmap_de_genes_check",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method status",
                         status_line => $self->{client}->status_line,
-                        method_name => 'create_interactive_heatmap_de_genes_check');
+                        method_name => 'status',
+                       );
     }
 }
-  
-  
+   
 
 sub version {
     my ($self) = @_;
@@ -722,16 +815,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'create_interactive_heatmap_de_genes',
+                method_name => 'create_interactive_heatmap_de_genes_old',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method create_interactive_heatmap_de_genes",
+            error => "Error invoking method create_interactive_heatmap_de_genes_old",
             status_line => $self->{client}->status_line,
-            method_name => 'create_interactive_heatmap_de_genes',
+            method_name => 'create_interactive_heatmap_de_genes_old',
         );
     }
 }
@@ -1120,6 +1213,9 @@ ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 a reference to a hash where the following keys are defined:
 sample1 has a value which is a string
 sample2 has a value which is a string
+logMode has a value which is a string
+removezeroes has a value which is a string
+condition_select has a value which is a string
 q_value_cutoff has a value which is a float
 log2_fold_change_cutoff has a value which is a float
 num_genes has a value which is an int
@@ -1135,11 +1231,46 @@ ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matri
 a reference to a hash where the following keys are defined:
 sample1 has a value which is a string
 sample2 has a value which is a string
+logMode has a value which is a string
+removezeroes has a value which is a string
+condition_select has a value which is a string
 q_value_cutoff has a value which is a float
 log2_fold_change_cutoff has a value which is a float
 num_genes has a value which is an int
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
+
+
+=end text
+
+=back
+
+
+
+=head2 ResultsToReport
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
 
 
 =end text

@@ -1,0 +1,290 @@
+{
+  "name": "Create Expression Matrix From Cuffdiff Output",
+  "ver": "0.0.1",
+  "authors" : [ ],
+  "contact" : "help@kbase.us",
+  "visible" : true,
+  "categories" : ["active"],
+  "widgets" : {
+    "input" : null,
+    "output" : "kbaseExpressionMatrix"
+  },
+  "parameters" : [ {
+    "id" : "ws_cuffdiff_id",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ "KBaseRNASeq.RNASeqDifferentialExpression" ]
+    }
+  }, 
+ {
+    "id" : "ws_expression_matrix_id",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+      "is_output_name" : true,
+      "valid_ws_types" : [ "KBaseFeatureValues.ExpressionMatrix" ]
+    }
+
+  } ,  
+
+{
+     "id" : "logMode",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "log2" ],
+    "field_type" : "dropdown",
+    "dropdown_options":{
+      "options": [
+        {
+          "value":"fpkm",
+          "display": "FPKM"
+        },
+        {
+          "value": "log2",
+          "display": "log2 (FPKM + 1)",
+          "selected": true
+        },
+        {
+          "value":"log10",
+          "display": "log10 (FPKM + 1)"
+        }
+
+      ]
+    }
+  },
+
+{
+     "id" : "removezeroes",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "1" ],
+    "field_type" : "dropdown",
+    "dropdown_options":{
+      "options": [
+        {
+          "value": "0",
+          "display": "Keep all genes"
+        },
+        {
+          "value": "1",
+          "display": "Remove genes without expression in any condition"
+        }
+      ]
+    }
+  },
+
+
+
+
+  {
+    "id" : "condition_select",
+    "optional" : true,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : [ "no_condition_filter_selected" ],
+    "field_type" : "dropdown",
+    "dropdown_options": {
+
+        "options": [
+          { 
+            "value": "no_condition_filter_selected",
+            "display":"No filtering based on differential expression",
+            "id": "no_condition_filter_selected",
+            "ui_name": "no_condition_filter_selected",
+            "selected" : true
+          },
+
+          { 
+            "value": "all_pairs",
+            "display":"All condition comparison",
+            "id": "all_pairs",
+            "ui_name": "all_pairs"
+          },
+          {
+            "value": "selected_pair",
+            "display":"Selected pair comparison",
+            "id": "selected_pair",
+            "ui_name": "selected_pair"
+
+          }
+
+        ]
+
+    }
+    
+    },
+ 
+  
+  
+  {
+    "id" : "sample1",
+    "optional" : true,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+
+        "parameter_id" : "ws_cuffdiff_id",
+        "subdata_included" : ["condition"],
+        "path_to_subdata": ["condition"]
+      },
+      "multiselection":false,
+      "show_src_obj":false,
+      "allow_custom":false
+    }
+    },
+    
+     {
+    "id" : "sample2",
+    "optional" : true,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+
+        "parameter_id" : "ws_cuffdiff_id",
+        "subdata_included" : ["condition"],
+        "path_to_subdata": ["condition"]
+      },
+      "multiselection":false,
+      "show_src_obj":false,
+      "allow_custom":false
+    }
+    },
+    {
+    "id" : "q_value_cutoff",
+    "optional" : true,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : [ "0.1" ],
+    "field_type" : "text",
+    "text_options" : {
+  	"validate_as": "float"
+    }
+  },
+  {
+    "id" : "log2_fold_change_cutoff",
+    "optional" : true,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : [ "1.2" ],
+    "field_type" : "text",
+    "text_options" : {
+  		"validate_as": "float"
+    }
+      	
+  },
+{
+    "id" : "num_genes",
+    "optional" : true,
+    "advanced" : true,
+    "allow_multiple" : false,
+    "default_values" : [ "1000" ],
+    "field_type" : "text",
+    "text_options" : {
+  		"validate_as": "int"  		
+     }
+}
+ 
+  ],
+  "behavior" : {
+      "service-mapping" : {
+      	"url" : "",
+        "name" : "kb_cummerbund",
+        "method" : "create_interactive_heatmap_de_genes",
+        "input_mapping" : [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "ws_cuffdiff_id",
+          "target_property": "ws_cuffdiff_id"
+        }
+        ,{
+          "input_parameter": "ws_expression_matrix_id",
+          "target_property": "ws_expression_matrix_id"
+        }
+        ,{
+          "input_parameter": "logMode",
+          "target_property": "logMode"
+        }
+        ,{
+          "input_parameter": "removezeroes",
+          "target_property": "removezeroes"
+        },
+        {
+          "input_parameter": "condition_select",
+          "target_property": "condition_select"
+        },
+
+        {
+          "input_parameter": "sample1",
+          "target_property": "sample1"
+        }
+        ,{
+          "input_parameter": "sample2",
+          "target_property": "sample2"
+        }
+        ,{
+          "input_parameter": "q_value_cutoff",
+          "target_property": "q_value_cutoff"
+        }
+        ,{
+          "input_parameter": "log2_fold_change_cutoff",
+          "target_property": "log2_fold_change_cutoff"
+        }
+        ,{
+          "input_parameter": "num_genes",
+          "target_property": "num_genes"
+        }
+
+
+        ],
+            "output_mapping": [
+                {
+                    "service_method_output_path": [0,"report_name"],
+                    "target_property": "report_name"
+                },
+                {
+                    "service_method_output_path": [0,"report_ref"],
+                    "target_property": "report_ref"
+                },
+                {
+                    "constant_value": "20",
+                    "target_property": "report_window_line_height"
+                },
+                {
+                    "service_method_output_path": [0],
+                    "target_property": "create_interactive_heatmap_de_genes"
+                },
+                {
+                    "input_parameter": "ws_cuffdiff_id",
+                    "target_property": "ws_cuffdiff_id"
+                },
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace_name"
+                }
+            ]
+        }
+    },
+    "job_id_output_field": "docker"
+}
+
+
+
+
