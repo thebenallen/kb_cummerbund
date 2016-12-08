@@ -73,8 +73,8 @@ def filter_notest_inf(infile):
                     "p_value": float(linedata[11]),
                     "p_value_f": -math.log10(float(linedata[11])),
                     "significant": linedata[13],
-                    "value_1": float(linedata[7]),
-                    "value_2": float(linedata[8]),
+                    "value_1": math.log2(float(linedata[7])),
+                    "value_2": math.log2(float(linedata[8])),
                     "locus":linedata[3]}
            condition_pair_dict[unique_key]["voldata"].append(stats) 
 
