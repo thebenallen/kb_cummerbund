@@ -3,7 +3,7 @@
   "authors" : [ ],
   "contact" : "help@kbase.us",
   "visible" : true,
-  "categories" : ["inactive","expression"],
+  "categories" : ["active","expression"],
   "widgets" : {
     "input" : null,
     "output" : "kbaseCummerbundPlot"
