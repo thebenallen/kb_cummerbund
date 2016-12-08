@@ -74,8 +74,8 @@ def volcano_plot_data_parse_and_upload(infile,outf):
                     "p_value": float(linedata[11]),
                     "p_value_f": -math.log10(float(linedata[11])),
                     "significant": linedata[13],
-                    "value_1": math.log2(float(linedata[7])+1),
-                    "value_2": math.log2(float(linedata[8])+1),
+                    "value_1": math.log((float(linedata[7])+1),2),
+                    "value_2": math.log((float(linedata[8])+1),2),
                     "locus":linedata[3]}
            condition_pair_dict[unique_key]["voldata"].append(stats) 
 
