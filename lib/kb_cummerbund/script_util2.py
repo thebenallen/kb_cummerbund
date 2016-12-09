@@ -297,6 +297,7 @@ def rplotanduploadinteractive (system_params, fparams, rparams, roptstr):
                '--input_directory', scratch,
                '--output_file_name', outjson ]
 
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()
@@ -408,6 +409,7 @@ def rplotandupload2 (system_params, fparams, rparams, roptstr):
                '--input_directory', scratch,
                '--output_file_name', outjson ]
 
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()
@@ -527,6 +529,7 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
                                     '--input_directory', scratch,
                                     '--output_file_name', outjson ]
 
+        cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
         logger.info (" ".join(cmd_expression_json))
         tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
         stdout, stderr = tool_process.communicate()
