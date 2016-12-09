@@ -255,31 +255,17 @@
 
         ],
             "output_mapping": [
-                {
-                    "service_method_output_path": [0,"report_name"],
-                    "target_property": "report_name"
-                },
-                {
-                    "service_method_output_path": [0,"report_ref"],
-                    "target_property": "report_ref"
-                },
-                {
-                    "constant_value": "20",
-                    "target_property": "report_window_line_height"
-                },
-                {
-                    "service_method_output_path": [0],
-                    "target_property": "create_interactive_heatmap_de_genes"
-                },
-                {
-                    "input_parameter": "ws_cuffdiff_id",
-                    "target_property": "ws_cuffdiff_id"
-                },
-                {
-                    "narrative_system_variable": "workspace",
-                    "target_property": "workspace_name"
-                }
-            ]
+       {
+          "input_parameter": "ws_expression_matrix_id",
+          "target_property": "expressionMatrixID"
+        },
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspaceID"
+        }
+              
+              
+         ]
         }
     },
     "job_id_output_field": "docker"
