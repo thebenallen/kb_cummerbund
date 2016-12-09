@@ -60,10 +60,12 @@ class kb_cummerbundTest(unittest.TestCase):
         
         ws_id="pranjan77:1475698249756"
         ws_id="pranjan77:1481019426226"
+        ws_id="pranjan77:1481237567854"
         c1 = 'wt'
         c2 = 'hy5'
         ws_obj_id="Ath_cuffdiff"
         ws_obj_id="wt-hy5-hisat2-cuffdiff"
+        ws_obj_id="Poplar_hisat2_stringtie_6samples_cuffdiff"
         '''
         #ws_id = 'pranjan77:1473962459187'
         #c1 = 'ecoli_8083'
@@ -119,8 +121,8 @@ class kb_cummerbundTest(unittest.TestCase):
                 'workspace_name': ws_id, 
                 'ws_cuffdiff_id': ws_obj_id, 
                 'ws_expression_matrix_id':ws_out_id3,
-                'sample1':'wt', 
-                'sample2' :'hy5', 
+                'sample1':'Control', 
+                'sample2' :'PD', 
                 'q_value_cutoff':0.4,
                 'log2_fold_change_cutoff': 1, 
                 'num_genes' :num_g

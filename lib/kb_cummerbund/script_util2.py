@@ -839,7 +839,7 @@ def upload_feature_value (system_params, fparams):
                                 '--working_directory', scratch,
                                 '--input_directory', scratch,
                                 '--output_file_name', outjson ]
-
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()
