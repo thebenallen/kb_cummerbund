@@ -115,14 +115,17 @@ class kb_cummerbundTest(unittest.TestCase):
                 'num_genes' :num_g
                 }
 '''
+        ws_id = 'pranjan77:1476324994474'
+        ws_obj_id = 'Ath_cuffdiff'
+
         num_g=100
         ws_out_id3 = "expuuc"
         heatmapParams={
                 'workspace_name': ws_id, 
                 'ws_cuffdiff_id': ws_obj_id, 
                 'ws_expression_matrix_id':ws_out_id3,
-                'sample1':'Control', 
-                'sample2' :'PD', 
+                'sample1':'WT', 
+                'sample2' :'hy5', 
                 'q_value_cutoff':0.4,
                 'log2_fold_change_cutoff': 1, 
                 'num_genes' :num_g
