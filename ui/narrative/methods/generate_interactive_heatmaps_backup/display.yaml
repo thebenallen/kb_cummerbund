@@ -1,0 +1,96 @@
+#
+# Define basic display information
+#
+name     : Create Expression Matrix From Cuffdiff Output
+tooltip  : |
+     Create expression matrix from cuffdiff output
+
+screenshots :
+    []
+
+replacement-text : Create expression matrix
+
+#
+# Define the set of other narrative methods that should be suggested to the user.
+#
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+
+#
+# Configure the display and description of the parameters
+#
+parameters :
+    ws_cuffdiff_id:
+        ui-name : |
+            Cuffdiff Output
+        short-hint : |
+            Differentially expressed data from Cuffdiff
+    ws_expression_matrix_id:
+        ui-name : |
+            Expression matrix 
+        short-hint : |
+            Expression matrix output object 
+    logMode:
+        ui-name : |
+            Matrix transformation
+        short-hint : |
+            Matrix transformation
+
+
+    removezeroes:
+        ui-name : |
+           Expression based filtering 
+        short-hint : |
+           Expression based filtering of genes
+
+
+    condition_select:
+        ui-name : |
+           Select conditions to compare 
+        short-hint : |
+           Select conditions to compare 
+    sample1:
+        ui-name : |
+            Treatment Label 1
+        short-hint : |
+            Sample condition 1  to identify differentially expressed genes
+    sample2:
+        ui-name : |
+            Treatment Label 2
+        short-hint : |
+            Sample condition 2 to identify differentially expressed genes
+    q_value_cutoff:
+        ui-name : |
+            Alpha Cutoff
+        short-hint : |
+            q_value_cutoff
+    num_genes:
+        ui-name : |
+            Number of Genes 
+        short-hint : |
+            Number of maximum top differentially expressed genes in expression matrix
+    log2_fold_change_cutoff:
+        ui-name : |
+            Fold Change Cutoff
+        short-hint : |
+            Absolute value of Log2(fold change) cutoff
+
+
+
+description : |
+   <p>This method uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and creates an expression matrix. Advanced options are available to select condition of filtering and transforming expression matrix </p> 
+    <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
+    Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
+    
+publications :
+    []

@@ -19,7 +19,13 @@ myggheat<-function(object, rescaling='none', clustering='none', labCol=T, labRow
 	}else{
 		m=fpkmMatrix(object,fullnames=fullnames)
 	}
-	#remove genes with no expression in any condition
+	s=list("matrix"=m)
+	## finally add the fill colour ramp of your choice (default is blue to red)-- and return
+	return (s)
+	
+  
+  
+  #remove genes with no expression in any condition
 	m=m[!apply(m,1,sum)==0,]
 	
 	## you can either scale by row or column not both! 
@@ -30,7 +36,11 @@ myggheat<-function(object, rescaling='none', clustering='none', labCol=T, labRow
     {
       m = log10(m+pseudocount)
     }
-	
+
+
+
+
+
 	## I have supplied the default cluster and euclidean distance (JSdist) - and chose to cluster after scaling
 	## if you want a different distance/cluster method-- or to cluster and then scale
 	## then you can supply a custom function 
@@ -164,6 +174,9 @@ spec = matrix(c(
   'imagewidth', 'w', 1, "character",
   'include_replicates', 'r', 1, "character",
   'outmatrix', 'm', 1, "character",
+  'pairs', 'p', 1, "character",
+  'logMode', 'l', 1, "character",
+  'removezeroes', 'z', 1, "character",
   'help'        , 'h', 0, "logical"
 ), byrow=TRUE, ncol=4);
 opt = getopt(spec);
@@ -178,53 +191,90 @@ suppressMessages(require (rjson))
 
 
 
-opt$imageheight = as.numeric(opt$imageheight)
-opt$imagewidth = as.numeric(opt$imagewidth)
-
-opt$include_replicates = as.numeric(opt$include_replicates)
-
-defaultimageheight = opt$imageheight
 
 
-suppressMessages(require (cummeRbund))
-suppressMessages(require (rjson))
-
-
-
-cuff=readCufflinks(opt$cuffdiff)
-x=read.table(opt$genelist)
-genes = as.vector(unlist(x[1]))
-myGenes<-getGenes(cuff,genes)
-
-
-samples = samples(cuff)$sample_name
-genes.features = annotation (genes(cuff))
-features = subset(genes.features, select = c(gene_id, gene_short_name))
+#opt$imageheight = as.numeric(opt$imageheight)
+#opt$imagewidth = as.numeric(opt$imagewidth)
+#opt$include_replicates = as.numeric(opt$include_replicates)
+#defaultimageheight = opt$imageheight
 
 
 
 
-hmap=c()
-if (opt$include_replicates ==0){
-hmap<-myggheat(myGenes,cluster='both', fullnames=T, replicates=F)
 
-} else {
-hmap<-myggheat(myGenes,cluster='both', fullnames=T, replicates=T)
+#opt$pairs = 0 in case no filtering on differential expression gene list
+#opt$pairs =1 whene just one condition is user for finding differentially expressed genes
+#opt$pairs =2 when all conditions are used for finding differentially expressed genes
 
+genes.repFpkm.matrix = c()
+pseudocount = 1 
+
+
+
+if (opt$pairs == 0){
+  #samples = samples(cuff)$sample_name
+  cuff=readCufflinks(opt$cuffdiff)
+  genes.features = annotation (genes(cuff))
+  features = subset(genes.features, select = c(gene_id, gene_short_name))
+  genes.repFpkm.matrix = repFpkmMatrix(genes(cuff))
+  
+  #remove genes with no expression in any condition
+  if (opt$removezeroes==1){
+    genes.repFpkm.matrix=genes.repFpkm.matrix[!apply(genes.repFpkm.matrix,1,sum)==0,]
+  }
+
+
+  #Log transformation
+  if(opt$logMode==2) 
+  {
+    genes.repFpkm.matrix = log2(genes.repFpkm.matrix+pseudocount)
+  }
+
+  if(opt$logMode==10) 
+  {
+    genes.repFpkm.matrix = log10(genes.repFpkm.matrix+pseudocount)
+  }
+
+  gene_id = rownames(genes.repFpkm.matrix)
+  genes.repFpkm.matrix = cbind(gene_id, genes.repFpkm.matrix)
+  repFpkmMatrix = merge(features, genes.repFpkm.matrix, by.x = "gene_id", by.y = "gene_id")
+  repFpkmMatrix$gene_id=NULL
+  genes.repFpkm.matrix = repFpkmMatrix
+}
+
+if (opt$pairs > 0){
+  cuff=readCufflinks(opt$cuffdiff)
+  x=read.table(opt$genelist)
+  genes = as.vector(unlist(x[1]))
+  myGenes<-getGenes(cuff,genes)
+  #samples = samples(cuff)$sample_name
+  genes.features = annotation (genes(cuff))
+  features = subset(genes.features, select = c(gene_id, gene_short_name))
+  hmap=c()
+  hmap<-myggheat(myGenes,cluster='both', fullnames=T, replicates=T)
+  genes.repFpkm.matrix = hmap$matrix
+
+  
+#remove genes with no expression in any condition
+if (opt$removezeroes==1){
+  genes.repFpkm.matrix=genes.repFpkm.matrix[!apply(genes.repFpkm.matrix,1,sum)==0,]
 }
 
 
-opt$imageheight = length(rownames(hmap$matrix))*12
-
-if (opt$imageheight > defaultimageheight){
-    opt$imageheight = defaultimageheight
+#Log transformation
+if(opt$logMode==2) 
+{
+  genes.repFpkm.matrix = log2(genes.repFpkm.matrix+pseudocount)
 }
 
-#png(filename = opt$outpng, width = opt$imagewidth, height = opt$imageheight, units = 'px')
-#print(hmap$heatmap)
-#.invisible <- dev.off()
+if(opt$logMode==10) 
+{
+  genes.repFpkm.matrix = log10(genes.repFpkm.matrix+pseudocount)
+}
 
-genes.repFpkm.matrix = hmap$matrix
+
+#Create expression matrix and add gene ids
+
 gene_id = rownames(genes.repFpkm.matrix)
 genes.repFpkm.matrix = cbind(gene_id, genes.repFpkm.matrix)
 df = genes.repFpkm.matrix
@@ -233,8 +283,8 @@ colnames(foo)=c("short_gene_id", "x_id")
 genes.repFpkm.matrix = cbind(foo$short_gene_id, genes.repFpkm.matrix)
 genes.repFpkm.matrix$gene_id=NULL
 colnames(genes.repFpkm.matrix)[1] = "gene_id"
+}
 
+#print expression matrix to file
 write.table(genes.repFpkm.matrix, file =opt$outmatrix, sep="\t", row.names=F)
-
-
 q(save="no")

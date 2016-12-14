@@ -11,6 +11,10 @@ MAINTAINER KBase Developer
 
 RUN apt-get update && apt-get -y install r-bioc-cummerbund r-cran-rjson r-cran-getopt
 
+
+RUN \
+ pip install -Iv requests_toolbelt>=0.7.0
+
 COPY ./ /kb/module
 
 RUN mkdir -p /kb/module/work/tmp

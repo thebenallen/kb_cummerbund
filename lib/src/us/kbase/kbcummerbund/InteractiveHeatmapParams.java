@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "sample1",
     "sample2",
+    "logMode",
+    "removezeroes",
+    "condition_select",
     "q_value_cutoff",
     "log2_fold_change_cutoff",
     "num_genes",
@@ -33,6 +36,12 @@ public class InteractiveHeatmapParams {
     private String sample1;
     @JsonProperty("sample2")
     private String sample2;
+    @JsonProperty("logMode")
+    private String logMode;
+    @JsonProperty("removezeroes")
+    private String removezeroes;
+    @JsonProperty("condition_select")
+    private String conditionSelect;
     @JsonProperty("q_value_cutoff")
     private Double qValueCutoff;
     @JsonProperty("log2_fold_change_cutoff")
@@ -72,6 +81,51 @@ public class InteractiveHeatmapParams {
 
     public InteractiveHeatmapParams withSample2(String sample2) {
         this.sample2 = sample2;
+        return this;
+    }
+
+    @JsonProperty("logMode")
+    public String getLogMode() {
+        return logMode;
+    }
+
+    @JsonProperty("logMode")
+    public void setLogMode(String logMode) {
+        this.logMode = logMode;
+    }
+
+    public InteractiveHeatmapParams withLogMode(String logMode) {
+        this.logMode = logMode;
+        return this;
+    }
+
+    @JsonProperty("removezeroes")
+    public String getRemovezeroes() {
+        return removezeroes;
+    }
+
+    @JsonProperty("removezeroes")
+    public void setRemovezeroes(String removezeroes) {
+        this.removezeroes = removezeroes;
+    }
+
+    public InteractiveHeatmapParams withRemovezeroes(String removezeroes) {
+        this.removezeroes = removezeroes;
+        return this;
+    }
+
+    @JsonProperty("condition_select")
+    public String getConditionSelect() {
+        return conditionSelect;
+    }
+
+    @JsonProperty("condition_select")
+    public void setConditionSelect(String conditionSelect) {
+        this.conditionSelect = conditionSelect;
+    }
+
+    public InteractiveHeatmapParams withConditionSelect(String conditionSelect) {
+        this.conditionSelect = conditionSelect;
         return this;
     }
 
@@ -162,7 +216,7 @@ public class InteractiveHeatmapParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((("InteractiveHeatmapParams"+" [sample1=")+ sample1)+", sample2=")+ sample2)+", qValueCutoff=")+ qValueCutoff)+", log2FoldChangeCutoff=")+ log2FoldChangeCutoff)+", numGenes=")+ numGenes)+", wsCuffdiffId=")+ wsCuffdiffId)+", wsExpressionMatrixId=")+ wsExpressionMatrixId)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((("InteractiveHeatmapParams"+" [sample1=")+ sample1)+", sample2=")+ sample2)+", logMode=")+ logMode)+", removezeroes=")+ removezeroes)+", conditionSelect=")+ conditionSelect)+", qValueCutoff=")+ qValueCutoff)+", log2FoldChangeCutoff=")+ log2FoldChangeCutoff)+", numGenes=")+ numGenes)+", wsCuffdiffId=")+ wsCuffdiffId)+", wsExpressionMatrixId=")+ wsExpressionMatrixId)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

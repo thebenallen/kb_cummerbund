@@ -2,8 +2,8 @@
   "ver" : "1.0.1",
   "authors" : [ ],
   "contact" : "help@kbase.us",
-  "visible" : true,
-  "categories" : ["active","expression"],
+  "visible" : false,
+  "categories" : ["inactive"],
   "widgets" : {
     "input" : null,
     "output" : "kbaseCummerbundPlot"

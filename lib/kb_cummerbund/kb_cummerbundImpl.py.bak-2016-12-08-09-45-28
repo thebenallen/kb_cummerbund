@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 #BEGIN_HEADER
+
 import simplejson
 import sys
 import os
@@ -57,10 +57,6 @@ class kb_cummerbund:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     #########################################
-    VERSION = "0.0.7"
-    GIT_URL = "git@github.com:kbaseapps/kb_cummerbund.git"
-    GIT_COMMIT_HASH = "e25c9e0197a8471aa47c5e817a825ff11b56dd82"
-    
     #BEGIN_CLASS_HEADER
     __TEMP_DIR = 'temp'
     #END_CLASS_HEADER
@@ -96,20 +92,8 @@ class kb_cummerbund:
 
         #END_CONSTRUCTOR
         pass
-    
 
     def generate_cummerbund_plots(self, ctx, cummerbundParams):
-        """
-        :param cummerbundParams: instance of type "cummerbundParams" ->
-           structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
-           KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
-           "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
-           KBaseRNASeq.cummerbund_output)
-        :returns: instance of type "ws_cummerbund_output" (@id ws
-           KBaseRNASeq.cummerbund_output)
-        """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN generate_cummerbund_plots
@@ -247,18 +231,6 @@ class kb_cummerbund:
         return [returnVal]
 
     def generate_cummerbund_plot2(self, ctx, cummerbundstatParams):
-        """
-        :param cummerbundstatParams: instance of type "cummerbundstatParams"
-           -> structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
-           KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
-           "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
-           KBaseRNASeq.cummerbund_output), parameter "ws_diffstat_output" of
-           type "ws_diffstat_output" (Differential stat workspace id)
-        :returns: instance of type "ws_cummerbund_output" (@id ws
-           KBaseRNASeq.cummerbund_output)
-        """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN generate_cummerbund_plot2
@@ -409,19 +381,6 @@ class kb_cummerbund:
         return [returnVal]
 
     def create_expression_matrix(self, ctx, expressionMatrixParams):
-        """
-        :param expressionMatrixParams: instance of type
-           "expressionMatrixParams" -> structure: parameter "workspace_name"
-           of type "workspace_name" (workspace name of the object), parameter
-           "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
-           KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
-           "ws_expression_matrix_id" of type "ws_expression_matrix_id" (@id
-           ws KBaseFeatureValues.ExpressionMatrix), parameter
-           "include_replicates" of type "bool" (indicates true or false
-           values, false <= 0, true >=1)
-        :returns: instance of type "ws_expression_matrix_id" (@id ws
-           KBaseFeatureValues.ExpressionMatrix)
-        """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN create_expression_matrix
@@ -478,7 +437,7 @@ class kb_cummerbund:
                   eo = json.load(et)
         eo['type']='untransformed'
         genome_ref = s_res[0]['data']['genome_id']
-        eo['genome_ref'] = genome_ref
+        #eo['genome_ref'] = genome_ref
 
         self.__LOGGER.info(workspace + self.__SCRATCH + outjson + params['ws_expression_matrix_id'])
         ws_client.save_objects({'workspace' : workspace,
@@ -498,21 +457,6 @@ class kb_cummerbund:
         return [returnVal]
 
     def create_interactive_heatmap_de_genes(self, ctx, interactiveHeatmapParams):
-        """
-        :param interactiveHeatmapParams: instance of type
-           "interactiveHeatmapParams" -> structure: parameter "sample1" of
-           String, parameter "sample2" of String, parameter "logMode" of
-           String, parameter "removezeroes" of String, parameter
-           "condition_select" of String, parameter "q_value_cutoff" of
-           Double, parameter "log2_fold_change_cutoff" of Double, parameter
-           "num_genes" of Long, parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
-           KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
-           "ws_expression_matrix_id" of type "ws_expression_matrix_id" (@id
-           ws KBaseFeatureValues.ExpressionMatrix)
-        :returns: instance of type "ResultsToReport" -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String
-        """
         # ctx is the context object
         # return variables are: returnVal
         #BEGIN create_interactive_heatmap_de_genes
@@ -697,7 +641,7 @@ class kb_cummerbund:
 			eo2 = json.load(et2)
 			genome_ref = s_res[0]['data']['genome_id']
 			eo2['type']=fparams['logMode']
-			eo2['genome_ref'] = genome_ref
+			#eo2['genome_ref'] = genome_ref
 			self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
 			res = ws_client.save_objects({'workspace' : workspace,
 			       'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
@@ -747,244 +691,8 @@ class kb_cummerbund:
         #END create_interactive_heatmap_de_genes
 
         # At some point might do deeper type checking...
-        if not isinstance(returnVal, dict):
+        if not isinstance(returnVal, basestring):
             raise ValueError('Method create_interactive_heatmap_de_genes return value ' +
-                             'returnVal is not type dict as required.')
+                             'returnVal is not type basestring as required.')
         # return the results
-        return [returnVal]
-
-    def create_interactive_heatmap_de_genes_old(self, ctx, heatmapParams):
-        """
-        :param heatmapParams: instance of type "heatmapParams" -> structure:
-           parameter "sample1" of String, parameter "sample2" of String,
-           parameter "q_value_cutoff" of Double, parameter
-           "log2_fold_change_cutoff" of Double, parameter "num_genes" of
-           Long, parameter "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
-           KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
-           "ws_expression_matrix_id1" of type "ws_expression_matrix_id" (@id
-           ws KBaseFeatureValues.ExpressionMatrix), parameter
-           "ws_expression_matrix_id2" of type "ws_expression_matrix_id" (@id
-           ws KBaseFeatureValues.ExpressionMatrix), parameter
-           "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
-           KBaseRNASeq.cummerbund_output)
-        :returns: instance of type "ResultsToReport" -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String
-        """
-        # ctx is the context object
-        # return variables are: returnVal
-        #BEGIN create_interactive_heatmap_de_genes_old
-        fparams    = heatmapParams
-        #returnVal = "ttt"
-        #Set up workspace client
-        user_token = ctx['token']
-        workspace = fparams['workspace_name']
-        ws_client  = Workspace(url=self.__WS_URL, token=user_token)
-        system_params = {}
-        system_params['token'] = user_token
-        system_params['ws_url'] =  self.__WS_URL
-        system_params['logger'] =  self.__LOGGER
-        system_params['shock_url'] =  self.__SHOCK_URL
-        system_params['hs_url'] =  self.__HS_URL
-        system_params['scratch'] =  self.__SCRATCH
-        system_params['rscripts'] =  self.__RSCRIPTS
-        system_params['workspace'] = workspace
-
-
-
-
-        #Read the input cuffdiff workspace object json file and get filehandle for cuffdiff tar file
-        s_res = ws_client.get_objects([{
-            'name' : fparams['ws_cuffdiff_id'],
-            'workspace' : fparams['workspace_name']
-            }])
-
-         #Check if workspace has data
-        if len(s_res) == 0:
-            self.__LOGGER.info("Workspace did not return any objects")
-            return returnVal
-        cuffdiff_dir = join (self.__SCRATCH , "cuffdiffData/cuffdiff")
-        cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
-        #cuffdiff_dir = "/kb/module/work/nnc/cuffdiff"
-        self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
-
-
-        #if (cuffdiff_dir is False):
-        #    return returnVal
-        fparams['cuffdiff_dir'] = cuffdiff_dir
-        fparams['infile'] = join (cuffdiff_dir, "gene_exp.diff")
-        fparams['outfile'] = join(system_params['scratch'],  "gene_exp.diff.filter")
-
-
-        fparams['pairs']=1
-        fparams['logModetmp'] = 2
-
-
-
-        rparams = {}
-        
-        rparams['cuffdiff_dir'] = fparams['cuffdiff_dir']
-        rparams['outpng'] = join (system_params['scratch'], "heatmap.png")
-        rparams['imageheight'] = 1600
-        rparams['imagewidth'] = 800
-        rparams['plotscript'] = join(system_params['rscripts'], "heatmapplotinteractive.R")
-        rparams['include_replicates'] = 1
-        rparams['pairs'] = fparams ['pairs']
-        rparams['logMode'] = fparams['logModetmp']
-        rparams['removezeroes'] = 1
-        rparams['outmatrix'] = join (system_params['scratch'], "outmatrix")
-        reportObj = {}
-
-        provenance = [{}]
-        if 'provenance' in ctx:
-            provenance = ctx['provenance']
-        # add additional info to provenance here, in this case the input data object reference
-        provenance[0]['input_ws_objects']=[workspace+'/'+fparams['ws_cuffdiff_id']]
-       
-        report = ""
-        if (fparams['pairs'] != 0):
-
-           try:
-                filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
-                self.__LOGGER.info("matrix is " + filtered_matrix)
-                fparams['infile'] = join (system_params['scratch'], "gene_exp.diff.filter")
-                fparams['outfile'] = join(system_params['scratch'],  "gene_exp.diff.filter.genelist")
-                genelist_filtered_matrix_file = script_util2.get_gene_list_from_filter_step(fparams)
-                rparams['genelist'] = filtered_matrix
-           except:
-                report += "There was an error in creating expression matrix"
-                report += "No differentially expressed genes were found"
-                report += "Please change / double check  your filtering criteria"
-
-	        reportObj = {
-		    'objects_created':[],
-		    'text_message':report
-		}
-
-		reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
-		report_info = ws_client.save_objects({
-		    'workspace':fparams['workspace_name'],
-		    'objects':[
-			 {
-			  'type':'KBaseReport.Report',
-			  'data':reportObj,
-			  'name':reportName,
-			  'meta':{},
-			  'hidden':1, # important!  make sure the report is hidden
-			  'provenance':provenance
-			 }
-		    ] })[0]  
-		print('saved Report: '+pformat(report_info))
-
-		returnVal = { "report_name" : reportName,"report_ref" : str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]) }
-
-                return [returnVal]
-
-
-        try:
-	    # Prepare output object.
-	    outjson = False;
-     
-
-	    roptstr_basic_heatmap_rep = script_util2.get_command_line_heatmap_basic (rparams)
-
-	    # Run R script to run cummerbund json and update the cummerbund output json file
-	    # Prepare output object.
-	    outputobject=dict()
-
-
-
-
-	    # Prepare output plot list
-	    cummerbundplotset=[]
-
-	    # List of plots to generate
-	    plotlist = [
-		      
-		    { 'roptstr': roptstr_basic_heatmap_rep,
-		      'title': "Heatmap",
-		      'description': "Heatmap", 
-		      'exp' : fparams['ws_expression_matrix_id']
-		      }
-
-		]
-	    fparams['cummerbundplotset'] = cummerbundplotset
-	    # Iterate through the plotlist and generate the images and json files.
-	    for plot in plotlist:
-		fparams['title'] = plot['title']
-		fparams['description'] = plot['description']
-
-
-		status = script_util2.rplotanduploadinteractive(system_params,fparams, rparams, plot['roptstr'])
-		if status == False:
-		       self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
-		else:
-                      
-		      self.__LOGGER.info(status)
-
-		      outjson = status
-		      self.__LOGGER.info('xxxxxx1')
-		      with open("{0}/{1}".format(self.__SCRATCH , outjson),'r') as et2:
-
-			eo2 = json.load(et2)
-			genome_ref = s_res[0]['data']['genome_id']
-			eo2['type']='log2_level'
-			eo2['genome_ref'] = genome_ref
-		        self.__LOGGER.info('xxxxxx2')
-			self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
-			res = ws_client.save_objects({'workspace' : workspace,
-			       'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
-			       'data' : eo2,
-			       'name' : plot['exp']
-			 }]})
-
-                        info=res[0]
-                        self.__LOGGER ('done uploading exp')
-                        report = "Successfully created expression matrix"
-			reportObj = {
-			    'objects_created':[{
-			     'ref': str(info[6]) +'/' + str(info[0]) + '/' + str(info[4]),
-                             'description': 'Expression matrix'
-			     }],
-			    'text_message':report
-			   }
-
-        except:
-		report += "There was an error in generating expression matrix"
-	        reportObj = {
-		    'objects_created':[],
-		    'text_message':report
-		}
-
-	reportName = 'create_interactive_heatmap_de_genes_'+str(hex(uuid.getnode()))
-	report_info = ws_client.save_objects({
-	    'workspace':fparams['workspace_name'],
-	    'objects':[
-		 {
-		  'type':'KBaseReport.Report',
-		  'data':reportObj,
-		  'name':reportName,
-		  'meta':{},
-		  'hidden':1, # important!  make sure the report is hidden
-		  'provenance':provenance
-		 }
-	    ] })[0]  
-	print('saved Report: '+pformat(report_info))
-
-	returnVal = { "report_name" : reportName,"report_ref" : str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]) }
-
-
-        #END create_interactive_heatmap_de_genes_old
-
-        # At some point might do deeper type checking...
-        if not isinstance(returnVal, dict):
-            raise ValueError('Method create_interactive_heatmap_de_genes_old return value ' +
-                             'returnVal is not type dict as required.')
-        # return the results
-        return [returnVal]
-
-    def status(self, ctx):
-        #BEGIN_STATUS
-        returnVal = {'state': "OK", 'message': "", 'version': self.VERSION, 
-                     'git_url': self.GIT_URL, 'git_commit_hash': self.GIT_COMMIT_HASH}
-        #END_STATUS
         return [returnVal]

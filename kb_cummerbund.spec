@@ -64,6 +64,9 @@ module kb_cummerbund {
 	typedef structure {
 		string sample1;
 		string sample2;
+		string logMode;
+		string removezeroes;
+		string condition_select;
 		float q_value_cutoff;
 		float log2_fold_change_cutoff ;
 		int num_genes;
@@ -72,16 +75,18 @@ module kb_cummerbund {
 	} interactiveHeatmapParams;
 	
 
+   typedef structure {
+    		string report_name;
+	    	string report_ref;
+    } ResultsToReport;
+
 	async funcdef generate_cummerbund_plots (cummerbundParams) returns (ws_cummerbund_output) authentication required;
 	async funcdef generate_cummerbund_plot2 (cummerbundstatParams) returns (ws_cummerbund_output) authentication required;
 
 	async funcdef create_expression_matrix (expressionMatrixParams) returns (ws_expression_matrix_id) authentication required;
-	
-
-	async funcdef create_interactive_heatmap_de_genes (interactiveHeatmapParams) returns (ws_expression_matrix_id) authentication required;
-
+	async funcdef create_interactive_heatmap_de_genes (interactiveHeatmapParams) returns (ResultsToReport) authentication required;
+	async funcdef create_interactive_heatmap_de_genes_old (heatmapParams) returns (ResultsToReport) authentication required;
 	/*
 	#async funcdef create_volcano_plot(volcanoplotParams) returns (ws_cummerbund_output) authentication required;
-#	async funcdef create_heatmap_de_genes (heatmapParams) returns (ws_cummerbund_output) authentication required;
 */
 };

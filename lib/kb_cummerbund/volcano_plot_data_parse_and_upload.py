@@ -66,7 +66,7 @@ def volcano_plot_data_parse_and_upload(infile,outf):
 	   except KeyError:
               condition_pair_dict[unique_key]={} 
               condition_pair_dict[unique_key]["voldata"] =[] 
-           stats = {"gene": linedata[1] , 
+           stats = {"gene": linedata[2] , 
                     "function": "", 
                     "log2fc": float(linedata[9]),
                     "log2fc_f": float(linedata[9]),
@@ -74,8 +74,8 @@ def volcano_plot_data_parse_and_upload(infile,outf):
                     "p_value": float(linedata[11]),
                     "p_value_f": -math.log10(float(linedata[11])),
                     "significant": linedata[13],
-                    "value_1": float(linedata[7]),
-                    "value_2": float(linedata[8]),
+                    "value_1": math.log((float(linedata[7])+1),2),
+                    "value_2": math.log((float(linedata[8])+1),2),
                     "locus":linedata[3]}
            condition_pair_dict[unique_key]["voldata"].append(stats) 
 

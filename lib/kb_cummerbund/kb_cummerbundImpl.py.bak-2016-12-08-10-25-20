@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #BEGIN_HEADER
+
 import simplejson
 import sys
 import os
@@ -478,7 +479,7 @@ class kb_cummerbund:
                   eo = json.load(et)
         eo['type']='untransformed'
         genome_ref = s_res[0]['data']['genome_id']
-        eo['genome_ref'] = genome_ref
+        #eo['genome_ref'] = genome_ref
 
         self.__LOGGER.info(workspace + self.__SCRATCH + outjson + params['ws_expression_matrix_id'])
         ws_client.save_objects({'workspace' : workspace,
@@ -697,7 +698,7 @@ class kb_cummerbund:
 			eo2 = json.load(et2)
 			genome_ref = s_res[0]['data']['genome_id']
 			eo2['type']=fparams['logMode']
-			eo2['genome_ref'] = genome_ref
+			#eo2['genome_ref'] = genome_ref
 			self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
 			res = ws_client.save_objects({'workspace' : workspace,
 			       'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
@@ -767,8 +768,8 @@ class kb_cummerbund:
            ws KBaseFeatureValues.ExpressionMatrix), parameter
            "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
            KBaseRNASeq.cummerbund_output)
-        :returns: instance of type "ResultsToReport" -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String
+        :returns: instance of type "ws_cummerbund_output" (@id ws
+           KBaseRNASeq.cummerbund_output)
         """
         # ctx is the context object
         # return variables are: returnVal
@@ -788,6 +789,7 @@ class kb_cummerbund:
         system_params['scratch'] =  self.__SCRATCH
         system_params['rscripts'] =  self.__RSCRIPTS
         system_params['workspace'] = workspace
+
 
 
 
@@ -820,6 +822,7 @@ class kb_cummerbund:
 
 
 
+        print fparams
         rparams = {}
         
         rparams['cuffdiff_dir'] = fparams['cuffdiff_dir']
@@ -918,18 +921,14 @@ class kb_cummerbund:
 		if status == False:
 		       self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
 		else:
-                      
 		      self.__LOGGER.info(status)
 
 		      outjson = status
-		      self.__LOGGER.info('xxxxxx1')
 		      with open("{0}/{1}".format(self.__SCRATCH , outjson),'r') as et2:
-
 			eo2 = json.load(et2)
 			genome_ref = s_res[0]['data']['genome_id']
-			eo2['type']='log2_level'
-			eo2['genome_ref'] = genome_ref
-		        self.__LOGGER.info('xxxxxx2')
+			eo2['type']=fparams['logMode']
+			#eo2['genome_ref'] = genome_ref
 			self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
 			res = ws_client.save_objects({'workspace' : workspace,
 			       'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
@@ -938,7 +937,6 @@ class kb_cummerbund:
 			 }]})
 
                         info=res[0]
-                        self.__LOGGER ('done uploading exp')
                         report = "Successfully created expression matrix"
 			reportObj = {
 			    'objects_created':[{
@@ -976,9 +974,9 @@ class kb_cummerbund:
         #END create_interactive_heatmap_de_genes_old
 
         # At some point might do deeper type checking...
-        if not isinstance(returnVal, dict):
+        if not isinstance(returnVal, basestring):
             raise ValueError('Method create_interactive_heatmap_de_genes_old return value ' +
-                             'returnVal is not type dict as required.')
+                             'returnVal is not type basestring as required.')
         # return the results
         return [returnVal]
 

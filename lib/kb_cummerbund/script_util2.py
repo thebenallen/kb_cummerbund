@@ -59,9 +59,13 @@ def get_command_line_heatmap_basic(rparams):
 
 #TODO: Check existence of files and directories
     ropts            = ["Rscript", rparams['plotscript']]
-    ropts.append("--genelist")
-    ropts.append(rparams['genelist'])
-        
+
+    try:
+        ropts.append("--genelist")
+        ropts.append(rparams['genelist'])
+    except:
+        ropts.append("nogenelist")
+       
     ropts.append("--cuffdiff")
     ropts.append(rparams['cuffdiff_dir'])
         
@@ -79,6 +83,17 @@ def get_command_line_heatmap_basic(rparams):
 
     ropts.append("--outmatrix")
     ropts.append(rparams['outmatrix'])
+
+    ropts.append("--pairs")
+    ropts.append(rparams['pairs'])
+
+    ropts.append("--logMode")
+    ropts.append(rparams['logMode'])
+
+    ropts.append("--removezeroes")
+    ropts.append(rparams['removezeroes'])
+
+
 
     
     roptstr = " ".join(str(x) for x in ropts)
@@ -282,6 +297,7 @@ def rplotanduploadinteractive (system_params, fparams, rparams, roptstr):
                '--input_directory', scratch,
                '--output_file_name', outjson ]
 
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()
@@ -393,6 +409,7 @@ def rplotandupload2 (system_params, fparams, rparams, roptstr):
                '--input_directory', scratch,
                '--output_file_name', outjson ]
 
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()
@@ -512,6 +529,7 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
                                     '--input_directory', scratch,
                                     '--output_file_name', outjson ]
 
+        cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
         logger.info (" ".join(cmd_expression_json))
         tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
         stdout, stderr = tool_process.communicate()
@@ -530,13 +548,21 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
 
 def filter_expression_matrix(fparams, system_params):
     cuffdiff_dir=fparams['cuffdiff_dir']
+    selected_condition_option = fparams['pairs']
+    
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
     q_value_cutoff = float(fparams['q_value_cutoff'])
+    
     #include_inf = fparams['include_inf']
     log2_fold_change_cutoff = float(fparams['log2_fold_change_cutoff'])
     infile  =fparams['infile']
-    num_genes = int(fparams['num_genes'])
+    num_genes = 1000000000000000000000 #no upper bound
+    try:
+        num_genes=int(fparams['num_genes'])
+    except:
+        num_genes = 10000000000000000
+
     infile = fparams['infile']
     outfile = fparams['outfile']
 
@@ -554,23 +580,27 @@ def filter_expression_matrix(fparams, system_params):
     logger.info("num_genes before: " + str(num_genes) )
     #if (num_genes > 500):
     #    num_genes = 500;
-    logger.info("num_genes after: " + str(num_genes) )
         
 
     fp=open(outfile, "w")
     x = "gene\tq_value\tlog2-fold_change\n"
     fp.write(x)
     mylist = []
+
+    logger.info(fparams )
     with open(infile) as f:
         qval_dict={}
         i=0
         for line in f:
             linesplit  = line.split()
+            if (linesplit[1] == "-"):
+               continue
             qval = linesplit[12]
             significance = linesplit[13]
           
-            if (significance =='no'):
-                continue
+     #       if (significance =='no'):
+     #           ii=1
+     #           continue
           
             if (qval =='q_value'):
                 continue
@@ -584,17 +614,10 @@ def filter_expression_matrix(fparams, system_params):
             gene = linesplit[2]
             sample1_name = linesplit[4]
             sample2_name = linesplit[5]
-            match=0
-            if (sample1_name == sample1):
-                match = match + 1
-            if (sample2_name == sample1):
-                match = match + 1
-            if (sample1_name == sample2):
-                match = match + 1
-            if (sample2_name == sample2):
-                match = match + 1
 
-            if (match != 2):
+            keep_row = 1
+            keep_row = is_valid_row(selected_condition_option, sample1, sample2, sample1_name, sample2_name)
+            if (keep_row == 0):
                 continue
             if (float(qval) > q_value_cutoff):
                 continue
@@ -626,6 +649,38 @@ def filter_expression_matrix(fparams, system_params):
         f.close()
         fp.close()
         return outfile
+
+
+def is_valid_row(selected_condition_option, sample1, sample2, sample1_name, sample2_name):
+
+    #User selects 3 options None, All , pair.
+    #If the user has selected None (0), no filtering based on sample is done
+    #If the user has selected All (2), all pairwise options are taken into account
+    #If ths uer has selecte pair (1), only one pair will be taken care of
+
+    #return 1 if you want to consider the row for differential expression
+
+     if (selected_condition_option==0):
+         return 1
+     if (selected_condition_option==2):
+         return 1
+     if (selected_condition_option==1):
+            match=0
+            if (sample1_name == sample1):
+                match = match + 1
+            if (sample2_name == sample1):
+                match = match + 1
+            if (sample1_name == sample2):
+                match = match + 1
+            if (sample2_name == sample2):
+                match = match + 1
+            if (match != 2):
+               return 0
+         
+     return 1
+
+
+
 
 def get_gene_list_from_filter_step(fparams):
         outfile = fparams['outfile']
@@ -787,7 +842,7 @@ def upload_feature_value (system_params, fparams):
                                 '--working_directory', scratch,
                                 '--input_directory', scratch,
                                 '--output_file_name', outjson ]
-
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()
