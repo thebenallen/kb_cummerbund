@@ -29,6 +29,9 @@ import kb_cummerbundutils
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
+from GenomeAnnotationAPI.GenomeAnnotationAPIClient import GenomeAnnotationAPI
+
+
 
 
 class kb_cummerbundException(BaseException):
@@ -69,6 +72,12 @@ class kb_cummerbund:
     # be found
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
+
+        self.callbackURL = os.environ.get('SDK_CALLBACK_URL')
+        if self.callbackURL == None:
+                            raise ValueError ("SDK_CALLBACK_URL not set in environment")
+
+
         if 'ws_url' in config:
             self.__WS_URL = config['ws_url']
         if 'shock_url' in config:
@@ -280,7 +289,8 @@ class kb_cummerbund:
             self.__LOGGER.info("Workspace did not return any objects")
             return returnVal
 
-        cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
+        #cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
+        cuffdiff_dir = "abc"
         self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
 
         if (cuffdiff_dir is False):
@@ -292,6 +302,17 @@ class kb_cummerbund:
 
         # Prepare output plot list
         cummerbundplotset=[]
+        print "Getting genome info"
+
+        genome_ref = s_res[0]['data']['genome_id']
+        print genome_ref
+        gaapi = GenomeAnnotationAPI(self.callbackURL, token=user_token)
+        genome = gaapi.get_genome_v1({"genomes": [{"ref": genome_ref}],
+                                          "included_fields": ["scientific_name"],
+                                          "included_feature_fields": ["id", "protein_translation",
+                                                                      "type", "function"
+                                                                      ]})["genomes"][0]["data"]
+        print genome
 
         # List of plots to generate
         plotlist = [
