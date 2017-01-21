@@ -309,8 +309,7 @@ class kb_cummerbund:
         gaapi = GenomeAnnotationAPI(self.callbackURL, token=user_token)
         genome = gaapi.get_genome_v1({"genomes": [{"ref": genome_ref}],
                                           "included_fields": ["scientific_name"],
-                                          "included_feature_fields": ["id", "protein_translation",
-                                                                      "type", "function"
+                                          "included_feature_fields": ["id", "type", "function"
                                                                       ]})["genomes"][0]["data"]
         print genome
 
