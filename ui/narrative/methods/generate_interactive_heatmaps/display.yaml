@@ -3,7 +3,8 @@
 #
 name     : Create Differential Expression Matrix and View HeatMap from Cuffdiff Output 
 tooltip  : |
-    Compare a pair of conditions in RNA-seq expression data to identify differentially expressed genes and view them in an interactive heatmap   
+    Compare a pair of conditions in RNA-seq expression data to identify differentially expressed genes and view them in an interactive heatmap. This method requires more than one condition and each condition should have at least two replicates.
+
 
 screenshots :
     []
