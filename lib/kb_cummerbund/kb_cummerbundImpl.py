@@ -278,19 +278,43 @@ class kb_cummerbund:
         user_token = ctx['token']
         ws_client  = Workspace(url=self.__WS_URL, token=user_token)
 
+
         #Read the input cuffdiff workspace object json file and get filehandle for cuffdiff tar file
         s_res = ws_client.get_objects([{
             'name' : params['ws_cuffdiff_id'],
             'workspace' : params['workspace_name']
             }])
+        print "Getting genome info"
+
+        genome_ref = s_res[0]['data']['genome_id']
+        #genome_ref = '2702/6/2'
+        #genome_ref = '2702/26/1'
+        #genome_ref = '2229/21/10'
+        print genome_ref
+        gaapi = GenomeAnnotationAPI(self.callbackURL, token=user_token)
+        genome = gaapi.get_genome_v1({"genomes": [{"ref": genome_ref}],
+                                          "included_fields": ["scientific_name"],
+                                          "included_feature_fields": ["id", "function", "type"
+                                                                      ]})["genomes"][0]["data"]
+        genome_dict = {}
+        features = genome['features']
+        for feature in features:
+          id = feature['id']
+          try: 
+            function = feature['function']
+            if not function:
+              function = 'Unknown'
+          except:
+             function = 'Unknown'
+          genome_dict[id] = function
+
 
         # Check if workspace has data
         if len(s_res) == 0:
             self.__LOGGER.info("Workspace did not return any objects")
             return returnVal
 
-        #cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
-        cuffdiff_dir = "abc"
+        cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
         self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
 
         if (cuffdiff_dir is False):
@@ -302,17 +326,6 @@ class kb_cummerbund:
 
         # Prepare output plot list
         cummerbundplotset=[]
-        print "Getting genome info"
-
-        genome_ref = s_res[0]['data']['genome_id']
-        print genome_ref
-        gaapi = GenomeAnnotationAPI(self.callbackURL, token=user_token)
-        genome = gaapi.get_genome_v1({"genomes": [{"ref": genome_ref}],
-                                          "included_fields": ["scientific_name"],
-                                          "included_feature_fields": ["id", "type", "function"
-                                                                      ]})["genomes"][0]["data"]
-        print genome
-
         # List of plots to generate
         plotlist = [
                 { 'file': "dispersionplot.R",
@@ -369,15 +382,6 @@ class kb_cummerbund:
                   'description': "Multi-dimensional scaling plot including replicates are  similar to PCA plots and useful for determining the major sources of variation in the dataset with replicates. These can be useful to determine any systematic bias that may be present between conditions." }
             ]
 
-#TODO.. Giving Rplot.pdf
-#                { 'file': "dendrogramplot.R",
-#                  'title': "Dendrogram",
-#                  'description': "Dendrogram  based on the JS (Jensen-Shannon divergence) distance" },
-#
-#                { 'file': "dendrogramrepplot.R",
-#                  'title': "Dendrogram including replicates",
-#                  'description': "Dendrogram including replicates based on the JS (Jensen-Shannon divergence) distance" },
-
 
         # Iterate through the plotlist and generate the images and json files.
         for plot in plotlist:
@@ -406,13 +410,13 @@ class kb_cummerbund:
         infile =  join(cuffdiff_dir, "gene_exp.diff") 
         outfile = join(cuffdiff_dir, "gene_exp_diff.out") 
         print outfile
-        x=v.volcano_plot_data_parse_and_upload(infile,outfile)
+        x=v.volcano_plot_data_parse_and_upload(infile,outfile, genome_dict)
         with open(outfile) as f:
             statdata = json.load(f)
         res = ws_client.save_objects({
             "workspace":params['workspace_name'],
             "objects": [{
-                "type":"KBaseRNASeq.DifferentialExpressionStat",
+                "type":"KBaseGwasData.differentialexpressionstat",
                 "data":statdata,
                 "name":params["ws_diffstat_output"]}]
             })

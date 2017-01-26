@@ -5,7 +5,47 @@ import json
 import sys
 import os.path
 
-def volcano_plot_data_parse_and_upload(infile,outf):
+def round_sig(x, sig=2):
+    return round(x, sig-int(floor(log10(x)))-1)
+
+def get_max_fold_change_to_handle_inf(infile):
+    header=0
+    maxvalue={}
+
+    with open(infile) as f:
+     for line in f:
+         header = header + 1
+         if (header > 2):
+           includeline=1
+           linedata  = line.split("\t")
+           m=re.search("NOTEST",line)
+           if m is not None:
+               includeline=0
+           m=re.search("inf",line)
+           if m is not None:
+               includeline=0
+           if includeline==1:
+             condition_1 = linedata[4]
+             condition_2 = linedata[5]
+             unique_key = condition_1 +"~~" + condition_2
+             log2fc = abs(float(linedata[9]))
+             try:
+               currentmax  = maxvalue[unique_key] 
+	     except KeyError:
+                currentmax  = log2fc
+                maxvalue[unique_key] = currentmax
+             if (log2fc > currentmax): 
+                 maxvalue[unique_key] = log2fc
+                 currentmax = log2fc
+             
+    return maxvalue    
+              
+              
+   
+
+def volcano_plot_data_parse_and_upload(infile,outf,genome_dict):
+    maxvalue = get_max_fold_change_to_handle_inf (infile)
+    print maxvalue
     header=0
     outfile="tmp"
     fp=open(outfile, "w")
@@ -18,9 +58,9 @@ def volcano_plot_data_parse_and_upload(infile,outf):
            m=re.search("NOTEST",line)
            if m is not None:
                includeline=0
-           m=re.search("inf",line)
-           if m is not None:
-               includeline=0
+           #m=re.search("inf",line)
+           #if m is not None:
+           #    includeline=0
            if includeline != 0:
              fp.write(line)
     f.close()
@@ -66,18 +106,37 @@ def volcano_plot_data_parse_and_upload(infile,outf):
 	   except KeyError:
               condition_pair_dict[unique_key]={} 
               condition_pair_dict[unique_key]["voldata"] =[] 
+
+           try: 
+             function = genome_dict[linedata[2]]
+           except KeyError:
+             function = 'Unknown'
+
+           log2fc = linedata[9]
+           log2fc_table = linedata[9]
+           m=re.search("inf",log2fc)
+           if m is None:
+               log2fc = float(log2fc)
+           else:
+               m=re.search("-inf", log2fc)
+               if m is None:
+                 log2fc_table =  "inf"
+                 log2fc = abs(maxvalue[unique_key])
+               else:
+                  log2fc_table = "-inf"
+                  log2fc = -abs(maxvalue[unique_key])
            stats = {"gene": linedata[2] , 
-                    "function": "", 
-                    "log2fc": float(linedata[9]),
-                    "log2fc_f": float(linedata[9]),
-                    "log2fc_fa": float(linedata[9]),
-                    "p_value": float(linedata[11]),
-                    "p_value_f": -math.log10(float(linedata[11])),
+                    "gene_function": function, 
+                    "log2fc_text": log2fc_table,
+                    "log2fc_f": log2fc,
+                    "p_value": float(linedata[12]),
+                    "p_value_f": -math.log10(float(linedata[12])),
                     "significant": linedata[13],
                     "value_1": math.log((float(linedata[7])+1),2),
                     "value_2": math.log((float(linedata[8])+1),2),
                     "locus":linedata[3]}
-           condition_pair_dict[unique_key]["voldata"].append(stats) 
+           if (linedata[2] != '-'):
+               condition_pair_dict[unique_key]["voldata"].append(stats) 
 
         counter=0
         for unique_key in condition_pair_dict:
