@@ -960,7 +960,6 @@ class kb_cummerbund:
 			       'data' : eo2,
 			       'name' : plot['exp']
 			 }]})
-
                         info=res[0]
                         self.__LOGGER ('done uploading exp')
                         report = "Successfully created expression matrix"
