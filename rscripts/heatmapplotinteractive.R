@@ -19,9 +19,9 @@
 		}else{
 			m=fpkmMatrix(object,fullnames=fullnames)
 		}
-		s=list("matrix"=m)
-		## finally add the fill colour ramp of your choice (default is blue to red)-- and return
-		return (s)
+#		s=list("matrix"=m)
+#		## finally add the fill colour ramp of your choice (default is blue to red)-- and return
+#		return (s)
 		
 	  
 	  
