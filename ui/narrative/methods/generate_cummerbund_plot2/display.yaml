@@ -1,7 +1,7 @@
 #
 # Define basic display information
 #
-name     : View CummeRbund Plots and interactive plot 
+name     : View CummeRbund Plots 
 tooltip  : |
     Explore a variety of plots to visualize and easily navigate through data produced from RNA-Seq differential expression analysis in Cuffdiff.
 

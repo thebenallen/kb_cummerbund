@@ -1,7 +1,7 @@
 #
 # Define basic display information
 #
-name     : View Differentially Expressed Genes from Cuffdiff in Heatmap
+name     : Create Differential Expression Matrix and View HeatMap from Cuffdiff Output 
 tooltip  : |
     Compare a pair of conditions in RNA-seq expression data to identify differentially expressed genes and view them in an interactive heatmap   
 
