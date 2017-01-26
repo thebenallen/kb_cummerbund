@@ -8,6 +8,7 @@ import hashlib
 import string
 import random
 import requests
+import math
 import logging
 import shutil
 import time
@@ -563,25 +564,14 @@ def filter_expression_matrix(fparams, system_params):
     except:
         num_genes = 10000000000000000
 
+    #set number of genes
+    if (num_genes > 1000):
+       num_genes = 1000
+
     infile = fparams['infile']
     outfile = fparams['outfile']
 
     logger=system_params['logger']
-
-#    for key in fparams:
-#    	print "fparams: " + str(key) + " " + str(fparams[key])
-#    for key in system_params:
-#    	print "system_params: " + str(key) + " " + str(system_params[key])
-
-
-    #if exists(cuffdiff_dir) == False:
-    #    logger.info("Cuffdiff directory does not exists")
-    #return False
-    logger.info("num_genes before: " + str(num_genes) )
-    #if (num_genes > 500):
-    #    num_genes = 500;
-        
-
     fp=open(outfile, "w")
     x = "gene\tq_value\tlog2-fold_change\n"
     fp.write(x)
@@ -598,18 +588,12 @@ def filter_expression_matrix(fparams, system_params):
             qval = linesplit[12]
             significance = linesplit[13]
           
-     #       if (significance =='no'):
-     #           ii=1
-     #           continue
+            if (significance =='no'):
+                continue
           
             if (qval =='q_value'):
                 continue
             log2_fold_change = linesplit[9]
-
-            #if (include_inf==0):
-            #    if (log2_fold_change.find('inf') != -1 ):
-            #        continue
-            #logger.info(log2_fold_change)
 
             gene = linesplit[2]
             sample1_name = linesplit[4]
@@ -619,7 +603,7 @@ def filter_expression_matrix(fparams, system_params):
             keep_row = is_valid_row(selected_condition_option, sample1, sample2, sample1_name, sample2_name)
             if (keep_row == 0):
                 continue
-            if (float(qval) > q_value_cutoff):
+            if (-math.log10(float(qval)) <= q_value_cutoff):
                 continue
             if (log2_fold_change.find('inf') == -1 ):
                 if (abs(float(log2_fold_change)) < abs(float(log2_fold_change_cutoff))):

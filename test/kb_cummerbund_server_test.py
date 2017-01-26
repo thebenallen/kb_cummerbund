@@ -97,8 +97,8 @@ class kb_cummerbundTest(unittest.TestCase):
                 'condition_select':'all_pairs',
                 'sample1':c1, 
                 'sample2' :c2, 
-                'q_value_cutoff':0.1,
-                'log2_fold_change_cutoff': 1.2, 
+                'q_value_cutoff':2.0,
+                'log2_fold_change_cutoff': 2.0, 
                 'num_genes' :num_g
                 }
         interactiveHeatmapParams={
@@ -118,7 +118,11 @@ class kb_cummerbundTest(unittest.TestCase):
         ws_id = 'pranjan77:1476324994474'
         ws_obj_id = 'Ath_cuffdiff'
 
-        num_g=100
+
+        ws_id = 'pranjan77:1485352184683'
+        ws_obj_id = 'Ath_sampleset_cuffdiff'
+
+        num_g=1000
         ws_out_id3 = "expuuc"
         heatmapParams={
                 'workspace_name': ws_id, 
@@ -126,18 +130,14 @@ class kb_cummerbundTest(unittest.TestCase):
                 'ws_expression_matrix_id':ws_out_id3,
                 'sample1':'WT', 
                 'sample2' :'hy5', 
-                'q_value_cutoff':0.4,
-                'log2_fold_change_cutoff': 1, 
+                'q_value_cutoff':2,
+                'log2_fold_change_cutoff': 3.32, 
                 'num_genes' :num_g
                 }
-        ws_id = 'pranjan77:1483555887223'
-        ws_obj_id = 'wt-hy5-cuffdiff'
 
-        ws_id = 'pranjan77:1485352184683'
-        ws_obj_id = 'Ath_sampleset_cuffdiff'
-
+        ret = self.getImpl().create_interactive_heatmap_de_genes_old(self.getContext(), heatmapParams)
         cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':'cummer' , 'ws_diffstat_output': 'diffstat_out'}
-        ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
+        #ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
 
 
 
