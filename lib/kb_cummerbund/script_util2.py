@@ -564,9 +564,6 @@ def filter_expression_matrix(fparams, system_params):
     except:
         num_genes = 10000000000000000
 
-    #set number of genes
-    if (num_genes > 1000):
-       num_genes = 1000
 
     infile = fparams['infile']
     outfile = fparams['outfile']

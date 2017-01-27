@@ -420,9 +420,6 @@ class kb_cummerbund:
                 "data":statdata,
                 "name":params["ws_diffstat_output"]}]
             })
-
- 
-
         #END generate_cummerbund_plot2
 
         # At some point might do deeper type checking...
