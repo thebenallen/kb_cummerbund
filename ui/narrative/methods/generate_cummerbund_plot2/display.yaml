@@ -46,9 +46,9 @@ parameters :
 
     ws_diffstat_output:
         ui-name : |
-            Differential statistics plot 
+            Differential statistics output 
         short-hint : |
-            Name of the differential statistics output
+            Name of the differential statistics output object
 
 
 
