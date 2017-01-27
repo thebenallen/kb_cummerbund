@@ -120,6 +120,7 @@ class kb_cummerbundTest(unittest.TestCase):
 
 
         ws_id = 'pranjan77:1485352184683'
+        ws_id = 'pranjan77:1485462112168'
         ws_obj_id = 'Ath_sampleset_cuffdiff'
 
         num_g=1000

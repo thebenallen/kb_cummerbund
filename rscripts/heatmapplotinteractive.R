@@ -34,7 +34,7 @@
 		
 	    if(logMode) 
 	    {
-	      m = log10(m+pseudocount)
+	      m = log2(m+pseudocount)
 	    }
 
 
@@ -202,7 +202,7 @@
 	genes.repFpkm.matrix = hmap$matrix
 
 	genes.repFpkm.matrix=genes.repFpkm.matrix[!apply(genes.repFpkm.matrix,1,sum)==0,]
-	genes.repFpkm.matrix = log2(genes.repFpkm.matrix+pseudocount)
+	#genes.repFpkm.matrix = log2(genes.repFpkm.matrix+pseudocount)
 
 	#Create expression matrix and add gene ids
 

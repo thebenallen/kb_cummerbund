@@ -409,7 +409,6 @@ class kb_cummerbund:
 
         infile =  join(cuffdiff_dir, "gene_exp.diff") 
         outfile = join(cuffdiff_dir, "gene_exp_diff.out") 
-        print outfile
         x=v.volcano_plot_data_parse_and_upload(infile,outfile, genome_dict)
         with open(outfile) as f:
             statdata = json.load(f)
@@ -863,7 +862,7 @@ class kb_cummerbund:
        
         report = ""
         if (fparams['pairs'] != 0):
-
+        
            try:
                 filtered_matrix = script_util2.filter_expression_matrix(fparams, system_params)
                 self.__LOGGER.info("matrix is " + filtered_matrix)
@@ -975,7 +974,7 @@ class kb_cummerbund:
 		    'text_message':report
 		}
 
-	reportName = 'create_interactive_heatmap_de_genes_'+str(hex(uuid.getnode()))
+	reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
 	report_info = ws_client.save_objects({
 	    'workspace':fparams['workspace_name'],
 	    'objects':[
