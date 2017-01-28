@@ -415,7 +415,7 @@ class kb_cummerbund:
         res = ws_client.save_objects({
             "workspace":params['workspace_name'],
             "objects": [{
-                "type":"KBaseGwasData.differentialexpressionstat",
+                "type":"KBaseRNASeq.DifferentialExpressionStat",
                 "data":statdata,
                 "name":params["ws_diffstat_output"]}]
             })
