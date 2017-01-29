@@ -8,6 +8,7 @@ import hashlib
 import string
 import random
 import requests
+import math
 import logging
 import shutil
 import time
@@ -32,6 +33,7 @@ import biokbase.Transform.script_utils as script_utils
 
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
+import filter_expression as f
 
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
@@ -548,107 +550,25 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
 
 def filter_expression_matrix(fparams, system_params):
     cuffdiff_dir=fparams['cuffdiff_dir']
+    scratch = system_params['scratch']
     selected_condition_option = fparams['pairs']
-    
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
-    q_value_cutoff = float(fparams['q_value_cutoff'])
+    q_value_cutoff = abs(float(fparams['q_value_cutoff']))
     
-    #include_inf = fparams['include_inf']
-    log2_fold_change_cutoff = float(fparams['log2_fold_change_cutoff'])
+    log2_fold_change_cutoff = abs(float(fparams['log2_fold_change_cutoff']))
     infile  =fparams['infile']
+    outfile = fparams['outfile']
     num_genes = 1000000000000000000000 #no upper bound
     try:
         num_genes=int(fparams['num_genes'])
     except:
-        num_genes = 10000000000000000
-
-    infile = fparams['infile']
-    outfile = fparams['outfile']
-
-    logger=system_params['logger']
-
-#    for key in fparams:
-#    	print "fparams: " + str(key) + " " + str(fparams[key])
-#    for key in system_params:
-#    	print "system_params: " + str(key) + " " + str(system_params[key])
-
-
-    #if exists(cuffdiff_dir) == False:
-    #    logger.info("Cuffdiff directory does not exists")
-    #return False
-    logger.info("num_genes before: " + str(num_genes) )
-    #if (num_genes > 500):
-    #    num_genes = 500;
-        
-
-    fp=open(outfile, "w")
-    x = "gene\tq_value\tlog2-fold_change\n"
-    fp.write(x)
-    mylist = []
-
-    logger.info(fparams )
-    with open(infile) as f:
-        qval_dict={}
-        i=0
-        for line in f:
-            linesplit  = line.split()
-            if (linesplit[1] == "-"):
-               continue
-            qval = linesplit[12]
-            significance = linesplit[13]
-          
-     #       if (significance =='no'):
-     #           ii=1
-     #           continue
-          
-            if (qval =='q_value'):
-                continue
-            log2_fold_change = linesplit[9]
-
-            #if (include_inf==0):
-            #    if (log2_fold_change.find('inf') != -1 ):
-            #        continue
-            #logger.info(log2_fold_change)
-
-            gene = linesplit[2]
-            sample1_name = linesplit[4]
-            sample2_name = linesplit[5]
-
-            keep_row = 1
-            keep_row = is_valid_row(selected_condition_option, sample1, sample2, sample1_name, sample2_name)
-            if (keep_row == 0):
-                continue
-            if (float(qval) > q_value_cutoff):
-                continue
-            if (log2_fold_change.find('inf') == -1 ):
-                if (abs(float(log2_fold_change)) < abs(float(log2_fold_change_cutoff))):
-                    continue
-            genes=gene.split(",");
-            if (len(genes) >1):
-                for j in genes:
-                    x=[]
-                    x.append(j)
-                    x.append(str(qval))
-                    x.append(str(log2_fold_change))
-                    mylist.append(x)
-            else:
-                    x=[]
-                    x.append(gene)
-                    x.append(str(qval))
-                    x.append(str(log2_fold_change))
-                    mylist.append(x)
-        mylistsorted = sorted(mylist, key=lambda line: abs(float(line[2])), reverse=True)
-        j=0
-        for x in mylistsorted:
-            #logger.info(x)
-            j = j +1
-            fp.write('{0}\n'.format('\t'.join(x)))
-            if (j >= num_genes):
-                break
-        f.close()
-        fp.close()
-        return outfile
+        num_genes = 100
+    outf = f.filter_expresssion_matrix_option(scratch, infile,outfile,sample1, sample2, num_genes, q_value_cutoff, log2_fold_change_cutoff)
+    if (os.path.isfile(outf)):
+       return outf
+    else:
+       return False
 
 
 def is_valid_row(selected_condition_option, sample1, sample2, sample1_name, sample2_name):

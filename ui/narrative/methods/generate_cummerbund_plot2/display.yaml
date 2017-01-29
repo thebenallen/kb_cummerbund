@@ -1,9 +1,9 @@
 #
 # Define basic display information
 #
-name     : View CummeRbund Plots and interactive plot 
+name     : View CummeRbund Plots 
 tooltip  : |
-    Explore a variety of plots to visualize and easily navigate through data produced from RNA-Seq differential expression analysis in Cuffdiff.
+    Explore a variety of plots to visualize and easily navigate through data produced from RNA-Seq differential expression analysis in Cuffdiff. This method should be used when there are more than one condition to compare and each condition has at least two replicates.
 
 screenshots :
     []
@@ -46,9 +46,9 @@ parameters :
 
     ws_diffstat_output:
         ui-name : |
-            Differential statistics plot 
+            Differential statistics output 
         short-hint : |
-            Name of the differential statistics output
+            Name of the differential statistics output object
 
 
 
