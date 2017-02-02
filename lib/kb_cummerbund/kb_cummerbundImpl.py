@@ -282,7 +282,7 @@ class kb_cummerbund:
         #Read the input cuffdiff workspace object json file and get filehandle for cuffdiff tar file
         s_res = ws_client.get_objects([{
             'name' : params['ws_cuffdiff_id'],
-            'workspace' : params['workspace_name']
+            'workspace' : params['workspace']
             }])
         print "Getting genome info"
 
@@ -413,7 +413,7 @@ class kb_cummerbund:
         with open(outfile) as f:
             statdata = json.load(f)
         res = ws_client.save_objects({
-            "workspace":params['workspace_name'],
+            "workspace":params['workspace'],
             "objects": [{
                 "type":"KBaseRNASeq.DifferentialExpressionStat",
                 "data":statdata,
@@ -433,7 +433,7 @@ class kb_cummerbund:
         reportName = 'generate_cummerbund_plot2_'+str(hex(uuid.getnode()))
 
         report_info = ws_client.save_objects({
-                        'workspace':params['workspace_name'],
+                        'workspace':params['workspace'],
                         'objects':[
                         {
                         'type':'KBaseReport.Report',
