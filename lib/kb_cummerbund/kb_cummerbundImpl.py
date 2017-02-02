@@ -419,6 +419,8 @@ class kb_cummerbund:
                 "data":statdata,
                 "name":params["ws_diffstat_output"]}]
             })
+
+'''
         report = "Please use app 'View interactive volcano plot' method with object(" +  params['ws_diffstat_output'] + ") as input."
         reportObj = {
            'objects_created':[],
@@ -446,6 +448,7 @@ class kb_cummerbund:
          ] })[0]  
         print('saved Report: '+pformat(report_info))
         #returnVal = { "report_name" : reportName,"report_ref" : str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]) }
+'''
         #END generate_cummerbund_plot2
 
         # At some point might do deeper type checking...
