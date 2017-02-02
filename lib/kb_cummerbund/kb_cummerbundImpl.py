@@ -937,8 +937,8 @@ class kb_cummerbund:
 		status = script_util2.rplotanduploadinteractive(system_params,fparams, rparams, plot['roptstr'])
 		if status == False:
                     self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
-                    report = "Error: Please select a different cutoff criteria. None of the genes passed fold change and q-value-cutoff"
-                    report += "No genes to show on heatmap"
+                    report = "Error: Please select a different cutoff criteria. None of the genes passed fold change and q-value-cutoff. "
+                    report += "Failed to created expression  matrix with differentially expressed genes. " +  fparams['ws_expression_matrix_id'] + " No genes to show on heatmap."
                     reportObj = {
                     'objects_created':[],
                     'text_message':report
