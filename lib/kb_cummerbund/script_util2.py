@@ -555,8 +555,9 @@ def filter_expression_matrix(fparams, system_params):
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
     q_value_cutoff = abs(float(fparams['q_value_cutoff']))
-    
     log2_fold_change_cutoff = abs(float(fparams['log2_fold_change_cutoff']))
+    print q_value_cutoff
+    print log2_fold_change_cutoff
     infile  =fparams['infile']
     outfile = fparams['outfile']
     num_genes = 1000000000000000000000 #no upper bound

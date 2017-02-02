@@ -119,21 +119,23 @@ class kb_cummerbundTest(unittest.TestCase):
         ws_obj_id = 'Ath_cuffdiff'
 
 
-        ws_id = 'pranjan77:1485352184683'
-        ws_id = 'pranjan77:1485462112168'
-        ws_id = 'pranjan77:1483555887223'
-        ws_obj_id = 'Ath_sampleset_cuffdiff'
-        ws_obj_id = 'wt-hy5-cuffdiff'
+        #ws_id = 'pranjan77:1485352184683'
+        #ws_id = 'pranjan77:1485462112168'
+        #ws_id = 'pranjan77:1483555887223'
+        ws_id = 'pranjan77:1486068164203'
+        #ws_obj_id = 'Ath_sampleset_cuffdiff'
+        #ws_obj_id = 'wt-hy5-cuffdiff'
+        ws_obj_id = 'wt-ycdr-cuffdiff'
         num_g=1000
         ws_out_id3 = "expuuc"
         heatmapParams={
                 'workspace': ws_id, 
                 'ws_cuffdiff_id': ws_obj_id, 
                 'ws_expression_matrix_id':ws_out_id3,
-                'sample1':'wt', 
-                'sample2' :'hy5', 
-                'q_value_cutoff':2,
-                'log2_fold_change_cutoff': 2, 
+                'sample1':'WT', 
+                'sample2' :'ydcR', 
+                'q_value_cutoff':1,
+                'log2_fold_change_cutoff': 1.5, 
                 'num_genes' :num_g
                 }
 

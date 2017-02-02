@@ -57,7 +57,7 @@ parameters :
         short-hint : |
             absolute value of -Log10 (q_value_cutoff)
         long_hint : |
-            absolute value of -Log10 (q_value_cutoff). The default value of 2 corresponds to q_value of 0.01.
+            absolute value of -Log10 (q_value_cutoff). The default value of 1.5  corresponds to q_value of 0.1. Ideally  2 or more should be used as cutoff.
 
     log2_fold_change_cutoff:
         ui-name : |
