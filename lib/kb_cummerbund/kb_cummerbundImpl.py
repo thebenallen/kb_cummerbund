@@ -420,35 +420,6 @@ class kb_cummerbund:
                 "name":params["ws_diffstat_output"]}]
             })
 
-'''
-        report = "Please use app 'View interactive volcano plot' method with object(" +  params['ws_diffstat_output'] + ") as input."
-        reportObj = {
-           'objects_created':[],
-           'text_message':report
-        }
-        provenance = [{}]
-        if 'provenance' in ctx:
-            provenance = ctx['provenance']
-        # add additional info to provenance here, in this case the input data object reference
-        provenance[0]['input_ws_objects']=[params['workspace']+'/'+params['ws_cuffdiff_id']]
- 
-        reportName = 'generate_cummerbund_plot2_'+str(hex(uuid.getnode()))
-
-        report_info = ws_client.save_objects({
-                        'workspace':params['workspace'],
-                        'objects':[
-                        {
-                        'type':'KBaseReport.Report',
-                        'data':reportObj,
-                        'name':reportName,
-                        'meta':{},
-                        'hidden':1, # important!  make sure the report is hidden
-                        'provenance':provenance
-                    }
-         ] })[0]  
-        print('saved Report: '+pformat(report_info))
-        #returnVal = { "report_name" : reportName,"report_ref" : str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]) }
-'''
         #END generate_cummerbund_plot2
 
         # At some point might do deeper type checking...
