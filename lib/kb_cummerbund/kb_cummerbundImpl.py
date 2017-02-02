@@ -419,7 +419,7 @@ class kb_cummerbund:
                 "data":statdata,
                 "name":params["ws_diffstat_output"]}]
             })
-        report = "Please use app 'View interactive volcano plot' method with object(" +  prams['ws_diffstat_output'] + ") as input."
+        report = "Please use app 'View interactive volcano plot' method with object(" +  params['ws_diffstat_output'] + ") as input."
         reportObj = {
            'objects_created':[],
            'text_message':report
