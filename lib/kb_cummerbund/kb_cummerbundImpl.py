@@ -400,7 +400,7 @@ class kb_cummerbund:
         outputobject['cuffdiff_input_id'] = params['ws_cuffdiff_id']
 
         res = ws_client.save_objects({
-            "workspace":params['workspace_name'],
+            "workspace":params['workspace'],
             "objects": [{
                 "type":"KBaseRNASeq.cummerbund_output",
                 "data":outputobject,
