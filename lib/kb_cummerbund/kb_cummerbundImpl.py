@@ -936,7 +936,33 @@ class kb_cummerbund:
 
 		status = script_util2.rplotanduploadinteractive(system_params,fparams, rparams, plot['roptstr'])
 		if status == False:
-		       self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
+                    self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
+                    report = "Error: Please select a different cutoff criteria. None of the genes passed fold change and q-value-cutoff"
+                    report += "No genes to show on heatmap"
+                    reportObj = {
+                    'objects_created':[],
+                    'text_message':report
+                    }
+                    reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
+                    report_info = ws_client.save_objects({
+                        'workspace':fparams['workspace_name'],
+                        'objects':[
+                        {
+                        'type':'KBaseReport.Report',
+                        'data':reportObj,
+                        'name':reportName,
+                        'meta':{},
+                        'hidden':1, # important!  make sure the report is hidden
+                        'provenance':provenance
+                    }
+                    ] })[0]  
+                    print('saved Report: '+pformat(report_info))
+
+                    returnVal = { "report_name" : reportName,"report_ref" : str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]) }
+
+                    return [returnVal]
+
+
 		else:
                       
 		      self.__LOGGER.info(status)
@@ -973,6 +999,7 @@ class kb_cummerbund:
 		    'objects_created':[],
 		    'text_message':report
 		}
+
 
 	reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
 	report_info = ws_client.save_objects({
