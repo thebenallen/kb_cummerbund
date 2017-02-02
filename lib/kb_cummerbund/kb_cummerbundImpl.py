@@ -824,7 +824,7 @@ class kb_cummerbund:
         #returnVal = "ttt"
         #Set up workspace client
         user_token = ctx['token']
-        workspace = fparams['workspace_name']
+        workspace = fparams['workspace']
         ws_client  = Workspace(url=self.__WS_URL, token=user_token)
         system_params = {}
         system_params['token'] = user_token
@@ -842,7 +842,7 @@ class kb_cummerbund:
         #Read the input cuffdiff workspace object json file and get filehandle for cuffdiff tar file
         s_res = ws_client.get_objects([{
             'name' : fparams['ws_cuffdiff_id'],
-            'workspace' : fparams['workspace_name']
+            'workspace' : fparams['workspace']
             }])
 
          #Check if workspace has data
@@ -909,7 +909,7 @@ class kb_cummerbund:
 
 		reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
 		report_info = ws_client.save_objects({
-		    'workspace':fparams['workspace_name'],
+		    'workspace':fparams['workspace'],
 		    'objects':[
 			 {
 			  'type':'KBaseReport.Report',
@@ -972,7 +972,7 @@ class kb_cummerbund:
                     }
                     reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
                     report_info = ws_client.save_objects({
-                        'workspace':fparams['workspace_name'],
+                        'workspace':fparams['workspace'],
                         'objects':[
                         {
                         'type':'KBaseReport.Report',
@@ -1025,7 +1025,7 @@ class kb_cummerbund:
 
 	reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
 	report_info = ws_client.save_objects({
-	    'workspace':fparams['workspace_name'],
+	    'workspace':fparams['workspace'],
 	    'objects':[
 		 {
 		  'type':'KBaseReport.Report',
