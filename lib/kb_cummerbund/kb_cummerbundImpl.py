@@ -424,7 +424,14 @@ class kb_cummerbund:
            'objects_created':[],
            'text_message':report
         }
+        provenance = [{}]
+        if 'provenance' in ctx:
+            provenance = ctx['provenance']
+        # add additional info to provenance here, in this case the input data object reference
+        provenance[0]['input_ws_objects']=[workspace+'/'+fparams['ws_cuffdiff_id']]
+ 
         reportName = 'generate_cummerbund_plot2_'+str(hex(uuid.getnode()))
+
         report_info = ws_client.save_objects({
                         'workspace':params['workspace_name'],
                         'objects':[
@@ -1014,11 +1021,13 @@ class kb_cummerbund:
 			   }
 
         except:
-		report += "There was an error in generating expression matrix"
-	        reportObj = {
-		    'objects_created':[],
-		    'text_message':report
-		}
+                
+		self.__LOGGER.info('xxxxxx0')
+		#report += "There was an error in generating expression matrix"
+	        #reportObj = {
+		#    'objects_created':[],
+		#    'text_message':report
+		#}
 
 
 	reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
