@@ -139,9 +139,9 @@ class kb_cummerbundTest(unittest.TestCase):
                 'num_genes' :num_g
                 }
 
-        ret = self.getImpl().create_interactive_heatmap_de_genes_old(self.getContext(), heatmapParams)
-        cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':'cummer' , 'ws_diffstat_output': 'diffstat_out'}
-        #ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
+        #ret = self.getImpl().create_interactive_heatmap_de_genes_old(self.getContext(), heatmapParams)
+        cummerbundParams={'workspace': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':'cummer' , 'ws_diffstat_output': 'diffstat_out'}
+        ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
 
 
 
