@@ -428,7 +428,7 @@ class kb_cummerbund:
         if 'provenance' in ctx:
             provenance = ctx['provenance']
         # add additional info to provenance here, in this case the input data object reference
-        provenance[0]['input_ws_objects']=[workspace+'/'+fparams['ws_cuffdiff_id']]
+        provenance[0]['input_ws_objects']=[params['workspace']+'/'+fparams['ws_cuffdiff_id']]
  
         reportName = 'generate_cummerbund_plot2_'+str(hex(uuid.getnode()))
 
