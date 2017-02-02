@@ -36,7 +36,7 @@ parameters :
         short-hint : |
            Differential expression statistics 
         long-hint  : |
-           Differential expression statistics 
+           Differential expression statistics. This is produced by running the app View CummeRbund Plots
     sample1:
         ui-name : |
             Treatment Label 1
@@ -53,4 +53,5 @@ description : |
 
 
 technical-description : |
-    View interactive volcano plot 
+    View interactive volcano plot. This app takes a differential expression statistics output produced by running the app View CummeRbund Plots. It takes two condition as input. It creates an interactive volcano plot.
+    The slider in the output plot can be used to select appropriate q_value and fold change cutoff and display number of genes and their functional annotation. 
