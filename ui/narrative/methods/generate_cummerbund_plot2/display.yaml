@@ -5,6 +5,7 @@ name     : View CummeRbund Plots
 tooltip  : |
     Explore a variety of plots to visualize and easily navigate through data produced from RNA-Seq differential expression analysis in Cuffdiff. This method should be used when there are more than one condition to compare and each condition has at least two replicates.
 
+
 screenshots :
     []
 
@@ -43,18 +44,24 @@ parameters :
             CummeRbund Plots 
         short-hint : |
             Name of the CummeRbund Output
+        long-hint : |
+            Name of the CummeRbund Output. This output object has the links to various QC plots.
+
 
     ws_diffstat_output:
         ui-name : |
             Differential statistics output 
         short-hint : |
             Name of the differential statistics output object
-
+        long-hint : |
+            Name of the differential statistics output object. This object should be explored using View interactive volcano plot app.
 
 
 description : |
-   <p>This method helps in exploration, analysis and  visualization of Cufflinks high-throughput RNA-seq data.</p> 
+   <p>This method helps in exploration, analysis and  visualization of  high-throughput RNA-seq data.</p> 
    <p>It uses the large amount of data produced from Cuffdiff RNA-seq differential expression analysis as input and allows user to easily navigate through it by visualizing different types of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot, volcano matrix plots, etc.</p>
+   <p>It also produces differential expression output. This output should be explored using View interactive volcano plot app to get list of genes and their functional annotation along with q-value and fold change.</p>
+
     
     <p><strong>WARNING:</strong> This method is one of the steps of the <a href= "http://kbase.us/rna-seq/"> KBase RNA-seq Pipeline </a> and is not intended to run standalone.</p>
 

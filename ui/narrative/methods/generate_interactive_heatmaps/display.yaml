@@ -35,9 +35,11 @@ suggestions :
 parameters :
     ws_cuffdiff_id:
         ui-name : |
-            Cuffdiff Output
+            Cuffdiff Object
         short-hint : |
             Differentially expressed data from Cuffdiff
+        short-hint : |
+            Differentially expressed data from Cuffdiff. This object can be obtained by running the Identify Differential Expression using Cuffdiff app
 
     sample1:
         ui-name : |
@@ -54,6 +56,9 @@ parameters :
             q_value Cutoff (-Log10 value)
         short-hint : |
             absolute value of -Log10 (q_value_cutoff)
+        long_hint : |
+            absolute value of -Log10 (q_value_cutoff). The default value of 2 corresponds to q_value of 0.01.
+
     log2_fold_change_cutoff:
         ui-name : |
             Fold Change Cutoff (Log2 value)
@@ -76,7 +81,19 @@ parameters :
             
 
 description : |
-   <p>This method helps in the visualization of Cufflinks high-throughput RNA-seq data using CummeRbund Package (csHeatmap method). It uses the data produced from Cuffdiff RNA-seq differential expression analysis as input and creates a heatmap of differentially expressed genes. Note that, the matrix is filtered based on Alpha Cutoff, Fold Change Cutoff and Number of Genes and sorted by Fold Change Cutoff.</p> 
+   <p> This method helps in the visualization of high-throughput RNA-seq data using CummeRbund Package. Differentially expressed genes are identified 
+       and displayed as heatmap. Note that the differentially expressed genes are selected  based on q_value Cutoff (-LOG 10 value) and  Fold Change Cutoff (LOG2 value).
+       </p> 
+       <p>
+       This method expects a Cuffdiff object obtained by running Identify Differential Expression using Cuffdiff  app as part of RNA-Seq analysis. Two other apps  should be run prior to using the app. View CummeRbund plot app should be used to get the QC plots as well as differential statistics output of all genes.
+       The differential statistics information should be viewed using View interactive volcano plot app to decide on approproate q_value Cutoff and Fold Change Cutoff and the number of genes to be displayed on heatmap.
+
+       If none of the genes pass the cutoff criteria, this method reports an error "Please select a different cutoff criteria. None of the genes passed fold change and q-value-cutoff. Failed to create expression matrix with differentially expressed genes. No genes to show on heatmap.
+       To fix this error, user should go to the volcano plot app and ensure that the cutoff selection is appropriate.
+       
+       This app expects -LOG10 (q_value_cutoff) and LOG2(Fold change). 
+       </p> 
+
     <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     

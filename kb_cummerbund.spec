@@ -26,14 +26,14 @@ module kb_cummerbund {
 
 
 	typedef structure {
-		workspace_name workspace_name;
+		string workspace_name;
 		ws_cuffdiff_id ws_cuffdiff_id;
 		ws_cummerbund_output ws_cummerbund_output;
 	} cummerbundParams;
 
 
 	typedef structure {
-		workspace_name workspace_name;
+		string workspace;
 		ws_cuffdiff_id ws_cuffdiff_id;
 		ws_cummerbund_output ws_cummerbund_output;
 		ws_diffstat_output ws_diffstat_output;
@@ -50,18 +50,19 @@ module kb_cummerbund {
 	} expressionMatrixParams;
 
 	typedef structure {
+    string workspace;
 		string sample1;
 		string sample2;
 		float q_value_cutoff;
 		float log2_fold_change_cutoff ;
 		int num_genes;
 		ws_cuffdiff_id ws_cuffdiff_id;
-		ws_expression_matrix_id ws_expression_matrix_id1;
-		ws_expression_matrix_id ws_expression_matrix_id2;
+		ws_expression_matrix_id ws_expression_matrix_id;
 		ws_cummerbund_output ws_cummerbund_output;
 	} heatmapParams;
 	
 	typedef structure {
+    string workspace_name;
 		string sample1;
 		string sample2;
 		string logMode;

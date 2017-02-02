@@ -127,7 +127,7 @@ class kb_cummerbundTest(unittest.TestCase):
         num_g=1000
         ws_out_id3 = "expuuc"
         heatmapParams={
-                'workspace_name': ws_id, 
+                'workspace': ws_id, 
                 'ws_cuffdiff_id': ws_obj_id, 
                 'ws_expression_matrix_id':ws_out_id3,
                 'sample1':'wt', 
