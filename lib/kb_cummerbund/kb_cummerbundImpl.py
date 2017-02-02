@@ -419,6 +419,26 @@ class kb_cummerbund:
                 "data":statdata,
                 "name":params["ws_diffstat_output"]}]
             })
+        report = "Please use app 'View interactive volcano plot' method with object(" +  prams['ws_diffstat_output'] + ") as input."
+        reportObj = {
+           'objects_created':[],
+           'text_message':report
+        }
+        reportName = 'generate_cummerbund_plot2_'+str(hex(uuid.getnode()))
+        report_info = ws_client.save_objects({
+                        'workspace':params['workspace_name'],
+                        'objects':[
+                        {
+                        'type':'KBaseReport.Report',
+                        'data':reportObj,
+                        'name':reportName,
+                        'meta':{},
+                        'hidden':1, # important!  make sure the report is hidden
+                        'provenance':provenance
+                    }
+         ] })[0]  
+        print('saved Report: '+pformat(report_info))
+        returnVal = { "report_name" : reportName,"report_ref" : str(report_info[6]) + '/' + str(report_info[0]) + '/' + str(report_info[4]) }
         #END generate_cummerbund_plot2
 
         # At some point might do deeper type checking...
@@ -938,7 +958,7 @@ class kb_cummerbund:
 		if status == False:
                     self.__LOGGER.info("Problem generating image and json file - " + plot["roptstr"])
                     report = "Error: Please select a different cutoff criteria. None of the genes passed fold change and q-value-cutoff. "
-                    report += "Failed to created expression  matrix with differentially expressed genes. " +  fparams['ws_expression_matrix_id'] + " No genes to show on heatmap."
+                    report += "Failed to create expression  matrix with differentially expressed genes(" +  fparams['ws_expression_matrix_id'] + "). No genes to show on heatmap."
                     reportObj = {
                     'objects_created':[],
                     'text_message':report
