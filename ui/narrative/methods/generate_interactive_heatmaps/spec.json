@@ -1,5 +1,5 @@
 {
-  "name": "View Differentially Expressed Genes from Cuffdiff in Heatmap",
+  "name": "Create Differential Expression Matrix and HeatMap using Cuffdiff",
   "ver": "0.0.1",
   "authors" : [ ],
   "contact" : "help@kbase.us",
@@ -141,6 +141,14 @@
         
         ],
      "output_mapping" : [
+       {
+           "service_method_output_path": [0, "report_name"],
+           "target_property": "report_name"
+        },
+        {
+         "service_method_output_path": [0, "report_ref"],
+                    "target_property": "report_ref"
+        },
        {
           "input_parameter": "ws_expression_matrix_id",
           "target_property": "expression_object"
