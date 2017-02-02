@@ -35,7 +35,7 @@ suggestions :
 parameters :
     ws_cuffdiff_id:
         ui-name : |
-            Cuffdiff Output
+            Cuffdiff Object
         short-hint : |
             Differentially expressed data from Cuffdiff
 
