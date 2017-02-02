@@ -132,8 +132,8 @@ class kb_cummerbundTest(unittest.TestCase):
                 'ws_expression_matrix_id':ws_out_id3,
                 'sample1':'wt', 
                 'sample2' :'hy5', 
-                'q_value_cutoff':5,
-                'log2_fold_change_cutoff': 5, 
+                'q_value_cutoff':2,
+                'log2_fold_change_cutoff': 2, 
                 'num_genes' :num_g
                 }
 

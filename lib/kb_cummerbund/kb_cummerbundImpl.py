@@ -851,7 +851,7 @@ class kb_cummerbund:
             return returnVal
         cuffdiff_dir = join (self.__SCRATCH , "cuffdiffData/cuffdiff")
         cuffdiff_dir = script_util2.extract_cuffdiff_data (self.__LOGGER, self.__SHOCK_URL, self.__SCRATCH, s_res, user_token)
-        #cuffdiff_dir = "/kb/module/work/nnc/cuffdiff"
+        #cuffdiff_dir = "/kb/module/work/cuffdiffData/cuffdiff"
         self.__LOGGER.info("Cuffdiff folder = " + cuffdiff_dir)
 
 
@@ -995,40 +995,33 @@ class kb_cummerbund:
 		      self.__LOGGER.info(status)
 
 		      outjson = status
-		      self.__LOGGER.info('xxxxxx1')
+		      self.__LOGGER.info('5')
 		      with open("{0}/{1}".format(self.__SCRATCH , outjson),'r') as et2:
 
 			eo2 = json.load(et2)
 			genome_ref = s_res[0]['data']['genome_id']
 			eo2['type']='log2_level'
 			eo2['genome_ref'] = genome_ref
-		        self.__LOGGER.info('xxxxxx2')
+		        self.__LOGGER.info('3')
 			self.__LOGGER.info(workspace + self.__SCRATCH + outjson + plot['exp'])
-			res = ws_client.save_objects({'workspace' : workspace,
-			       'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
-			       'data' : eo2,
-			       'name' : plot['exp']
-			 }]})
-                        info=res[0]
-                        self.__LOGGER ('done uploading exp')
-                        report = "Successfully created expression matrix"
-			reportObj = {
-			    'objects_created':[{
-			     'ref': str(info[6]) +'/' + str(info[0]) + '/' + str(info[4]),
-                             'description': 'Expression matrix'
-			     }],
-			    'text_message':report
-			   }
+                        try:
+                            res = ws_client.save_objects({'workspace' : workspace,
+                                   'objects' : [{ 'type' : 'KBaseFeatureValues.ExpressionMatrix',
+                                   'data' : eo2,
+                                   'name' : plot['exp']
+                             }]})
+                        except:
+                            self.__LOGGER ("xxxx6")
 
         except:
-                
-		self.__LOGGER.info('xxxxxx0')
-		#report += "There was an error in generating expression matrix"
-	        #reportObj = {
-		#    'objects_created':[],
-		#    'text_message':report
-		#}
+		self.__LOGGER.info('6')
+        report = "Successfully created expression matrix"
+        reportObj = {
+             'objects_created':[],
+             'text_message':report
+              }
 
+        self.__LOGGER.info('7')
 
 	reportName = 'create_interactive_heatmap_de_genes_old_'+str(hex(uuid.getnode()))
 	report_info = ws_client.save_objects({

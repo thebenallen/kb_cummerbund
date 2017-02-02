@@ -110,7 +110,7 @@
         "input_mapping" : [
         {
           "narrative_system_variable": "workspace",
-          "target_property": "workspace_name"
+          "target_property": "workspace"
         },{
           "input_parameter": "ws_cuffdiff_id",
           "target_property": "ws_cuffdiff_id"
