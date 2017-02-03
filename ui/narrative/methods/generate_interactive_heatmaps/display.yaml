@@ -75,7 +75,7 @@ parameters :
           
     ws_expression_matrix_id:
         ui-name : |
-            Expression Matrix
+            Filtered Expression Matrix
         short-hint : |
             Filtered expression matrix associated with the heatmap. 
             
