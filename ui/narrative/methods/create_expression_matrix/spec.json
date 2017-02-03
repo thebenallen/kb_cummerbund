@@ -4,7 +4,7 @@
   "authors" : [ ],
   "contact" : "help@kbase.us",
   "visible" : false,
-  "categories" : ["inactive"],
+  "categories" : ["active", "expression"],
   "widgets" : {
     "input" : null,
     "output" : "kbaseExpressionMatrix" 
