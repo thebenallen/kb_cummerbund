@@ -4,7 +4,7 @@
   "authors" : [ ],
   "contact" : "help@kbase.us",
   "visible" : true,
-  "categories" : ["inactive"],
+  "categories" : ["active", "expression"],
   "widgets" : {
     "input" : null,
     "output" : "kbaseExpressionMatrix"
@@ -51,10 +51,6 @@
           "value": "log2",
           "display": "log2 (FPKM + 1)",
           "selected": true
-        },
-        {
-          "value":"log10",
-          "display": "log10 (FPKM + 1)"
         }
 
       ]
