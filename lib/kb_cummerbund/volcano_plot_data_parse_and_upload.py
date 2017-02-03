@@ -40,16 +40,34 @@ def get_max_fold_change_to_handle_inf(infile):
              
     return maxvalue    
               
-              
+def parse_gene_exp_diff (infile,outfile):
+  fp = open(outfile, "w")
+  with open(infile) as tmp1:
+    for line in tmp1:
+      linedata = line.split("\t")
+      m = re.search(",", linedata[2])
+      if m is not None:
+        count = linedata[2].split(",")
+        valx = ",".join(count)
+        for value in count:
+           linedata[2] = value
+           linex = "\t".join(linedata)
+           fp.write(linex)
+      else:
+           fp.write(line)
+  fp.close()
+  return outfile
+
    
 
 def volcano_plot_data_parse_and_upload(infile,outf,genome_dict):
     maxvalue = get_max_fold_change_to_handle_inf (infile)
+    infileparse = parse_gene_exp_diff(infile, "infile.out")              
     print maxvalue
     header=0
     outfile="tmp"
     fp=open(outfile, "w")
-    with open(infile) as f:
+    with open(infileparse) as f:
      for line in f:
          header = header + 1
          if (header > 2):
