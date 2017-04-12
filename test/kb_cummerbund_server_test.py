@@ -122,10 +122,17 @@ class kb_cummerbundTest(unittest.TestCase):
         #ws_id = 'pranjan77:1485352184683'
         #ws_id = 'pranjan77:1485462112168'
         #ws_id = 'pranjan77:1483555887223'
-        ws_id = 'pranjan77:1486068164203'
         #ws_obj_id = 'Ath_sampleset_cuffdiff'
         #ws_obj_id = 'wt-hy5-cuffdiff'
-        ws_obj_id = 'wt-ycdr-cuffdiff'
+
+        # inputs on production
+        #ws_id = 'pranjan77:1486068164203'
+        #ws_obj_id = 'wt-ycdr-cuffdiff'
+
+        # inputs on CI
+        ws_id = 'pranjan77:1490326083513'
+        ws_obj_id = 'Ath_sampleset_cuffdiff'
+        
         num_g=1000
         ws_out_id3 = "expuuc"
         heatmapParams={
