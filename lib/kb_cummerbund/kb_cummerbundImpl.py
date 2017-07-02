@@ -62,7 +62,7 @@ class kb_cummerbund:
     ######################################### noqa
     VERSION = "0.0.8"
     GIT_URL = "git@github.com:arfathpasha/kb_cummerbund.git"
-    GIT_COMMIT_HASH = "b04abae668f4e38870b6c68af2510f614d122e73"
+    GIT_COMMIT_HASH = "c8e7012d1b0d3479879da3878a53aac98675ef40"
 
     #BEGIN_CLASS_HEADER
     __TEMP_DIR = 'temp'

@@ -48,16 +48,21 @@ build-startup-script:
 
 build-test-script:
 	echo '#!/bin/bash' > $(TEST_DIR)/$(TEST_SCRIPT_NAME)
+	echo 'export PATH=$(PATH):$(TARGET)/bin' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 	echo 'script_dir=$$(dirname "$$(readlink -f "$$0")")' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 	echo 'export KB_DEPLOYMENT_CONFIG=$$script_dir/../deploy.cfg' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 	echo 'export KB_AUTH_TOKEN=`cat /kb/module/work/token`' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 	echo 'export PYTHONPATH=$$script_dir/../$(LIB_DIR):$$PATH:$$PYTHONPATH' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
-	echo 'cd $$script_dir/../$(TEST_DIR)' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
-	echo 'python -u -m unittest discover -p "*_test.py"' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
+	echo 'coverage run /kb/module/test/*.py' >> $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 	chmod +x $(TEST_DIR)/$(TEST_SCRIPT_NAME)
 
 test:
-	bash $(TEST_DIR)/$(TEST_SCRIPT_NAME)
+	./$(TEST_DIR)/$(TEST_SCRIPT_NAME)
+	echo checking dir contents
+	coverage report -m
+	cp .coverage work/
+	mkdir -p work/kb/deployment/lib
+	cp -R /kb/deployment/lib/biokbase work/kb/deployment/lib
 
 clean:
 	rm -rfv $(LBIN_DIR)
