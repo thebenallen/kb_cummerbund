@@ -57,7 +57,7 @@ sub new
     }
     my $service_version = undef;
     if (exists $arg_hash{"service_version"}) {
-        $service_version = $arg_hash{"async_version"};
+        $service_version = $arg_hash{"service_version"};
     }
     $self->{service_version} = $service_version;
 
@@ -100,20 +100,19 @@ sub new
     # We create an auth token, passing through the arguments that we were (hopefully) given.
 
     {
-	my $token = Bio::KBase::AuthToken->new(@args);
-	
-	if (!$token->error_message)
-	{
-	    $self->{token} = $token->token;
-	    $self->{client}->{token} = $token->token;
+	my %arg_hash2 = @args;
+	if (exists $arg_hash2{"token"}) {
+	    $self->{token} = $arg_hash2{"token"};
+	} elsif (exists $arg_hash2{"user_id"}) {
+	    my $token = Bio::KBase::AuthToken->new(@args);
+	    if (!$token->error_message) {
+	        $self->{token} = $token->token;
+	    }
 	}
-        else
-        {
-	    #
-	    # All methods in this module require authentication. In this case, if we
-	    # don't have a token, we can't continue.
-	    #
-	    die "Authentication failed: " . $token->error_message;
+	
+	if (exists $self->{token})
+	{
+	    $self->{client}->{token} = $self->{token};
 	}
     }
 
@@ -179,10 +178,9 @@ sub _check_job {
 $cummerbundParams is a kb_cummerbund.cummerbundParams
 $return is a kb_cummerbund.ws_cummerbund_output
 cummerbundParams is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a kb_cummerbund.workspace_name
+	workspace_name has a value which is a string
 	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
-workspace_name is a string
 ws_cuffdiff_id is a string
 ws_cummerbund_output is a string
 
@@ -195,10 +193,9 @@ ws_cummerbund_output is a string
 $cummerbundParams is a kb_cummerbund.cummerbundParams
 $return is a kb_cummerbund.ws_cummerbund_output
 cummerbundParams is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a kb_cummerbund.workspace_name
+	workspace_name has a value which is a string
 	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
-workspace_name is a string
 ws_cuffdiff_id is a string
 ws_cummerbund_output is a string
 
@@ -257,7 +254,7 @@ sub _generate_cummerbund_plots_submit {
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
         method => "kb_cummerbund._generate_cummerbund_plots_submit",
-        params => \@args}, context => $context);
+        params => \@args, context => $context});
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
@@ -292,11 +289,10 @@ sub _generate_cummerbund_plots_submit {
 $cummerbundstatParams is a kb_cummerbund.cummerbundstatParams
 $return is a kb_cummerbund.ws_cummerbund_output
 cummerbundstatParams is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a kb_cummerbund.workspace_name
+	workspace has a value which is a string
 	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 	ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
-workspace_name is a string
 ws_cuffdiff_id is a string
 ws_cummerbund_output is a string
 ws_diffstat_output is a string
@@ -310,11 +306,10 @@ ws_diffstat_output is a string
 $cummerbundstatParams is a kb_cummerbund.cummerbundstatParams
 $return is a kb_cummerbund.ws_cummerbund_output
 cummerbundstatParams is a reference to a hash where the following keys are defined:
-	workspace_name has a value which is a kb_cummerbund.workspace_name
+	workspace has a value which is a string
 	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 	ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
-workspace_name is a string
 ws_cuffdiff_id is a string
 ws_cummerbund_output is a string
 ws_diffstat_output is a string
@@ -374,7 +369,7 @@ sub _generate_cummerbund_plot2_submit {
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
         method => "kb_cummerbund._generate_cummerbund_plot2_submit",
-        params => \@args}, context => $context);
+        params => \@args, context => $context});
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
@@ -491,7 +486,7 @@ sub _create_expression_matrix_submit {
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
         method => "kb_cummerbund._create_expression_matrix_submit",
-        params => \@args}, context => $context);
+        params => \@args, context => $context});
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
@@ -526,6 +521,7 @@ sub _create_expression_matrix_submit {
 $interactiveHeatmapParams is a kb_cummerbund.interactiveHeatmapParams
 $return is a kb_cummerbund.ResultsToReport
 interactiveHeatmapParams is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a string
 	sample1 has a value which is a string
 	sample2 has a value which is a string
 	logMode has a value which is a string
@@ -551,6 +547,7 @@ ResultsToReport is a reference to a hash where the following keys are defined:
 $interactiveHeatmapParams is a kb_cummerbund.interactiveHeatmapParams
 $return is a kb_cummerbund.ResultsToReport
 interactiveHeatmapParams is a reference to a hash where the following keys are defined:
+	workspace_name has a value which is a string
 	sample1 has a value which is a string
 	sample2 has a value which is a string
 	logMode has a value which is a string
@@ -622,7 +619,7 @@ sub _create_interactive_heatmap_de_genes_submit {
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
         method => "kb_cummerbund._create_interactive_heatmap_de_genes_submit",
-        params => \@args}, context => $context);
+        params => \@args, context => $context});
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
@@ -657,14 +654,14 @@ sub _create_interactive_heatmap_de_genes_submit {
 $heatmapParams is a kb_cummerbund.heatmapParams
 $return is a kb_cummerbund.ResultsToReport
 heatmapParams is a reference to a hash where the following keys are defined:
+	workspace has a value which is a string
 	sample1 has a value which is a string
 	sample2 has a value which is a string
 	q_value_cutoff has a value which is a float
 	log2_fold_change_cutoff has a value which is a float
 	num_genes has a value which is an int
 	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
-	ws_expression_matrix_id1 has a value which is a kb_cummerbund.ws_expression_matrix_id
-	ws_expression_matrix_id2 has a value which is a kb_cummerbund.ws_expression_matrix_id
+	ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
 	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 ws_cuffdiff_id is a string
 ws_expression_matrix_id is a string
@@ -682,14 +679,14 @@ ResultsToReport is a reference to a hash where the following keys are defined:
 $heatmapParams is a kb_cummerbund.heatmapParams
 $return is a kb_cummerbund.ResultsToReport
 heatmapParams is a reference to a hash where the following keys are defined:
+	workspace has a value which is a string
 	sample1 has a value which is a string
 	sample2 has a value which is a string
 	q_value_cutoff has a value which is a float
 	log2_fold_change_cutoff has a value which is a float
 	num_genes has a value which is an int
 	ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
-	ws_expression_matrix_id1 has a value which is a kb_cummerbund.ws_expression_matrix_id
-	ws_expression_matrix_id2 has a value which is a kb_cummerbund.ws_expression_matrix_id
+	ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
 	ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 ws_cuffdiff_id is a string
 ws_expression_matrix_id is a string
@@ -753,7 +750,7 @@ sub _create_interactive_heatmap_de_genes_old_submit {
     }
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
         method => "kb_cummerbund._create_interactive_heatmap_de_genes_old_submit",
-        params => \@args}, context => $context);
+        params => \@args, context => $context});
     if ($result) {
         if ($result->is_error) {
             Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
@@ -1059,7 +1056,7 @@ a string
 
 <pre>
 a reference to a hash where the following keys are defined:
-workspace_name has a value which is a kb_cummerbund.workspace_name
+workspace_name has a value which is a string
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 
@@ -1070,7 +1067,7 @@ ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 =begin text
 
 a reference to a hash where the following keys are defined:
-workspace_name has a value which is a kb_cummerbund.workspace_name
+workspace_name has a value which is a string
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 
@@ -1093,7 +1090,7 @@ ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 
 <pre>
 a reference to a hash where the following keys are defined:
-workspace_name has a value which is a kb_cummerbund.workspace_name
+workspace has a value which is a string
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
@@ -1105,7 +1102,7 @@ ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
 =begin text
 
 a reference to a hash where the following keys are defined:
-workspace_name has a value which is a kb_cummerbund.workspace_name
+workspace has a value which is a string
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
 ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 ws_diffstat_output has a value which is a kb_cummerbund.ws_diffstat_output
@@ -1165,14 +1162,14 @@ include_replicates has a value which is a kb_cummerbund.bool
 
 <pre>
 a reference to a hash where the following keys are defined:
+workspace has a value which is a string
 sample1 has a value which is a string
 sample2 has a value which is a string
 q_value_cutoff has a value which is a float
 log2_fold_change_cutoff has a value which is a float
 num_genes has a value which is an int
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
-ws_expression_matrix_id1 has a value which is a kb_cummerbund.ws_expression_matrix_id
-ws_expression_matrix_id2 has a value which is a kb_cummerbund.ws_expression_matrix_id
+ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
 ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 
 </pre>
@@ -1182,14 +1179,14 @@ ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 =begin text
 
 a reference to a hash where the following keys are defined:
+workspace has a value which is a string
 sample1 has a value which is a string
 sample2 has a value which is a string
 q_value_cutoff has a value which is a float
 log2_fold_change_cutoff has a value which is a float
 num_genes has a value which is an int
 ws_cuffdiff_id has a value which is a kb_cummerbund.ws_cuffdiff_id
-ws_expression_matrix_id1 has a value which is a kb_cummerbund.ws_expression_matrix_id
-ws_expression_matrix_id2 has a value which is a kb_cummerbund.ws_expression_matrix_id
+ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matrix_id
 ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 
 
@@ -1211,6 +1208,7 @@ ws_cummerbund_output has a value which is a kb_cummerbund.ws_cummerbund_output
 
 <pre>
 a reference to a hash where the following keys are defined:
+workspace_name has a value which is a string
 sample1 has a value which is a string
 sample2 has a value which is a string
 logMode has a value which is a string
@@ -1229,6 +1227,7 @@ ws_expression_matrix_id has a value which is a kb_cummerbund.ws_expression_matri
 =begin text
 
 a reference to a hash where the following keys are defined:
+workspace_name has a value which is a string
 sample1 has a value which is a string
 sample2 has a value which is a string
 logMode has a value which is a string
