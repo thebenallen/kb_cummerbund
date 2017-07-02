@@ -24,6 +24,7 @@ before_install:
 - python --version
 - javac -version
 - java -version
+
 install:
 - pip install coveralls
 - git clone https://github.com/kbase/jars
@@ -34,19 +35,23 @@ install:
 - docker images
 - export PATH=$(pwd)/bin:$PATH
 - cd ../
-- git clone git@github.com:arfathpasha/kb_cummerbund.git
+- git clone https://github.com/arfathpasha/kb_cummerbund.git -b travis #TODO change to develop or master
 - cd kb_cummerbund
-- kb-sdk test -s
+- kb-sdk test || true
 - sed -i "s/test_token=/test_token=$TEST_TOKEN/" test_local/test.cfg
 - sed -i 's\https://appdev.kbase.us/services\https://ci.kbase.us/services\' test_local/test.cfg
 - sed -i 's\https://appdev.kbase.us/services/auth/api/legacy/KBase/Sessions/Login\https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login\' test_local/test.cfg
 - sed -i 's/$(id -u)/0:0/' test_local/run_tests.sh
+
 script:
 - kb-sdk test
+
 after_success:
 - cp test_local/workdir/.coverage .
-- sudo mkdir -p /kb/deployment
-- sudo cp -R test_local/workdir/kb/deployment/lib /kb/deployment
-- ls -l /kb/deployment/lib/biokbase/
+- sudo mkdir -p /kb/module/lib/
+- sudo cp -R test_local/workdir/kb/module/lib/kb_cummerbund /kb/module/lib/
+- pwd
+- ls -l /kb/module/lib/kb_cummerbund
+- cat .coverage
 - coverage report -m
 - coveralls

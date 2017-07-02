@@ -1,6 +1,7 @@
 [run]
 include =
     lib/kb_cummerbund/*
+    /kb/module/lib/kb_cummerbund/*
 
 [report]
 # Regexes for lines to exclude from consideration
