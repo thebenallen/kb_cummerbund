@@ -17,7 +17,7 @@ env:
 branches:
   only:
   - master
-  - travis  #TODO remove
+  - develop
 
 before_install:
 - docker version
@@ -35,7 +35,7 @@ install:
 - docker images
 - export PATH=$(pwd)/bin:$PATH
 - cd ../
-- git clone https://github.com/arfathpasha/kb_cummerbund.git -b travis #TODO change to develop or master
+- git clone https://github.com/arfathpasha/kb_cummerbund.git -b develop
 - cd kb_cummerbund
 - kb-sdk test || true
 - sed -i "s/test_token=/test_token=$TEST_TOKEN/" test_local/test.cfg
