@@ -1,7 +1,6 @@
-Build status:
-[![Coverage Status](https://coveralls.io/repos/github/arfathpasha/kb_cummerbund/badge.svg?branch=master)](https://coveralls.io/github/arfathpasha/kb_cummerbund?branch=master)
-master:  [![Build Status](https://travis-ci.org/arfathpasha/kb_cummerbund.svg?branch=master)](https://travis-ci.org/arfathpasha/kb_cummerbund)
-travis: [![Build Status](https://travis-ci.org/arfathpasha/kb_cummerbund.svg?branch=travis)](https://travis-ci.org/arfathpasha/kb_cummerbund)
+Build status:<br>
+master: [![Coverage Status](https://coveralls.io/repos/github/arfathpasha/kb_cummerbund/badge.svg?branch=master)](https://coveralls.io/github/arfathpasha/kb_cummerbund?branch=master)<br>
+master:  [![Build Status](https://travis-ci.org/arfathpasha/kb_cummerbund.svg?branch=master)](https://travis-ci.org/arfathpasha/kb_cummerbund)<br>
 develop: [![Build Status](https://travis-ci.org/arfathpasha/kb_cummerbund.svg?branch=develop)](https://travis-ci.org/arfathpasha/kb_cummerbund)
 
 # kb_cummerbund
