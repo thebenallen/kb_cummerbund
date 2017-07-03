@@ -12,19 +12,17 @@ notifications:
     on_failure: always
 env:
   global:
-    secure: IWQz/e5VViYJJlb33UhQb8Md+eTp1dTMSA9blxeJMRjLpe0o/46A6GYHEY7wgwzxdHEViy1gGlfP1PnGxq4yBcnHDMNqCfAynELHMa9JC273I26hs2koKVZFC86WBnfFoT3u5UJsaCOaG9+j7UQ4j7I6of6PmMF8iFmGxxJgHTUKNhjfx/DJ1v4/UqZy6xAPVunUsd/1XeFPuFPV30+WYcrxkMz3+xBX6iyfSqUYjONW4FJW7FSmpktCv+NzQEK90yH+TWTaOOuJz7/9YL9ykbqaNuZCPUIboU/cuW+45EoxYoEM/ZEVNWsGc9rF8QRFOFaIDEQ2RAu3hPbCnllL4rN7HrChP43BmK14u4CaLQw9wRvesYRvdEGSHIEvN3o4DDO2G4+NU/0eJgpbqAK6rvDrKD3fhfYgLzVsVNsppTdyKcl5AI/33VefiAEYidyQXrbXI4alswut5Yb3DdGRpproLP12O39+5aqGx49LKEEBE5AZVMWvmIxMIDEtueCorYfcRooggD73ms0Xx9xQzPezriwcoIapyieYbvuAMP0JqilrYSffMPXm8Kg35RFzn043SehWhzacbQX9voJeCqsMrMAhGzvH24m4V+ZEtFisGm57cJjrbT1F4qi7yfJEh+a9VxclL8XY9cs/pUFrBM+kWYEUkonfflCJxvwf3LM=
-
+    secure: AX9vII/c27GEDOfLi6f/0y+NSetjB01gzCUe4/kGnxnlbPzeLDkQRuw/xmlSa6AdhE2MHBOYu0dvh335qYeUP7B2S/Axu1mh77ld3BwkJ2axJO0WDK4KGsFy1ivn9JkxM6BUe3OmaMOV2FN6dAIHoZhqcmkMqeYbeVrCqJk2RXvNK6EJQj2Oux239NSGFuQ5RQGZLMnjCi0fFe8w2zvMdkTZqBYhL2eVg/ACPQIX2b4QF3fBDsrORXjPqGWIEQackOle5fkZwIh/PTcq3HyBrck6783YjpiBwNdXQI2Xv1kBnbTYhPP5hqohAsAFy8k6LNJWzVMFmwqZvhm2VZwPevc1lZj9MxO7ekPS7gtdkycuAFCrM0Of1jiPcqj+JN9h3sMRu+5ZJEGaFaxFUsqbKRA2FqQbMPMp8Kbl1vIZcdQYtDpE4PvV4jegXtb3pNM/Uj8BIuzMUabvJhn1rKk14NNVKsKBCJz5SktONwg1JPL49RCANMDQPWvY5mWHWBDlDH3sjeu37Bj6AGKs65ad4r6HHbAmvswCFuaa/Df8UkTkOCHBw/v9oFHEJQwtGHs9ILKmoyGn7HmXDW7QKls47dyPhaDQ6Q2Jp1ritNnVfwG0A0XQnat3OKwPxScMTlj7ZubpPUsIwfvHb42sNL/FQf3wAd3dg07dwrKRjh0EkOo=
+    
 branches:
   only:
   - master
   - develop
-
 before_install:
 - docker version
 - python --version
 - javac -version
 - java -version
-
 install:
 - pip install coveralls
 - git clone https://github.com/kbase/jars
@@ -40,12 +38,11 @@ install:
 - kb-sdk test || true
 - sed -i "s/test_token=/test_token=$TEST_TOKEN/" test_local/test.cfg
 - sed -i 's\https://appdev.kbase.us/services\https://ci.kbase.us/services\' test_local/test.cfg
-- sed -i 's\https://appdev.kbase.us/services/auth/api/legacy/KBase/Sessions/Login\https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login\' test_local/test.cfg
+- sed -i 's\https://appdev.kbase.us/services/auth/api/legacy/KBase/Sessions/Login\https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login\'
+  test_local/test.cfg
 - sed -i 's/$(id -u)/0:0/' test_local/run_tests.sh
-
 script:
 - kb-sdk test
-
 after_success:
 - cp test_local/workdir/.coverage .
 - sudo mkdir -p /kb/module/lib/
