@@ -11,7 +11,7 @@ from biokbase.workspace.client import Workspace as workspaceService
 from kb_cummerbund.kb_cummerbundImpl import kb_cummerbund
 
 
-class kb_cummerbundTest(unittest.TestCase):
+class TestCummerbund(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -160,3 +160,7 @@ class kb_cummerbundTest(unittest.TestCase):
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         pass
+
+#start the tests if run as a script
+if __name__ == '__main__':
+    unittest.main()

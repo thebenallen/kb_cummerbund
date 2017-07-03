@@ -54,16 +54,16 @@ class kb_cummerbund:
     A KBase module: kb_cummerbund
     '''
 
-    ######## WARNING FOR GEVENT USERS #######
+    ######## WARNING FOR GEVENT USERS ####### noqa
     # Since asynchronous IO can lead to methods - even the same method -
     # interrupting each other, you must be *very* careful when using global
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
-    #########################################
-    VERSION = "0.0.7"
-    GIT_URL = "git@github.com:kbaseapps/kb_cummerbund.git"
-    GIT_COMMIT_HASH = "e25c9e0197a8471aa47c5e817a825ff11b56dd82"
-    
+    ######################################### noqa
+    VERSION = "0.0.8"
+    GIT_URL = "git@github.com:arfathpasha/kb_cummerbund.git"
+    GIT_COMMIT_HASH = "c8e7012d1b0d3479879da3878a53aac98675ef40"
+
     #BEGIN_CLASS_HEADER
     __TEMP_DIR = 'temp'
     #END_CLASS_HEADER
@@ -105,14 +105,13 @@ class kb_cummerbund:
 
         #END_CONSTRUCTOR
         pass
-    
+
 
     def generate_cummerbund_plots(self, ctx, cummerbundParams):
         """
         :param cummerbundParams: instance of type "cummerbundParams" ->
-           structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
+           structure: parameter "workspace_name" of String, parameter
+           "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
            KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
            "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
            KBaseRNASeq.cummerbund_output)
@@ -258,9 +257,8 @@ class kb_cummerbund:
     def generate_cummerbund_plot2(self, ctx, cummerbundstatParams):
         """
         :param cummerbundstatParams: instance of type "cummerbundstatParams"
-           -> structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
+           -> structure: parameter "workspace" of String, parameter
+           "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
            KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
            "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
            KBaseRNASeq.cummerbund_output), parameter "ws_diffstat_output" of
@@ -521,13 +519,13 @@ class kb_cummerbund:
     def create_interactive_heatmap_de_genes(self, ctx, interactiveHeatmapParams):
         """
         :param interactiveHeatmapParams: instance of type
-           "interactiveHeatmapParams" -> structure: parameter "sample1" of
-           String, parameter "sample2" of String, parameter "logMode" of
-           String, parameter "removezeroes" of String, parameter
-           "condition_select" of String, parameter "q_value_cutoff" of
-           Double, parameter "log2_fold_change_cutoff" of Double, parameter
-           "num_genes" of Long, parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
+           "interactiveHeatmapParams" -> structure: parameter
+           "workspace_name" of String, parameter "sample1" of String,
+           parameter "sample2" of String, parameter "logMode" of String,
+           parameter "removezeroes" of String, parameter "condition_select"
+           of String, parameter "q_value_cutoff" of Double, parameter
+           "log2_fold_change_cutoff" of Double, parameter "num_genes" of
+           Long, parameter "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
            KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
            "ws_expression_matrix_id" of type "ws_expression_matrix_id" (@id
            ws KBaseFeatureValues.ExpressionMatrix)
@@ -777,14 +775,13 @@ class kb_cummerbund:
     def create_interactive_heatmap_de_genes_old(self, ctx, heatmapParams):
         """
         :param heatmapParams: instance of type "heatmapParams" -> structure:
-           parameter "sample1" of String, parameter "sample2" of String,
-           parameter "q_value_cutoff" of Double, parameter
-           "log2_fold_change_cutoff" of Double, parameter "num_genes" of
-           Long, parameter "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
+           parameter "workspace" of String, parameter "sample1" of String,
+           parameter "sample2" of String, parameter "q_value_cutoff" of
+           Double, parameter "log2_fold_change_cutoff" of Double, parameter
+           "num_genes" of Long, parameter "ws_cuffdiff_id" of type
+           "ws_cuffdiff_id" (@id ws
            KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
-           "ws_expression_matrix_id1" of type "ws_expression_matrix_id" (@id
-           ws KBaseFeatureValues.ExpressionMatrix), parameter
-           "ws_expression_matrix_id2" of type "ws_expression_matrix_id" (@id
+           "ws_expression_matrix_id" of type "ws_expression_matrix_id" (@id
            ws KBaseFeatureValues.ExpressionMatrix), parameter
            "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
            KBaseRNASeq.cummerbund_output)
@@ -1023,7 +1020,6 @@ class kb_cummerbund:
                              'returnVal is not type dict as required.')
         # return the results
         return [returnVal]
-
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK", 'message': "", 'version': self.VERSION, 
