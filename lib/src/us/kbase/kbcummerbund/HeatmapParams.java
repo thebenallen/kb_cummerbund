@@ -19,18 +19,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
+    "workspace",
     "sample1",
     "sample2",
     "q_value_cutoff",
     "log2_fold_change_cutoff",
     "num_genes",
     "ws_cuffdiff_id",
-    "ws_expression_matrix_id1",
-    "ws_expression_matrix_id2",
+    "ws_expression_matrix_id",
     "ws_cummerbund_output"
 })
 public class HeatmapParams {
 
+    @JsonProperty("workspace")
+    private String workspace;
     @JsonProperty("sample1")
     private String sample1;
     @JsonProperty("sample2")
@@ -43,13 +45,26 @@ public class HeatmapParams {
     private Long numGenes;
     @JsonProperty("ws_cuffdiff_id")
     private String wsCuffdiffId;
-    @JsonProperty("ws_expression_matrix_id1")
-    private String wsExpressionMatrixId1;
-    @JsonProperty("ws_expression_matrix_id2")
-    private String wsExpressionMatrixId2;
+    @JsonProperty("ws_expression_matrix_id")
+    private String wsExpressionMatrixId;
     @JsonProperty("ws_cummerbund_output")
     private String wsCummerbundOutput;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonProperty("workspace")
+    public String getWorkspace() {
+        return workspace;
+    }
+
+    @JsonProperty("workspace")
+    public void setWorkspace(String workspace) {
+        this.workspace = workspace;
+    }
+
+    public HeatmapParams withWorkspace(String workspace) {
+        this.workspace = workspace;
+        return this;
+    }
 
     @JsonProperty("sample1")
     public String getSample1() {
@@ -141,33 +156,18 @@ public class HeatmapParams {
         return this;
     }
 
-    @JsonProperty("ws_expression_matrix_id1")
-    public String getWsExpressionMatrixId1() {
-        return wsExpressionMatrixId1;
+    @JsonProperty("ws_expression_matrix_id")
+    public String getWsExpressionMatrixId() {
+        return wsExpressionMatrixId;
     }
 
-    @JsonProperty("ws_expression_matrix_id1")
-    public void setWsExpressionMatrixId1(String wsExpressionMatrixId1) {
-        this.wsExpressionMatrixId1 = wsExpressionMatrixId1;
+    @JsonProperty("ws_expression_matrix_id")
+    public void setWsExpressionMatrixId(String wsExpressionMatrixId) {
+        this.wsExpressionMatrixId = wsExpressionMatrixId;
     }
 
-    public HeatmapParams withWsExpressionMatrixId1(String wsExpressionMatrixId1) {
-        this.wsExpressionMatrixId1 = wsExpressionMatrixId1;
-        return this;
-    }
-
-    @JsonProperty("ws_expression_matrix_id2")
-    public String getWsExpressionMatrixId2() {
-        return wsExpressionMatrixId2;
-    }
-
-    @JsonProperty("ws_expression_matrix_id2")
-    public void setWsExpressionMatrixId2(String wsExpressionMatrixId2) {
-        this.wsExpressionMatrixId2 = wsExpressionMatrixId2;
-    }
-
-    public HeatmapParams withWsExpressionMatrixId2(String wsExpressionMatrixId2) {
-        this.wsExpressionMatrixId2 = wsExpressionMatrixId2;
+    public HeatmapParams withWsExpressionMatrixId(String wsExpressionMatrixId) {
+        this.wsExpressionMatrixId = wsExpressionMatrixId;
         return this;
     }
 
@@ -198,7 +198,7 @@ public class HeatmapParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((("HeatmapParams"+" [sample1=")+ sample1)+", sample2=")+ sample2)+", qValueCutoff=")+ qValueCutoff)+", log2FoldChangeCutoff=")+ log2FoldChangeCutoff)+", numGenes=")+ numGenes)+", wsCuffdiffId=")+ wsCuffdiffId)+", wsExpressionMatrixId1=")+ wsExpressionMatrixId1)+", wsExpressionMatrixId2=")+ wsExpressionMatrixId2)+", wsCummerbundOutput=")+ wsCummerbundOutput)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((("HeatmapParams"+" [workspace=")+ workspace)+", sample1=")+ sample1)+", sample2=")+ sample2)+", qValueCutoff=")+ qValueCutoff)+", log2FoldChangeCutoff=")+ log2FoldChangeCutoff)+", numGenes=")+ numGenes)+", wsCuffdiffId=")+ wsCuffdiffId)+", wsExpressionMatrixId=")+ wsExpressionMatrixId)+", wsCummerbundOutput=")+ wsCummerbundOutput)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

@@ -51,9 +51,8 @@ class kb_cummerbund(object):
     def generate_cummerbund_plots(self, cummerbundParams, context=None):
         """
         :param cummerbundParams: instance of type "cummerbundParams" ->
-           structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
+           structure: parameter "workspace_name" of String, parameter
+           "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
            KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
            "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
            KBaseRNASeq.cummerbund_output)
@@ -80,9 +79,8 @@ class kb_cummerbund(object):
     def generate_cummerbund_plot2(self, cummerbundstatParams, context=None):
         """
         :param cummerbundstatParams: instance of type "cummerbundstatParams"
-           -> structure: parameter "workspace_name" of type "workspace_name"
-           (workspace name of the object), parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
+           -> structure: parameter "workspace" of String, parameter
+           "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
            KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
            "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
            KBaseRNASeq.cummerbund_output), parameter "ws_diffstat_output" of
@@ -141,13 +139,13 @@ class kb_cummerbund(object):
     def create_interactive_heatmap_de_genes(self, interactiveHeatmapParams, context=None):
         """
         :param interactiveHeatmapParams: instance of type
-           "interactiveHeatmapParams" -> structure: parameter "sample1" of
-           String, parameter "sample2" of String, parameter "logMode" of
-           String, parameter "removezeroes" of String, parameter
-           "condition_select" of String, parameter "q_value_cutoff" of
-           Double, parameter "log2_fold_change_cutoff" of Double, parameter
-           "num_genes" of Long, parameter "ws_cuffdiff_id" of type
-           "ws_cuffdiff_id" (@id ws
+           "interactiveHeatmapParams" -> structure: parameter
+           "workspace_name" of String, parameter "sample1" of String,
+           parameter "sample2" of String, parameter "logMode" of String,
+           parameter "removezeroes" of String, parameter "condition_select"
+           of String, parameter "q_value_cutoff" of Double, parameter
+           "log2_fold_change_cutoff" of Double, parameter "num_genes" of
+           Long, parameter "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
            KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
            "ws_expression_matrix_id" of type "ws_expression_matrix_id" (@id
            ws KBaseFeatureValues.ExpressionMatrix)
@@ -174,14 +172,13 @@ class kb_cummerbund(object):
     def create_interactive_heatmap_de_genes_old(self, heatmapParams, context=None):
         """
         :param heatmapParams: instance of type "heatmapParams" -> structure:
-           parameter "sample1" of String, parameter "sample2" of String,
-           parameter "q_value_cutoff" of Double, parameter
-           "log2_fold_change_cutoff" of Double, parameter "num_genes" of
-           Long, parameter "ws_cuffdiff_id" of type "ws_cuffdiff_id" (@id ws
+           parameter "workspace" of String, parameter "sample1" of String,
+           parameter "sample2" of String, parameter "q_value_cutoff" of
+           Double, parameter "log2_fold_change_cutoff" of Double, parameter
+           "num_genes" of Long, parameter "ws_cuffdiff_id" of type
+           "ws_cuffdiff_id" (@id ws
            KBaseRNASeq.RNASeqCuffdiffdifferentialExpression), parameter
-           "ws_expression_matrix_id1" of type "ws_expression_matrix_id" (@id
-           ws KBaseFeatureValues.ExpressionMatrix), parameter
-           "ws_expression_matrix_id2" of type "ws_expression_matrix_id" (@id
+           "ws_expression_matrix_id" of type "ws_expression_matrix_id" (@id
            ws KBaseFeatureValues.ExpressionMatrix), parameter
            "ws_cummerbund_output" of type "ws_cummerbund_output" (@id ws
            KBaseRNASeq.cummerbund_output)

@@ -19,15 +19,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "workspace_name",
+    "workspace",
     "ws_cuffdiff_id",
     "ws_cummerbund_output",
     "ws_diffstat_output"
 })
 public class CummerbundstatParams {
 
-    @JsonProperty("workspace_name")
-    private String workspaceName;
+    @JsonProperty("workspace")
+    private String workspace;
     @JsonProperty("ws_cuffdiff_id")
     private String wsCuffdiffId;
     @JsonProperty("ws_cummerbund_output")
@@ -36,18 +36,18 @@ public class CummerbundstatParams {
     private String wsDiffstatOutput;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("workspace_name")
-    public String getWorkspaceName() {
-        return workspaceName;
+    @JsonProperty("workspace")
+    public String getWorkspace() {
+        return workspace;
     }
 
-    @JsonProperty("workspace_name")
-    public void setWorkspaceName(String workspaceName) {
-        this.workspaceName = workspaceName;
+    @JsonProperty("workspace")
+    public void setWorkspace(String workspace) {
+        this.workspace = workspace;
     }
 
-    public CummerbundstatParams withWorkspaceName(String workspaceName) {
-        this.workspaceName = workspaceName;
+    public CummerbundstatParams withWorkspace(String workspace) {
+        this.workspace = workspace;
         return this;
     }
 
@@ -108,7 +108,7 @@ public class CummerbundstatParams {
 
     @Override
     public String toString() {
-        return ((((((((((("CummerbundstatParams"+" [workspaceName=")+ workspaceName)+", wsCuffdiffId=")+ wsCuffdiffId)+", wsCummerbundOutput=")+ wsCummerbundOutput)+", wsDiffstatOutput=")+ wsDiffstatOutput)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((("CummerbundstatParams"+" [workspace=")+ workspace)+", wsCuffdiffId=")+ wsCuffdiffId)+", wsCummerbundOutput=")+ wsCummerbundOutput)+", wsDiffstatOutput=")+ wsDiffstatOutput)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

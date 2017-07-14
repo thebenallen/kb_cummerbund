@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
+    "workspace_name",
     "sample1",
     "sample2",
     "logMode",
@@ -32,6 +33,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class InteractiveHeatmapParams {
 
+    @JsonProperty("workspace_name")
+    private String workspaceName;
     @JsonProperty("sample1")
     private String sample1;
     @JsonProperty("sample2")
@@ -53,6 +56,21 @@ public class InteractiveHeatmapParams {
     @JsonProperty("ws_expression_matrix_id")
     private String wsExpressionMatrixId;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonProperty("workspace_name")
+    public String getWorkspaceName() {
+        return workspaceName;
+    }
+
+    @JsonProperty("workspace_name")
+    public void setWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
+    }
+
+    public InteractiveHeatmapParams withWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
+        return this;
+    }
 
     @JsonProperty("sample1")
     public String getSample1() {
@@ -216,7 +234,7 @@ public class InteractiveHeatmapParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((("InteractiveHeatmapParams"+" [sample1=")+ sample1)+", sample2=")+ sample2)+", logMode=")+ logMode)+", removezeroes=")+ removezeroes)+", conditionSelect=")+ conditionSelect)+", qValueCutoff=")+ qValueCutoff)+", log2FoldChangeCutoff=")+ log2FoldChangeCutoff)+", numGenes=")+ numGenes)+", wsCuffdiffId=")+ wsCuffdiffId)+", wsExpressionMatrixId=")+ wsExpressionMatrixId)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((("InteractiveHeatmapParams"+" [workspaceName=")+ workspaceName)+", sample1=")+ sample1)+", sample2=")+ sample2)+", logMode=")+ logMode)+", removezeroes=")+ removezeroes)+", conditionSelect=")+ conditionSelect)+", qValueCutoff=")+ qValueCutoff)+", log2FoldChangeCutoff=")+ log2FoldChangeCutoff)+", numGenes=")+ numGenes)+", wsCuffdiffId=")+ wsCuffdiffId)+", wsExpressionMatrixId=")+ wsExpressionMatrixId)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
