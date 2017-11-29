@@ -1,8 +1,8 @@
 {
   "name": "Create Expression Matrix From Cuffdiff Output",
-  "ver": "0.0.1",
-  "authors" : [ ],
-  "contact" : "help@kbase.us",
+  "ver": "1.0.2",
+  "authors" : [ "pranjan77", "arfath", "sjyoo" ],
+  "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
   "categories" : ["inactive"],
   "widgets" : {

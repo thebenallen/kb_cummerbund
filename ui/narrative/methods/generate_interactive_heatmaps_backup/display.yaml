@@ -5,6 +5,8 @@ name     : Create Expression Matrix From Cuffdiff Output
 tooltip  : |
      Create expression matrix from cuffdiff output
 
+icon: cuffdiff-yellow.png
+
 screenshots :
     []
 

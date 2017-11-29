@@ -1,11 +1,13 @@
 #
 # Define basic display information
 #
-name     : View interactive heatmap
+name     : View interactive heatmap - v1.0.2
 subtitle : |
     View interactive heatmap
 tooltip  : |
     View interactive heatmap 
+
+icon: kb_expr-yellow.png
 
 screenshots :
     []
