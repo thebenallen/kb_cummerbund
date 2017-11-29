@@ -25,6 +25,9 @@ except:
 
 from biokbase.workspace.client import Workspace
 
+import requests.packages.urllib3
+requests.packages.urllib3.disable_warnings()
+
 def stderrlogger(name, level=logging.INFO):
     """
     Return a standard python logger with a stderr handler attached and using a prefix

@@ -3,7 +3,7 @@
 #
 name     : View CummeRbund Plots 
 tooltip  : |
-    Display a variety of plots to visualize and easily navigate through data produced from RNA-seq differential expression analysis in Cuffdiff.
+    Explore a variety of plots to visualize and easily navigate through data produced from RNA-Seq differential expression analysis in Cuffdiff.
 
 screenshots :
     []
@@ -46,7 +46,10 @@ parameters :
 
 description : |
    <p>This method helps in exploration, analysis and  visualization of Cufflinks high-throughput RNA-seq data.</p> 
-   <p>It uses the large amount of data produced from Cuffdiff RNA-seq differential expression analysis as input and allows user to easily navigate through it by visualizing different types of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot, volcano matrix plots, etc.</p> 
+   <p>It uses the large amount of data produced from Cuffdiff RNA-seq differential expression analysis as input and allows user to easily navigate through it by visualizing different types of CummeRbund plots including squared coefficient of variation (SCV) plots, density plot of genes in the two samples, scatter plot, volcano matrix plots, etc.</p>
+    
+    <p><strong>WARNING:</strong> This method is one of the steps of the <a href= "http://kbase.us/rna-seq/"> KBase RNA-seq Pipeline </a> and is not intended to run standalone.</p>
+
    <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
     Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>
     

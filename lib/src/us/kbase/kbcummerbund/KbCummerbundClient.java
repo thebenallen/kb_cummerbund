@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JobState;
 import us.kbase.common.service.JsonClientCaller;
@@ -21,7 +22,10 @@ import us.kbase.common.service.UnauthorizedException;
  */
 public class KbCummerbundClient {
     private JsonClientCaller caller;
-    private long asyncJobCheckTimeMs = 5000;
+    private long asyncJobCheckTimeMs = 100;
+    private int asyncJobCheckTimeScalePercent = 150;
+    private long asyncJobCheckMaxTimeMs = 300000;  // 5 minutes
+    private String serviceVersion = null;
 
 
     /** Constructs a client with a custom URL and no user credentials.
@@ -51,6 +55,20 @@ public class KbCummerbundClient {
      */
     public KbCummerbundClient(URL url, String user, String password) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, user, password);
+    }
+
+    /** Constructs a client with a custom URL
+     * and a custom authorization service URL.
+     * @param url the URL of the service.
+     * @param user the user name.
+     * @param password the password for the user name.
+     * @param auth the URL of the authorization server.
+     * @throws UnauthorizedException if the credentials are not valid.
+     * @throws IOException if an IOException occurs when checking the user's
+     * credentials.
+     */
+    public KbCummerbundClient(URL url, String user, String password, URL auth) throws UnauthorizedException, IOException {
+        caller = new JsonClientCaller(url, user, password, auth);
     }
 
     /** Get the token this client uses to communicate with the server.
@@ -148,20 +166,34 @@ public class KbCummerbundClient {
         this.asyncJobCheckTimeMs = newValue;
     }
 
-    /**
-     * <p>Original spec-file function name: generate_cummerbund_plots</p>
-     * <pre>
-     * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundParams CummerbundParams} (original type "cummerbundParams")
-     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public String generateCummerbundPlotsAsync(CummerbundParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public int getAsyncJobCheckTimeScalePercent() {
+        return this.asyncJobCheckTimeScalePercent;
+    }
+
+    public void setAsyncJobCheckTimeScalePercent(int newValue) {
+        this.asyncJobCheckTimeScalePercent = newValue;
+    }
+
+    public long getAsyncJobCheckMaxTimeMs() {
+        return this.asyncJobCheckMaxTimeMs;
+    }
+
+    public void setAsyncJobCheckMaxTimeMs(long newValue) {
+        this.asyncJobCheckMaxTimeMs = newValue;
+    }
+
+    public String getServiceVersion() {
+        return this.serviceVersion;
+    }
+
+    public void setServiceVersion(String newValue) {
+        this.serviceVersion = newValue;
+    }
+
+    protected <T> JobState<T> _checkJob(String jobId, TypeReference<List<JobState<T>>> retType) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
-        args.add(arg1);
-        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
-        List<String> res = caller.jsonrpcCall("kb_cummerbund.generate_cummerbund_plots_async", args, retType, true, true, jsonRpcContext);
+        args.add(jobId);
+        List<JobState<T>> res = caller.jsonrpcCall("kb_cummerbund._check_job", args, retType, true, true);
         return res.get(0);
     }
 
@@ -174,11 +206,11 @@ public class KbCummerbundClient {
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public JobState<List<String>> generateCummerbundPlotsCheck(String jobId) throws IOException, JsonClientException {
+    protected String _generateCummerbundPlotsSubmit(CummerbundParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
-        args.add(jobId);
-        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
-        List<JobState<List<String>>> res = caller.jsonrpcCall("kb_cummerbund.generate_cummerbund_plots_check", args, retType, true, true);
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund._generate_cummerbund_plots_submit", args, retType, true, true, jsonRpcContext);
         return res.get(0);
     }
 
@@ -192,16 +224,64 @@ public class KbCummerbundClient {
      * @throws JsonClientException if a JSON RPC exception occurs
      */
     public String generateCummerbundPlots(CummerbundParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        String jobId = generateCummerbundPlotsAsync(arg1, jsonRpcContext);
+        String jobId = _generateCummerbundPlotsSubmit(arg1, jsonRpcContext);
+        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
+        long asyncJobCheckTimeMs = this.asyncJobCheckTimeMs;
         while (true) {
             if (Thread.currentThread().isInterrupted())
                 throw new JsonClientException("Thread was interrupted");
             try { 
-                Thread.sleep(this.asyncJobCheckTimeMs);
+                Thread.sleep(asyncJobCheckTimeMs);
             } catch(Exception ex) {
                 throw new JsonClientException("Thread was interrupted", ex);
             }
-            JobState<List<String>> res = generateCummerbundPlotsCheck(jobId);
+            asyncJobCheckTimeMs = Math.min(asyncJobCheckTimeMs * this.asyncJobCheckTimeScalePercent / 100, this.asyncJobCheckMaxTimeMs);
+            JobState<List<String>> res = _checkJob(jobId, retType);
+            if (res.getFinished() != 0L)
+                return res.getResult().get(0);
+        }
+    }
+
+    /**
+     * <p>Original spec-file function name: generate_cummerbund_plot2</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundstatParams CummerbundstatParams} (original type "cummerbundstatParams")
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    protected String _generateCummerbundPlot2Submit(CummerbundstatParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund._generate_cummerbund_plot2_submit", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: generate_cummerbund_plot2</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.CummerbundstatParams CummerbundstatParams} (original type "cummerbundstatParams")
+     * @return   instance of original type "ws_cummerbund_output" (@id ws KBaseRNASeq.cummerbund_output)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String generateCummerbundPlot2(CummerbundstatParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        String jobId = _generateCummerbundPlot2Submit(arg1, jsonRpcContext);
+        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
+        long asyncJobCheckTimeMs = this.asyncJobCheckTimeMs;
+        while (true) {
+            if (Thread.currentThread().isInterrupted())
+                throw new JsonClientException("Thread was interrupted");
+            try { 
+                Thread.sleep(asyncJobCheckTimeMs);
+            } catch(Exception ex) {
+                throw new JsonClientException("Thread was interrupted", ex);
+            }
+            asyncJobCheckTimeMs = Math.min(asyncJobCheckTimeMs * this.asyncJobCheckTimeScalePercent / 100, this.asyncJobCheckMaxTimeMs);
+            JobState<List<String>> res = _checkJob(jobId, retType);
             if (res.getFinished() != 0L)
                 return res.getResult().get(0);
         }
@@ -216,28 +296,11 @@ public class KbCummerbundClient {
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public String createExpressionMatrixAsync(ExpressionMatrixParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    protected String _createExpressionMatrixSubmit(ExpressionMatrixParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(arg1);
         TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
-        List<String> res = caller.jsonrpcCall("kb_cummerbund.create_expression_matrix_async", args, retType, true, true, jsonRpcContext);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: create_expression_matrix</p>
-     * <pre>
-     * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.ExpressionMatrixParams ExpressionMatrixParams} (original type "expressionMatrixParams")
-     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public JobState<List<String>> createExpressionMatrixCheck(String jobId) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(jobId);
-        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
-        List<JobState<List<String>>> res = caller.jsonrpcCall("kb_cummerbund.create_expression_matrix_check", args, retType, true, true);
+        List<String> res = caller.jsonrpcCall("kb_cummerbund._create_expression_matrix_submit", args, retType, true, true, jsonRpcContext);
         return res.get(0);
     }
 
@@ -251,16 +314,19 @@ public class KbCummerbundClient {
      * @throws JsonClientException if a JSON RPC exception occurs
      */
     public String createExpressionMatrix(ExpressionMatrixParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        String jobId = createExpressionMatrixAsync(arg1, jsonRpcContext);
+        String jobId = _createExpressionMatrixSubmit(arg1, jsonRpcContext);
+        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
+        long asyncJobCheckTimeMs = this.asyncJobCheckTimeMs;
         while (true) {
             if (Thread.currentThread().isInterrupted())
                 throw new JsonClientException("Thread was interrupted");
             try { 
-                Thread.sleep(this.asyncJobCheckTimeMs);
+                Thread.sleep(asyncJobCheckTimeMs);
             } catch(Exception ex) {
                 throw new JsonClientException("Thread was interrupted", ex);
             }
-            JobState<List<String>> res = createExpressionMatrixCheck(jobId);
+            asyncJobCheckTimeMs = Math.min(asyncJobCheckTimeMs * this.asyncJobCheckTimeScalePercent / 100, this.asyncJobCheckMaxTimeMs);
+            JobState<List<String>> res = _checkJob(jobId, retType);
             if (res.getFinished() != 0L)
                 return res.getResult().get(0);
         }
@@ -271,15 +337,15 @@ public class KbCummerbundClient {
      * <pre>
      * </pre>
      * @param   arg1   instance of type {@link us.kbase.kbcummerbund.InteractiveHeatmapParams InteractiveHeatmapParams} (original type "interactiveHeatmapParams")
-     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
+     * @return   instance of type {@link us.kbase.kbcummerbund.ResultsToReport ResultsToReport}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public String createInteractiveHeatmapDeGenesAsync(InteractiveHeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    protected String _createInteractiveHeatmapDeGenesSubmit(InteractiveHeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(arg1);
         TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
-        List<String> res = caller.jsonrpcCall("kb_cummerbund.create_interactive_heatmap_de_genes_async", args, retType, true, true, jsonRpcContext);
+        List<String> res = caller.jsonrpcCall("kb_cummerbund._create_interactive_heatmap_de_genes_submit", args, retType, true, true, jsonRpcContext);
         return res.get(0);
     }
 
@@ -288,40 +354,78 @@ public class KbCummerbundClient {
      * <pre>
      * </pre>
      * @param   arg1   instance of type {@link us.kbase.kbcummerbund.InteractiveHeatmapParams InteractiveHeatmapParams} (original type "interactiveHeatmapParams")
-     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
+     * @return   instance of type {@link us.kbase.kbcummerbund.ResultsToReport ResultsToReport}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public JobState<List<String>> createInteractiveHeatmapDeGenesCheck(String jobId) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(jobId);
-        TypeReference<List<JobState<List<String>>>> retType = new TypeReference<List<JobState<List<String>>>>() {};
-        List<JobState<List<String>>> res = caller.jsonrpcCall("kb_cummerbund.create_interactive_heatmap_de_genes_check", args, retType, true, true);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: create_interactive_heatmap_de_genes</p>
-     * <pre>
-     * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.InteractiveHeatmapParams InteractiveHeatmapParams} (original type "interactiveHeatmapParams")
-     * @return   instance of original type "ws_expression_matrix_id" (@id ws KBaseFeatureValues.ExpressionMatrix)
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public String createInteractiveHeatmapDeGenes(InteractiveHeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        String jobId = createInteractiveHeatmapDeGenesAsync(arg1, jsonRpcContext);
+    public ResultsToReport createInteractiveHeatmapDeGenes(InteractiveHeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        String jobId = _createInteractiveHeatmapDeGenesSubmit(arg1, jsonRpcContext);
+        TypeReference<List<JobState<List<ResultsToReport>>>> retType = new TypeReference<List<JobState<List<ResultsToReport>>>>() {};
+        long asyncJobCheckTimeMs = this.asyncJobCheckTimeMs;
         while (true) {
             if (Thread.currentThread().isInterrupted())
                 throw new JsonClientException("Thread was interrupted");
             try { 
-                Thread.sleep(this.asyncJobCheckTimeMs);
+                Thread.sleep(asyncJobCheckTimeMs);
             } catch(Exception ex) {
                 throw new JsonClientException("Thread was interrupted", ex);
             }
-            JobState<List<String>> res = createInteractiveHeatmapDeGenesCheck(jobId);
+            asyncJobCheckTimeMs = Math.min(asyncJobCheckTimeMs * this.asyncJobCheckTimeScalePercent / 100, this.asyncJobCheckMaxTimeMs);
+            JobState<List<ResultsToReport>> res = _checkJob(jobId, retType);
             if (res.getFinished() != 0L)
                 return res.getResult().get(0);
         }
+    }
+
+    /**
+     * <p>Original spec-file function name: create_interactive_heatmap_de_genes_old</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.HeatmapParams HeatmapParams} (original type "heatmapParams")
+     * @return   instance of type {@link us.kbase.kbcummerbund.ResultsToReport ResultsToReport}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    protected String _createInteractiveHeatmapDeGenesOldSubmit(HeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("kb_cummerbund._create_interactive_heatmap_de_genes_old_submit", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: create_interactive_heatmap_de_genes_old</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.kbcummerbund.HeatmapParams HeatmapParams} (original type "heatmapParams")
+     * @return   instance of type {@link us.kbase.kbcummerbund.ResultsToReport ResultsToReport}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ResultsToReport createInteractiveHeatmapDeGenesOld(HeatmapParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        String jobId = _createInteractiveHeatmapDeGenesOldSubmit(arg1, jsonRpcContext);
+        TypeReference<List<JobState<List<ResultsToReport>>>> retType = new TypeReference<List<JobState<List<ResultsToReport>>>>() {};
+        long asyncJobCheckTimeMs = this.asyncJobCheckTimeMs;
+        while (true) {
+            if (Thread.currentThread().isInterrupted())
+                throw new JsonClientException("Thread was interrupted");
+            try { 
+                Thread.sleep(asyncJobCheckTimeMs);
+            } catch(Exception ex) {
+                throw new JsonClientException("Thread was interrupted", ex);
+            }
+            asyncJobCheckTimeMs = Math.min(asyncJobCheckTimeMs * this.asyncJobCheckTimeScalePercent / 100, this.asyncJobCheckMaxTimeMs);
+            JobState<List<ResultsToReport>> res = _checkJob(jobId, retType);
+            if (res.getFinished() != 0L)
+                return res.getResult().get(0);
+        }
+    }
+
+    public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};
+        List<Map<String, Object>> res = caller.jsonrpcCall("kb_cummerbund.status", args, retType, true, false, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
     }
 }

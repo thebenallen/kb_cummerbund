@@ -3,8 +3,8 @@
   "ver" : "1.0.1",
   "authors" : [ ],
   "contact" : "help@kbase.us",
-  "visible" : true,
-  "categories" : ["active","expression"],
+  "visible" : false,
+  "categories" : ["inactive"],
   "widgets" : {
     "input" : null,
     "output" : "kbaseExpressionMatrix" 
@@ -17,14 +17,14 @@
     "default_values" : [ "" ],
     "field_type" : "text",
     "text_options" : {
-      "valid_ws_types" : ["KBaseRNASeq.RNASeqCuffdiffdifferentialExpression" ]
+      "valid_ws_types" : ["KBaseRNASeq.RNASeqDifferentialExpression" ]
     }
   }, {
     "id": "include_replicates",
     "optional":false,
     "advanced":false,
     "allow_multiple":false,
-    "default_values":[""],
+    "default_values":["1"],
     "field_type" : "checkbox",
     "checkbox_options":{
       "checked_value": 1,

@@ -8,7 +8,7 @@ tooltip  : |
 screenshots :
     []
 
-icon: cuffdiff-yellow.png
+icon: cummerbund-yellow.png 
 
 #
 # Define the set of other narrative methods that should be suggested to the user.
@@ -40,7 +40,10 @@ parameters :
         short-hint : |
             Provide name of the output expression matrix
 description : |
-    <p>This method creates the expression matrix based on differentially expressed data obtained from Cuffdiff method. Replicates option allow users to get the expression matrix for all conditions with replicates. If Replicates option is disabled, it provides the average value of the expression values of the replicates. The expression values are provided as log10(FPKM+1).</p>
+    <p>This method creates the expression matrix based on differentially expressed data obtained from Cuffdiff method. Replicates option allow users to get the expression matrix for all conditions with replicates. If Replicates option is disabled, it provides the average value of the expression values of the replicates.</p>
+     
+    <p><strong>WARNING:</strong> This method is one of the steps of the <a href= "http://kbase.us/rna-seq/"> KBase RNA-seq Pipeline </a> and is not intended to run standalone.</p>
+
       <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
        Priya Ranjan, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Jim Thomason, Fei He, Vivek Kumar</p>
 publications :

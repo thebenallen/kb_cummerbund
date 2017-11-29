@@ -1,0 +1,57 @@
+#
+# Define basic display information
+#
+name     : View interactive volcano plot 
+subtitle : |
+    View interactive volcano plot
+tooltip  : |
+    View interactive volcano plot 
+
+screenshots :
+    []
+
+#
+# Define the set of other narrative methods that should be suggested to the user.
+#
+suggestions :
+    apps:
+        related :
+            []
+        next :
+            []
+    methods:
+        related :
+            []
+        next :
+            []
+
+
+#
+# Configure the display and description of the parameters
+#
+parameters :
+    param0 :
+        ui-name : |
+           Differential expression statistics 
+        short-hint : |
+           Differential expression statistics 
+        long-hint  : |
+           Differential expression statistics. This is produced by running the app View CummeRbund Plots
+    sample1:
+        ui-name : |
+            Treatment Label 1
+        short-hint : |
+            Sample condition to identify differentially expressed genes
+    sample2:
+        ui-name : |
+            Treatment Label 2
+        short-hint : |
+            Sample condition to identify differentially expressed genes
+
+description : |
+
+    <p>View interactive volcano plot. This app takes a differential expression statistics object as an input. The differential expression statistics object can be obtained by running the app View CummeRbund Plots. It creates an interactive volcano plot.
+    The slider in the volcano  plot can be used to select appropriate q_value and fold change cutoff and display number of genes and their functional annotation. </p>
+
+    <p><strong>Team members who developed & deployed algorithm in KBase:</strong>
+    Priya Ranjan, Jim Thomason, Srividya Ramakrishnan, Sunita Kumari, Shinjae Yoo, Fei He, Vivek Kumar</p>

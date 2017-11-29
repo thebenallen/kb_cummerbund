@@ -8,6 +8,7 @@ import hashlib
 import string
 import random
 import requests
+import math
 import logging
 import shutil
 import time
@@ -30,6 +31,9 @@ from biokbase.workspace.client import Workspace
 
 import biokbase.Transform.script_utils as script_utils
 
+import requests.packages.urllib3
+requests.packages.urllib3.disable_warnings()
+import filter_expression as f
 
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
@@ -57,9 +61,13 @@ def get_command_line_heatmap_basic(rparams):
 
 #TODO: Check existence of files and directories
     ropts            = ["Rscript", rparams['plotscript']]
-    ropts.append("--genelist")
-    ropts.append(rparams['genelist'])
-        
+
+    try:
+        ropts.append("--genelist")
+        ropts.append(rparams['genelist'])
+    except:
+        ropts.append("nogenelist")
+       
     ropts.append("--cuffdiff")
     ropts.append(rparams['cuffdiff_dir'])
         
@@ -77,6 +85,17 @@ def get_command_line_heatmap_basic(rparams):
 
     ropts.append("--outmatrix")
     ropts.append(rparams['outmatrix'])
+
+    ropts.append("--pairs")
+    ropts.append(rparams['pairs'])
+
+    ropts.append("--logMode")
+    ropts.append(rparams['logMode'])
+
+    ropts.append("--removezeroes")
+    ropts.append(rparams['removezeroes'])
+
+
 
     
     roptstr = " ".join(str(x) for x in ropts)
@@ -280,6 +299,7 @@ def rplotanduploadinteractive (system_params, fparams, rparams, roptstr):
                '--input_directory', scratch,
                '--output_file_name', outjson ]
 
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()
@@ -391,6 +411,7 @@ def rplotandupload2 (system_params, fparams, rparams, roptstr):
                '--input_directory', scratch,
                '--output_file_name', outjson ]
 
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()
@@ -510,6 +531,7 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
                                     '--input_directory', scratch,
                                     '--output_file_name', outjson ]
 
+        cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
         logger.info (" ".join(cmd_expression_json))
         tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
         stdout, stderr = tool_process.communicate()
@@ -528,60 +550,42 @@ def generate_and_upload_expression_matrix (logger, scratch, rscripts, scriptfile
 
 def filter_expression_matrix(fparams, system_params):
     cuffdiff_dir=fparams['cuffdiff_dir']
+    scratch = system_params['scratch']
+    selected_condition_option = fparams['pairs']
     sample1 = fparams['sample1']
     sample2 = fparams['sample2']
-    q_value_cutoff = float(fparams['q_value_cutoff'])
-    #include_inf = fparams['include_inf']
-    log2_fold_change_cutoff = float(fparams['log2_fold_change_cutoff'])
+    q_value_cutoff = abs(float(fparams['q_value_cutoff']))
+    log2_fold_change_cutoff = abs(float(fparams['log2_fold_change_cutoff']))
+    print q_value_cutoff
+    print log2_fold_change_cutoff
     infile  =fparams['infile']
-    num_genes = int(fparams['num_genes'])
-    infile = fparams['infile']
     outfile = fparams['outfile']
+    num_genes = 1000000000000000000000 #no upper bound
+    try:
+        num_genes=int(fparams['num_genes'])
+    except:
+        num_genes = 100
+    outf = f.filter_expresssion_matrix_option(scratch, infile,outfile,sample1, sample2, num_genes, q_value_cutoff, log2_fold_change_cutoff)
+    if (os.path.isfile(outf)):
+       return outf
+    else:
+       return False
 
-    logger=system_params['logger']
 
-#    for key in fparams:
-#    	print "fparams: " + str(key) + " " + str(fparams[key])
-#    for key in system_params:
-#    	print "system_params: " + str(key) + " " + str(system_params[key])
+def is_valid_row(selected_condition_option, sample1, sample2, sample1_name, sample2_name):
 
+    #User selects 3 options None, All , pair.
+    #If the user has selected None (0), no filtering based on sample is done
+    #If the user has selected All (2), all pairwise options are taken into account
+    #If ths uer has selecte pair (1), only one pair will be taken care of
 
-    #if exists(cuffdiff_dir) == False:
-    #    logger.info("Cuffdiff directory does not exists")
-    #return False
-    logger.info("num_genes before: " + str(num_genes) )
-    #if (num_genes > 500):
-    #    num_genes = 500;
-    logger.info("num_genes after: " + str(num_genes) )
-        
+    #return 1 if you want to consider the row for differential expression
 
-    fp=open(outfile, "w")
-    x = "gene\tq_value\tlog2-fold_change\n"
-    fp.write(x)
-    mylist = []
-    with open(infile) as f:
-        qval_dict={}
-        i=0
-        for line in f:
-            linesplit  = line.split()
-            qval = linesplit[12]
-            significance = linesplit[13]
-          
-            if (significance =='no'):
-                continue
-          
-            if (qval =='q_value'):
-                continue
-            log2_fold_change = linesplit[9]
-
-            #if (include_inf==0):
-            #    if (log2_fold_change.find('inf') != -1 ):
-            #        continue
-            #logger.info(log2_fold_change)
-
-            gene = linesplit[2]
-            sample1_name = linesplit[4]
-            sample2_name = linesplit[5]
+     if (selected_condition_option==0):
+         return 1
+     if (selected_condition_option==2):
+         return 1
+     if (selected_condition_option==1):
             match=0
             if (sample1_name == sample1):
                 match = match + 1
@@ -591,39 +595,13 @@ def filter_expression_matrix(fparams, system_params):
                 match = match + 1
             if (sample2_name == sample2):
                 match = match + 1
-
             if (match != 2):
-                continue
-            if (float(qval) > q_value_cutoff):
-                continue
-            if (log2_fold_change.find('inf') == -1 ):
-                if (abs(float(log2_fold_change)) < abs(float(log2_fold_change_cutoff))):
-                    continue
-            genes=gene.split(",");
-            if (len(genes) >1):
-                for j in genes:
-                    x=[]
-                    x.append(j)
-                    x.append(str(qval))
-                    x.append(str(log2_fold_change))
-                    mylist.append(x)
-            else:
-                    x=[]
-                    x.append(gene)
-                    x.append(str(qval))
-                    x.append(str(log2_fold_change))
-                    mylist.append(x)
-        mylistsorted = sorted(mylist, key=lambda line: abs(float(line[2])), reverse=True)
-        j=0
-        for x in mylistsorted:
-            #logger.info(x)
-            j = j +1
-            fp.write('{0}\n'.format('\t'.join(x)))
-            if (j >= num_genes):
-                break
-        f.close()
-        fp.close()
-        return outfile
+               return 0
+         
+     return 1
+
+
+
 
 def get_gene_list_from_filter_step(fparams):
         outfile = fparams['outfile']
@@ -785,7 +763,7 @@ def upload_feature_value (system_params, fparams):
                                 '--working_directory', scratch,
                                 '--input_directory', scratch,
                                 '--output_file_name', outjson ]
-
+    cmd_expression_json = ["perl", '/kb/module/lib/kb_cummerbund/get_exp_matrix.pl', '/kb/module/work/outmatrix.parse.txt', '/kb/module/work/out.json'] 
     logger.info (" ".join(cmd_expression_json))
     tool_process = subprocess.Popen (" ".join (cmd_expression_json), stderr=subprocess.PIPE, shell=True)
     stdout, stderr = tool_process.communicate()

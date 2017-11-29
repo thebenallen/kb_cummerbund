@@ -1,6 +1,63 @@
-language: 
+language: python
+
+python:
+- '2.7'
+
+sudo: required
+
+services:
+- docker
+
+notifications:
+  email:
+    recipients:
+    - arfathpasha@gmail.com
+    on_success: never
+    on_failure: always
+
 env:
+  global:
+    secure: AX9vII/c27GEDOfLi6f/0y+NSetjB01gzCUe4/kGnxnlbPzeLDkQRuw/xmlSa6AdhE2MHBOYu0dvh335qYeUP7B2S/Axu1mh77ld3BwkJ2axJO0WDK4KGsFy1ivn9JkxM6BUe3OmaMOV2FN6dAIHoZhqcmkMqeYbeVrCqJk2RXvNK6EJQj2Oux239NSGFuQ5RQGZLMnjCi0fFe8w2zvMdkTZqBYhL2eVg/ACPQIX2b4QF3fBDsrORXjPqGWIEQackOle5fkZwIh/PTcq3HyBrck6783YjpiBwNdXQI2Xv1kBnbTYhPP5hqohAsAFy8k6LNJWzVMFmwqZvhm2VZwPevc1lZj9MxO7ekPS7gtdkycuAFCrM0Of1jiPcqj+JN9h3sMRu+5ZJEGaFaxFUsqbKRA2FqQbMPMp8Kbl1vIZcdQYtDpE4PvV4jegXtb3pNM/Uj8BIuzMUabvJhn1rKk14NNVKsKBCJz5SktONwg1JPL49RCANMDQPWvY5mWHWBDlDH3sjeu37Bj6AGKs65ad4r6HHbAmvswCFuaa/Df8UkTkOCHBw/v9oFHEJQwtGHs9ILKmoyGn7HmXDW7QKls47dyPhaDQ6Q2Jp1ritNnVfwG0A0XQnat3OKwPxScMTlj7ZubpPUsIwfvHb42sNL/FQf3wAd3dg07dwrKRjh0EkOo=
+    
+branches:
+  only:
+  - master
+  - develop
+
 before_install:
+- docker version
+- python --version
+- javac -version
+- java -version
+
 install:
+- pip install coveralls
+- git clone https://github.com/kbase/jars
+- git clone https://github.com/kbase/kb_sdk
+- cd kb_sdk
+- make
+- make sdkbase
+- docker images
+- export PATH=$(pwd)/bin:$PATH
+- cd ../
+- git clone https://github.com/kbaseapps/kb_cummerbund.git
+- cd kb_cummerbund
+- kb-sdk test || true
+- sed -i "s/test_token=/test_token=$TEST_TOKEN/" test_local/test.cfg
+- sed -i 's\https://appdev.kbase.us/services\https://ci.kbase.us/services\' test_local/test.cfg
+- sed -i 's\https://appdev.kbase.us/services/auth/api/legacy/KBase/Sessions/Login\https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login\'
+  test_local/test.cfg
+- sed -i 's/$(id -u)/0:0/' test_local/run_tests.sh
+
 script:
-after_script:
+- kb-sdk test
+
+after_success:
+- cp test_local/workdir/.coverage .
+- sudo mkdir -p /kb/module/lib/
+- sudo cp -R test_local/workdir/kb/module/lib/kb_cummerbund /kb/module/lib/
+- pwd
+- ls -l /kb/module/lib/kb_cummerbund
+- cat .coverage
+- coverage report -m
+- coveralls

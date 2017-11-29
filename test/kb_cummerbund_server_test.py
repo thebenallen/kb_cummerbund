@@ -11,7 +11,7 @@ from biokbase.workspace.client import Workspace as workspaceService
 from kb_cummerbund.kb_cummerbundImpl import kb_cummerbund
 
 
-class kb_cummerbundTest(unittest.TestCase):
+class TestCummerbund(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -57,35 +57,110 @@ class kb_cummerbundTest(unittest.TestCase):
         #
         #ws_id="pranjan77:1452551559640"
         #ws_obj_id="Ath_wt_hy5_cuffdiff"
-
-        ws_id="pranjan77:1454700987350"
-        ws_obj_id="Ath_WT_hy5_cuffdiff"
-
-
-        ws_out_id="cummerbund_out_obj_ath"
+        
+        ws_id="pranjan77:1475698249756"
+        ws_id="pranjan77:1481019426226"
+        ws_id="pranjan77:1481237567854"
+        c1 = 'wt'
+        c2 = 'hy5'
+        ws_obj_id="Ath_cuffdiff"
+        ws_obj_id="wt-hy5-hisat2-cuffdiff"
+        ws_obj_id="Poplar_hisat2_stringtie_6samples_cuffdiff"
+        '''
+        #ws_id = 'pranjan77:1473962459187'
+        #c1 = 'ecoli_8083'
+        #c2 = 'ecoli_8085'
+        #ws_obj_id="test_3_samples_cuffdiff"
+        ws_out_id="expx1"
+        diffstat_out="expx12"
 
         #run get cummernund plot
-
-        cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id}
-        ret = self.getImpl().generate_cummerbund_plots(self.getContext(), cummerbundParams)
+        cummerbundParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id, 'ws_diffstat_output': 'diffstat_out'}
+        ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
 
 
         #run get expression matrix
-
         ws_out_id2="exp_out_obj_rep_ath_comma"
         expParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_expression_matrix_id':ws_out_id2, 'include_replicates':1}
-        ret = self.getImpl().create_expression_matrix (self.getContext(), expParams)
+        #ret = self.getImpl().create_expression_matrix (self.getContext(), expParams)
         #x=1
         #y=1
         #self.assertEqual(x,y,1)
-        ws_out_id3 = "exp3"
-        num_g = "100"
-        interactiveHeatmapParams={'workspace_name': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':ws_out_id3, 'ws_expression_matrix_id':"abc",
-		'sample1':'WT_R1', 'sample2' :'Hy5_R1', 'q_value_cutoff':0.05,  'log2_fold_change_cutoff': 2, 'num_genes' :num_g ,'include_replicates':1}
-        ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
+        ws_out_id3 = "exp3x"
+        num_g = "5"
+        interactiveHeatmapParams={
+                'workspace_name': ws_id, 
+                'ws_cuffdiff_id': ws_obj_id, 
+                'ws_expression_matrix_id':ws_out_id3,
+                'logMode': 'log2', 
+                'removezeroes': 1,
+                'condition_select':'all_pairs',
+                'sample1':c1, 
+                'sample2' :c2, 
+                'q_value_cutoff':2.0,
+                'log2_fold_change_cutoff': 2.0, 
+                'num_genes' :num_g
+                }
+        interactiveHeatmapParams={
+                'workspace_name': ws_id, 
+                'ws_cuffdiff_id': ws_obj_id, 
+                'ws_expression_matrix_id':ws_out_id3,
+                'logMode': 'log2', 
+                'removezeroes': 1,
+                'condition_select':'all_pairs',
+                'sample1':'ecoli_8083', 
+                'sample2' :'ecoli_8085', 
+                'q_value_cutoff':0.1,
+                'log2_fold_change_cutoff': 1.2, 
+                'num_genes' :num_g
+                }
+'''
+        ws_id = 'pranjan77:1476324994474'
+        ws_obj_id = 'Ath_cuffdiff'
+
+
+        #ws_id = 'pranjan77:1485352184683'
+        #ws_id = 'pranjan77:1485462112168'
+        #ws_id = 'pranjan77:1483555887223'
+        #ws_obj_id = 'Ath_sampleset_cuffdiff'
+        #ws_obj_id = 'wt-hy5-cuffdiff'
+
+        # inputs on production
+        #ws_id = 'pranjan77:1486068164203'
+        #ws_obj_id = 'wt-ycdr-cuffdiff'
+
+        # inputs on CI
+        ws_id = 'pranjan77:1490326083513'
+        ws_obj_id = 'Ath_sampleset_cuffdiff'
+        
+        num_g=1000
+        ws_out_id3 = "expuuc"
+        heatmapParams={
+                'workspace': ws_id, 
+                'ws_cuffdiff_id': ws_obj_id, 
+                'ws_expression_matrix_id':ws_out_id3,
+                'sample1':'WT', 
+                'sample2' :'ydcR', 
+                'q_value_cutoff':1,
+                'log2_fold_change_cutoff': 1.5, 
+                'num_genes' :num_g
+                }
+
+        #ret = self.getImpl().create_interactive_heatmap_de_genes_old(self.getContext(), heatmapParams)
+        cummerbundParams={'workspace': ws_id, 'ws_cuffdiff_id': ws_obj_id, 'ws_cummerbund_output':'cummer' , 'ws_diffstat_output': 'diffstat_out'}
+        ret = self.getImpl().generate_cummerbund_plot2(self.getContext(), cummerbundParams)
+
+
+
+        #ret = self.getImpl().create_interactive_heatmap_de_genes_old(self.getContext(), heatmapParams)
+        #ret = self.getImpl().create_interactive_heatmap_de_genes(self.getContext(), interactiveHeatmapParams)
         # Run your method by
         # ret = self.getImpl().your_method(self.getContext(), parameters...)
         #
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
         pass
+
+#start the tests if run as a script
+if __name__ == '__main__':
+    unittest.main()

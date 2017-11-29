@@ -1,0 +1,90 @@
+{
+  "name" : "View interactive volcano plot",
+  "ver" : "0.0.1",
+  "authors" : [ ],
+  "contact" : "help@kbase.us",
+  "visble" : false,
+  "categories" : ["active", "expression"],
+  "widgets" : {
+    "input" : null,
+    "output" : "kbaseExpressionVolcanoPlot"
+  },
+  "parameters" : [ {
+    "id" : "param0",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "text",
+    "text_options" : {
+      "valid_ws_types" : [ "KBaseRNASeq.DifferentialExpressionStat", "KBaseGwasData.differentialexpressionstat" ]
+    }
+  },
+
+{
+    "id" : "sample1",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+
+        "parameter_id" : "param0",
+        "subdata_included" : ["unique_conditions"],
+        "path_to_subdata": ["unique_conditions"]
+      },
+      "multiselection":false,
+      "show_src_obj":false,
+      "allow_custom":false
+    }
+    },
+    
+    {
+    "id" : "sample2",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "textsubdata",
+    "textsubdata_options" : {
+      "subdata_selection": {
+
+        "parameter_id" : "param0",
+        "subdata_included" : ["unique_conditions"],
+        "path_to_subdata": ["unique_conditions"]
+      },
+      "multiselection":false,
+      "show_src_obj":false,
+      "allow_custom":false
+    }
+    }
+
+
+
+  ],
+  "behavior" : {
+    "none" : {
+      "output_mapping" : [
+        {
+          "input_parameter": "param0",
+          "target_property": "volcano_plot_object"
+        },
+        {
+          "input_parameter": "sample1",
+          "target_property": "sample1"
+        }
+        ,{
+          "input_parameter": "sample2",
+          "target_property": "sample2"
+        }
+        ,
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace"
+        }
+      ]
+    }
+  }
+}
