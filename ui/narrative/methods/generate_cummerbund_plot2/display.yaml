@@ -5,7 +5,6 @@ name     : View CummeRbund Plots
 tooltip  : |
     Explore a variety of plots to visualize and easily navigate through data produced from RNA-Seq differential expression analysis in Cuffdiff. This app should be used when there are more than one condition to compare and each condition has at least two replicates.
 
-
 screenshots :
     []
 

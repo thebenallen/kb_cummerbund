@@ -10,7 +10,7 @@ service-language:
     python
 
 module-version:
-    0.0.8
+    1.0.2
 
 owners:
     [pranjan77, arfath, sjyoo]

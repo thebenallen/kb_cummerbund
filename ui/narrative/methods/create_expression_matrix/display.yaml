@@ -3,12 +3,12 @@
 #
 name     : Create Expression Matrix from Cuffdiff
 
+icon: cuffdiff-yellow.png
+
 tooltip  : |
     Create the expression matrix for the differential expression data obtained from Cuffdiff step of the RNA-seq pipeline.
 screenshots :
     []
-
-icon: cummerbund-yellow.png 
 
 #
 # Define the set of other narrative methods that should be suggested to the user.

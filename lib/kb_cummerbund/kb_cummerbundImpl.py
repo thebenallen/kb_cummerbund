@@ -61,8 +61,8 @@ class kb_cummerbund:
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
     ######################################### noqa
-    VERSION = "0.0.8"
-    GIT_URL = "git@github.com:arfathpasha/kb_cummerbund.git"
+    VERSION = "1.0.0"
+    GIT_URL = "https://github.com/kbaseapps/kb_cummerbund"
     GIT_COMMIT_HASH = "c8e7012d1b0d3479879da3878a53aac98675ef40"
 
     #BEGIN_CLASS_HEADER

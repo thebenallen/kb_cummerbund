@@ -1,11 +1,13 @@
 #
 # Define basic display information
 #
-name     : View interactive volcano plot 
+name     : View interactive volcano plot - v1.0.2
 subtitle : |
     View interactive volcano plot
 tooltip  : |
     View interactive volcano plot 
+
+icon: kb_expr-yellow.png
 
 screenshots :
     []
