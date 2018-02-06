@@ -3,7 +3,7 @@
   "authors" : [ "pranjan77", "arfath", "sjyoo" ],
   "contact" : "http://kbase.us/contact-us/",
   "visible" : true,
-  "categories" : ["active","expression"],
+  "categories" : ["inactive"],
   "widgets" : {
     "input" : null,
     "output" : "kbaseCummerbundPlot"
