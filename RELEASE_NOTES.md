@@ -1,4 +1,10 @@
-### Version 1.0.0
+#### This module is deprecated.
+
+### Version 1.0.4
+__Changes__
+- Inactivate "View interactive heatmap - v1.0.2" and "View interactive volcano plot - v1.0.2" apps
+
+### Version 1.0.3
 __Changes__
 - Inactivate "Create Differential Expression Matrix and HeatMap using Cuffdiff" app
 
